@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Opportunity: the rover that kept going</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--ink:#f6e9da;--dim:#d3bba6;--rust:#c2693c;--blue:#9db2c7;--night:#0a0506;--card:rgba(24,11,7,.52);--line:rgba(255,214,170,.2);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--night:#0a0506}}
+:root[data-theme="dark"]{--night:#0a0506}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,2,.7))}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 22px 14px;font-size:14px;color:var(--dim)}
+header b{font-weight:500;color:var(--ink)}
+nav{display:flex;gap:8px}
+nav i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);transition:.4s}
+nav i.on{background:var(--rust);border-color:var(--rust);box-shadow:0 0 12px var(--rust)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+section.r{justify-content:flex-end}
+.card{max-width:460px;padding:30px 32px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12);opacity:.001;transform:translateY(26px);transition:opacity 1s,transform 1s}
+.card.in{opacity:1;transform:none}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(64px,13vw,170px);font-weight:600;letter-spacing:-.035em;text-shadow:0 8px 60px rgba(0,0,0,.6)}
+h2{font-size:clamp(30px,4vw,44px)}
+p{margin:0 0 12px}
+.hero{display:block;padding-top:24vh}
+.hero p{max-width:30ch;font-size:clamp(19px,2.2vw,26px);line-height:1.4;color:var(--ink);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.hero small{display:block;margin-top:22px;color:var(--dim);font-size:14px}
+.num{font-family:Fraunces,Georgia,serif;font-size:56px;font-weight:600;color:var(--ink);line-height:1}
+.stats{display:flex;gap:26px;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{display:block;font-size:13px;color:var(--dim);margin-top:4px}
+.note{font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--blue)}
+footer{font-size:13px;color:var(--dim);margin-top:18px}
+@media (max-width:760px){section,section.r{align-items:flex-end;justify-content:center;padding:0 16px 7vh}.card{padding:22px}.hero{align-items:flex-start;padding-top:20vh}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+header span{display:flex;align-items:center}
+body.insp{overflow:hidden}body.insp main,body.insp nav,body.insp #back{display:none}body.story #insp{display:none}
+#c{touch-action:none}body.story #c{touch-action:auto}
+#insp{position:fixed;inset:0;z-index:4;pointer-events:none}#insp>*{pointer-events:auto}
+.ip{position:absolute;left:22px;top:calc(env(safe-area-inset-top,0px) + 64px);width:290px}
+.ip h2{font-size:clamp(32px,4vw,46px)}.lead{color:var(--dim);font-size:15px;margin-bottom:14px}
+#plist{display:flex;flex-direction:column;gap:6px}
+#plist button,#back,#go{font:inherit;color:var(--ink);cursor:pointer}
+#plist button{text-align:left;padding:9px 14px;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px 4px 12px 4px;transition:.25s}
+#plist button:hover,#plist button.on{border-color:var(--rust);background:rgba(194,105,60,.3)}
+.pc{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:min(400px,38vw);padding:26px 28px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12)}
+.pc h3{font:300 30px/1.1 Fraunces,Georgia,serif;margin:0 0 10px}.pc p{font-size:15.5px}
+#go{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);transform:translateX(-50%);padding:14px 32px;border-radius:999px;border:1px solid var(--rust);background:linear-gradient(#d2784a,#a4512a);font-weight:500;box-shadow:0 10px 40px rgba(194,105,60,.45)}
+#back{padding:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;margin-right:14px;font-size:13px}
+#pin{position:absolute;width:38px;height:38px;margin:-19px 0 0 -19px;border:2px solid #fff;border-radius:50%;pointer-events:none!important;display:none;box-shadow:0 0 18px rgba(255,200,150,.8);animation:pl 1.6s infinite}
+@keyframes pl{50%{transform:scale(1.25);opacity:.5}}
+@media (max-width:760px){.ip{width:auto;right:16px;left:16px}.lead{display:none}#plist{flex-direction:row;overflow-x:auto;padding-bottom:6px}#plist button{white-space:nowrap}.pc{top:auto;bottom:84px;right:16px;left:16px;width:auto;transform:none;max-height:34vh;overflow:auto;padding:18px}}
+#c{filter:saturate(.8) contrast(1.06)}#sfx{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;mix-blend-mode:multiply;background:radial-gradient(ellipse at 50% 40%,rgba(120,80,50,.2),rgba(55,32,20,.8))}
+.gk{font-size:13px;color:#e08a5a;margin:0 0 4px}.spec{font-size:13.5px;color:var(--blue);margin:8px 0 0}.pc{max-height:76vh;overflow:auto}
+#plist{max-height:calc(100vh - 250px);overflow:auto;padding-right:4px}.gh{font-size:12px;color:var(--dim);margin:10px 0 2px}
+.hot{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:1.5px solid #fff;background:rgba(194,105,60,.8);color:#fff;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:0;cursor:pointer;box-shadow:0 0 12px rgba(255,200,150,.7);display:none;z-index:1;transition:opacity .3s}
+.hot.on{background:#fff;color:#7a3a1c;box-shadow:0 0 20px #fff;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:2}
+.hot span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:6px;background:rgba(20,10,6,.85);color:var(--ink);font-size:12px;display:none}
+.hot:hover span,.hot.on span{display:block}
+@media (max-width:760px){.gh{display:none}#plist{max-height:none}.pc{max-height:30vh}}
+</style>
+</head>
+<body class="insp" style="background-color: #05070B; margin: 0;">
+<div id="se-loader" style="position:fixed;inset:0;background:#05070B;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9da;font-family:'IBM Plex Sans',system-ui,sans-serif;transition:opacity 0.6s ease, visibility 0.6s ease;">
+  <div style="width:48px;height:48px;border:3px solid rgba(255,214,170,0.18);border-top:3px solid #c2693c;border-radius:50%;animation:se-spin 1s linear infinite;margin-bottom:18px;"></div>
+  <div style="font-family:Fraunces,Georgia,serif;font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;">Opportunity Rover (MER-B)</div>
+  <div style="font-size:12px;color:#9db2c7;letter-spacing:0.08em;text-transform:uppercase;">Establishing NSSDCA Telemetry Link...</div>
+</div>
+<style>
+@keyframes se-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+<canvas id="c"></canvas><div class="vig"></div><div id="sfx"></div><div class="grain"></div>
+<header><b>Space Apps Challenge, Sulaymaniyah 2026</b><span><button id="back">Inspect the rover</button><nav id="nav"></nav></span></header>
+<div id="insp"><div class="ip"><h2>Meet the rover</h2><p class="lead">Drag to turn it. Scroll to zoom. Pick a part to learn what it did.</p><div id="plist"></div></div>
+<div class="pc"><p class="gk" id="pg"></p><h3 id="pn"></h3><p id="pa"></p><p id="pb"></p><p class="note" id="pt"></p><p class="spec" id="ps"></p></div>
+<button id="go">Start the journey</button><i id="pin"></i></div>
+
+<main>
+<section class="hero"><div class="card in" style="background:none;border:0;box-shadow:none;backdrop-filter:none;padding:0 0 0 2vw;max-width:none">
+<h1>Opportunity</h1><p>A robot built to last three months. It worked for fourteen years.</p>
+<small>Abandoned but Not Forgotten: scroll to follow its story</small></div></section>
+
+<section><div class="card"><h2>Named by a nine-year-old</h2>
+<p>In 2003, NASA ran a naming contest for two new twin rovers. The winner was Sofi Collis, age nine, who had once lived in an orphanage and found comfort looking at the night sky. She wrote about the spirit and the opportunity that America had given her. The rovers became Spirit and Opportunity.</p>
+<p>Opportunity left Earth on a Delta II rocket on July 7, 2003, folded inside a protective capsule. It spent about seven months crossing space to reach Mars.</p></div></section>
+
+<section class="r"><div class="card"><h2>Six minutes, then a bounce</h2>
+<p>On January 25, 2004 (UTC), the capsule hit Mars’ thin air at roughly 19,000 km/h. A heat shield burned off speed, a parachute opened, rockets fired, and airbags inflated around the rover. Then it dropped and bounced across the plain more than twenty times.</p>
+<p>It rolled to a stop inside a small crater, which the team named Eagle. They called it a hole in one: bedrock was exposed right at the rover’s wheels.</p></div></section>
+
+<section><div class="card"><h2>Rocks that remember water</h2>
+<p>This was the first bedrock outcrop a rover had ever studied on Mars. Opportunity reached out with its arm. Its Mössbauer spectrometer found jarosite, a mineral that forms in acidic water. Its microscope showed ripples frozen in the layers, the kind made by shallow, moving water.</p>
+<p>The tiny grey spheres in the soil, nicknamed “blueberries”, were hematite grown inside wet rock. In March 2004 NASA announced it: Meridiani Planum was once soaked in salty water.</p></div></section>
+
+<section class="r"><div class="card"><h2>A stranger on the plain</h2>
+<p>In January 2005, Opportunity drove to a dark lump of metal that did not belong. It sat near the rover’s own discarded heat shield, so the team called it Heat Shield Rock.</p>
+<p>It was an iron-nickel meteorite, the first ever identified on another planet. A visitor from the asteroid belt had been lying on Mars all along, waiting for someone to look.</p></div></section>
+
+<section><div class="card"><h2>Stuck in the sand</h2>
+<p>On April 26, 2005, Opportunity drove onto a soft ripple of sand called Purgatory Dune and sank up to its axles. Its wheels spun and went nowhere.</p>
+<p>Engineers copied the dune in a sandbox at JPL and practised on a test rover. For about five weeks they backed Opportunity out a few centimetres at a time. On June 4 it rolled free, and the team learned to avoid soft sand ripples.</p></div></section>
+
+<section class="r"><div class="card"><h2>Victoria, a crater with cliffs</h2>
+<p>Victoria crater is about 730 metres wide, more than seven football fields. Opportunity arrived in 2006 and spent nearly two years exploring its rim, photographing layered cliffs like the pages of a history book.</p>
+<p>Each layer was a different chapter of Martian weather and water. In 2008 it left, and set a new goal: Endeavour crater, far across the plain.</p></div></section>
+
+<section><div class="card"><h2>Endeavour, and a marathon</h2>
+<p>The drive to Endeavour took almost three years. At the rim in 2011, Opportunity found a bright vein of gypsum named Homestake, a mineral left by water flowing through rock. In 2015 it found clay minerals, which form in gentler water than the acid of its first site.</p>
+<p>In March 2015 it passed the distance of a marathon, 42.195 km.</p>
+<div class="stats"><div><div class="num" data-to="45.16" data-dec="2">0</div><span>kilometres driven in total</span></div></div></div></section>
+
+<section class="r"><div class="card"><h2>Older, slower, still working</h2>
+<p>Planned for 90 sols, it worked for 5,111. It aged like any machine. A front wheel motor wore down, so it sometimes drove backward. In 2014 its flash memory began to fail, and engineers worked around it. Dust built up on its panels, until a wind gust cleaned them and the power jumped back.</p>
+<div class="stats"><div><div class="num" data-to="90">0</div><span>sols planned</span></div><div><div class="num" data-to="5111">0</div><span>sols worked</span></div></div></div></section>
+
+<section><div class="card"><h2>The storm</h2>
+<p>In late May 2018, a dust storm began near Opportunity and grew until it wrapped the whole planet. By early June the sky above the rover was darker than any it had ever seen.</p>
+<p>Solar power fell almost to zero. The rover put itself into a low-power sleep, waking now and then to check. Earth waited and listened.</p></div></section>
+
+<section class="r"><div class="card"><h2>June 10, 2018</h2>
+<p>That was the last time Opportunity spoke. It was resting in Perseverance Valley, on the rim of Endeavour. When the storm cleared in autumn, NASA sent more than a thousand recovery commands. Nothing replied.</p>
+<p>On February 13, 2019, NASA declared the mission complete, after 5,111 sols on Mars.</p>
+<p class="note">A news reporter once translated its final data as “My battery is low and it’s getting dark.” That is a poetic paraphrase, not words the rover wrote.</p></div></section>
+
+<section><div class="card"><h2>Why it still matters</h2>
+<p>Opportunity proved a lot of Mars once had liquid water, and that told later missions where to look. Curiosity and Perseverance followed its path, one question at a time. The rover stays on Mars, but its discoveries are still being used.</p>
+<footer>Facts from NASA/JPL mission pages. Terrain and rover are procedural 3D art, drawn for this story.</footer></div></section>
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var N=12,$=function(s){return document.querySelector(s)};
+var nav=$('#nav');for(var i=0;i<N;i++){nav.appendChild(document.createElement('i'))}
+// ---------- noise ----------
+function h(x,y){var v=Math.sin(x*127.1+y*311.7)*43758.5453;return v-Math.floor(v)}
+function lp(a,b,t){return a+(b-a)*t}
+function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+return lp(lp(h(xi,yi),h(xi+1,yi),u),lp(h(xi,yi+1),h(xi+1,yi+1),u),v)}
+function fbm(x,y,o){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*vn(x,y);x*=2.03;y*=2.03;a*=.5}return s}
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+var SZ=140;
+function H(x,z){var d=(fbm(x*.035+7,z*.035+3,5)-.5)*9+Math.sin(x*.21+fbm(x*.05,z*.05,2)*6)*.35;return d*sm(2.5,16,Math.abs(z))}
+// ---------- renderer ----------
+var R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.15;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+var S=new THREE.Scene();S.fog=new THREE.FogExp2(0x1a1020,.01);S.background=new THREE.Color(0x1a1020);
+var cam=new THREE.PerspectiveCamera(55,1,.1,1200);S.add(cam);
+var sun=new THREE.DirectionalLight(0xffe6cc,2.4);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+var sc=sun.shadow.camera;sc.left=-16;sc.right=16;sc.top=16;sc.bottom=-16;sc.far=90;S.add(sun,sun.target);
+var hemi=new THREE.HemisphereLight(0xd9b898,0x4a3326,.7);S.add(hemi);
+// ---------- terrain with painted texture ----------
+var pm=new THREE.PMREMGenerator(R),es=new THREE.Scene(),eg=new THREE.SphereGeometry(60,32,16),ec=[],ep=eg.attributes.position;
+for(var i0=0;i0<ep.count;i0++){var yy=ep.getY(i0)/60,cc=new THREE.Color();if(yy>0){var yq=Math.pow(yy,.6);cc.setRGB(lp(.95,.5,yq),lp(.68,.38,yq),lp(.45,.3,yq))}else cc.setRGB(.32,.17,.1);ec.push(cc.r,cc.g,cc.b)}
+eg.setAttribute('color',new THREE.Float32BufferAttribute(ec,3));es.add(new THREE.Mesh(eg,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+var sb=new THREE.Mesh(new THREE.SphereGeometry(9,16,12),new THREE.MeshBasicMaterial({color:0xfff2d8}));sb.position.set(-30,40,24);es.add(sb);
+S.environment=pm.fromScene(es,.04).texture;
+var EM=[];
+function M(c,m,r,map,env){var mm=new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r,map:map||null});EM.push([mm,env]);return mm}
+function pv(x,y,P){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=((xi%P)+P)%P,b=(a+1)%P,c=((yi%P)+P)%P,d=(c+1)%P;
+ return lp(lp(h(a,c),h(b,c),u),lp(h(a,d),h(b,d),u),v)}
+function pf(x,y,o,P){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*pv(x,y,P);x*=2;y*=2;P*=2;a*=.5}return s}
+var DS=512,dc=document.createElement('canvas');dc.width=dc.height=DS;var dcx=dc.getContext('2d'),di=dcx.createImageData(DS,DS),bc=document.createElement('canvas');bc.width=bc.height=DS;var bcx=bc.getContext('2d'),bi=bcx.createImageData(DS,DS);
+for(var j=0;j<DS;j++)for(var k=0;k<DS;k++){
+ var u=k/DS,v=j/DS,warp=pf(u*4,v*4,3,4)*3,rip=.5+.5*Math.sin((u*20+v*6+warp)*6.2832),mask=sm(.35,.65,pf(u*3,v*3,2,3)),
+ pe=sm(.64,.78,pv(u*48,v*48,48))*(.55+.45*pv(u*96,v*96,96)),gr=h(k*1.3,j*.7),
+ ht=Math.min(1,Math.max(0,.4*pf(u*8,v*8,5,8)+.2*rip*mask+.42*pe+.1*gr)),g=.55+.9*ht,p=(j*DS+k)*4,pk=1-.38*pe;
+ di.data[p]=Math.min(255,g*190*pk);di.data[p+1]=Math.min(255,g*172*pk);di.data[p+2]=Math.min(255,g*160*pk*(1+.1*pe));di.data[p+3]=255;
+ bi.data[p]=bi.data[p+1]=bi.data[p+2]=ht*255;bi.data[p+3]=255}
+dcx.putImageData(di,0,0);bcx.putImageData(bi,0,0);
+function tt(cv,rep){var t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.anisotropy=8;return t}
+var geo=new THREE.PlaneGeometry(SZ,SZ,256,256),pos=geo.attributes.position,vc=new Float32Array(pos.count*3);
+var pal=[[84,62,52],[118,84,66],[150,108,84],[176,134,106]];
+for(var m=0;m<pos.count;m++){var gx=pos.getX(m),gz=-pos.getY(m),ge=H(gx,gz);pos.setZ(m,ge);
+ var gn=fbm(gx*.05,gz*.05,4),pt=fbm(gx*.02+30,gz*.02,3),tq=Math.min(.999,Math.max(0,(ge+4)/9*.55+gn*.55-.05))*3,ix=Math.floor(tq),fq=tq-ix,pa=pal[ix],pb=pal[Math.min(3,ix+1)],
+ dk=(.85+.3*fbm(gx*.4,gz*.4,3))*1.45,r=lp(pa[0],pb[0],fq),g2=lp(pa[1],pb[1],fq),b2=lp(pa[2],pb[2],fq),
+ dm1=sm(.4,.28,pt),br=sm(.6,.7,pt);
+ r=lp(lp(r,58,dm1*.7),178,br*.4);g2=lp(lp(g2,52,dm1*.7),138,br*.4);b2=lp(lp(b2,54,dm1*.7),104,br*.4);
+ vc[m*3]=Math.min(1,r*dk/255);vc[m*3+1]=Math.min(1,g2*dk/255);vc[m*3+2]=Math.min(1,b2*dk/255)}
+geo.setAttribute('color',new THREE.BufferAttribute(vc,3));geo.computeVertexNormals();
+var dT=tt(dc,36),bT=tt(bc,36),gm=new THREE.MeshStandardMaterial({map:dT,bumpMap:bT,bumpScale:1.5,vertexColors:true,roughness:1});EM.push([gm,.35]);
+var ground=new THREE.Mesh(geo,gm);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;S.add(ground);
+// rocks: 6 sculpted variants with detail texture
+var rm=new THREE.MeshStandardMaterial({color:0x9a8372,map:tt(dc,2),bumpMap:tt(bc,2),bumpScale:2.5,roughness:.92});EM.push([rm,.35]);
+var rv=[];for(var q=0;q<6;q++){var rg=new THREE.IcosahedronGeometry(1,3),rp=rg.attributes.position;
+ for(var u2=0;u2<rp.count;u2++){var px=rp.getX(u2),py=rp.getY(u2),pz=rp.getZ(u2),s=.72+.55*vn(px*1.7+q*9,pz*1.7+py*1.7)+.18*vn(px*5+q,py*5+pz*5);rp.setXYZ(u2,px*s,py*s*.6,pz*s)}
+ rg.computeVertexNormals();rv.push(rg)}
+for(var r=0;r<170;r++){var rock=new THREE.Mesh(rv[r%6],rm),rx=(h(r,1)-.5)*110,rz=(h(r,2)-.5)*110;if(Math.abs(rz)<3.2)rz+=rz<0?-4:4;
+ var sz=.06+h(r,3)*h(r,4)*.7;rock.scale.set(sz*(.8+h(r,7)*.6),sz*.62,sz*(.8+h(r,8)*.6));rock.position.set(rx,H(rx,rz)+sz*.1,rz);rock.rotation.set(0,h(r,6)*6.28,0);rock.castShadow=rock.receiveShadow=true;S.add(rock)}
+// blueberries
+var bm=M(0x7d8794,.85,.22,null,1.3);
+for(var bb=0;bb<450;bb++){var bs=.014+h(bb,9)*.022,bm2=new THREE.Mesh(new THREE.SphereGeometry(bs,8,6),bm),bxp=-23+h(bb,7)*9,bzp=(h(bb,8)-.5)*5;
+ bm2.position.set(bxp,H(bxp,bzp)+bs*.7,bzp);bm2.castShadow=true;S.add(bm2)}
+// ---------- rover textures ----------
+function mk(w,hh,fn){var c=document.createElement('canvas');c.width=w;c.height=hh;var x=c.getContext('2d');fn(x,w,hh);var t=new THREE.CanvasTexture(c);t.anisotropy=8;return t}
+function dust(x,w,hh,n,al){for(var i=0;i<n;i++){x.fillStyle='rgba('+(170+Math.random()*50|0)+','+(100+Math.random()*40|0)+',60,'+Math.random()*al+')';x.beginPath();x.arc(Math.random()*w,Math.random()*hh,Math.random()*2.2+.4,0,6.283);x.fill()}
+ for(var b=0;b<12;b++){var bx=Math.random()*w,by=Math.random()*hh,g=x.createRadialGradient(bx,by,0,bx,by,w*.25);g.addColorStop(0,'rgba(190,105,60,'+al*.45+')');g.addColorStop(1,'rgba(190,105,60,0)');x.fillStyle=g;x.fillRect(0,0,w,hh)}}
+function circ(x,cx2,cy,r){x.beginPath();x.arc(cx2,cy,r,0,6.283);x.fill()}
+var bodyT=mk(512,512,function(x,w,hh){var g=x.createLinearGradient(0,0,w,hh);g.addColorStop(0,'#e4ded1');g.addColorStop(1,'#a9a193');x.fillStyle=g;x.fillRect(0,0,w,hh);
+ x.strokeStyle='rgba(40,35,30,.55)';x.lineWidth=2;for(var i=1;i<4;i++){x.beginPath();x.moveTo(i*w/4,0);x.lineTo(i*w/4,hh);x.stroke()}x.beginPath();x.moveTo(0,hh/2);x.lineTo(w,hh/2);x.stroke();
+ x.fillStyle='rgba(55,50,45,.85)';for(var s=1;s<4;s++)for(var y=16;y<hh;y+=32)circ(x,s*w/4+7,y,2.2);for(var xp=16;xp<w;xp+=32)circ(x,xp,hh/2+7,2.2);
+ var kg=x.createLinearGradient(40,60,210,210);kg.addColorStop(0,'#8f6a1f');kg.addColorStop(.5,'#e7c15a');kg.addColorStop(1,'#9a742a');x.fillStyle=kg;x.fillRect(40,60,170,150);
+ for(var c=0;c<90;c++){x.strokeStyle=c%2?'rgba(255,238,170,.4)':'rgba(70,45,5,.45)';x.lineWidth=1;var a=40+Math.random()*170,b=60+Math.random()*150;x.beginPath();x.moveTo(a,b);x.lineTo(a+Math.random()*28-14,b+Math.random()*28-14);x.stroke()}
+ for(var sc=0;sc<180;sc++){x.strokeStyle=sc%3?'rgba(255,255,255,.08)':'rgba(30,25,20,.12)';var sx=Math.random()*w,sy=Math.random()*hh;x.beginPath();x.moveTo(sx,sy);x.lineTo(sx+Math.random()*60-30,sy+Math.random()*10-5);x.stroke()}
+ dust(x,w,hh,2600,.35);var dg2=x.createLinearGradient(0,hh*.6,0,hh);dg2.addColorStop(0,'rgba(170,95,55,0)');dg2.addColorStop(1,'rgba(170,95,55,.55)');x.fillStyle=dg2;x.fillRect(0,0,w,hh)});
+var solT=mk(1024,768,function(x,w,hh){x.fillStyle='#0b1428';x.fillRect(0,0,w,hh);var cols=10,rows=6,cw=(w-40)/cols,ch=(hh-40)/rows;
+ for(var i=0;i<cols;i++)for(var j=0;j<rows;j++){var px=20+i*cw,py=20+j*ch,g=x.createLinearGradient(px,py,px+cw,py+ch);g.addColorStop(0,'#2b3a68');g.addColorStop(.5,'#18203f');g.addColorStop(1,'#0b1226');x.fillStyle=g;x.fillRect(px+3,py+3,cw-6,ch-6);
+  x.strokeStyle='rgba(190,200,215,.5)';x.lineWidth=1;for(var l=1;l<5;l++){x.beginPath();x.moveTo(px+3,py+l*ch/5);x.lineTo(px+cw-3,py+l*ch/5);x.stroke()}
+  x.lineWidth=2;x.beginPath();x.moveTo(px+cw/2,py+3);x.lineTo(px+cw/2,py+ch-3);x.stroke()}
+ x.strokeStyle='#8e949c';x.lineWidth=8;x.strokeRect(4,4,w-8,hh-8);dust(x,w,hh,9000,.7)});
+var wsT=mk(512,64,function(x,w,hh){x.fillStyle='#a5aab0';x.fillRect(0,0,w,hh);x.fillStyle='#3d4147';for(var i=0;i<32;i++)x.fillRect(i*16,0,8,hh);
+ for(var l=0;l<120;l++){x.strokeStyle='rgba(255,255,255,.12)';x.beginPath();x.moveTo(Math.random()*w,0);x.lineTo(Math.random()*w,hh);x.stroke()}dust(x,w,hh,900,.5)});
+var wcT=mk(256,256,function(x,w,hh){x.fillStyle='#9aa0a6';x.fillRect(0,0,w,hh);x.fillStyle='#6b7077';circ(x,128,128,124);x.fillStyle='#a8aeb4';circ(x,128,128,108);
+ x.fillStyle='#2a2d32';for(var s=0;s<10;s++){x.save();x.translate(128,128);x.rotate(s*.628);x.fillRect(34,-9,62,18);x.restore()}x.fillStyle='#53575d';circ(x,128,128,22);x.fillStyle='#8a9097';circ(x,128,128,9);dust(x,w,hh,500,.5)});
+var bodyM=M(0xffffff,.5,.5,bodyT,.9),solM=M(0xffffff,.3,.55,solT,.7),frM=M(0x2b2e33,.8,.4,null,.8),stM=M(0x9c9a96,.8,.45,null,.9),glM=M(0x050608,.9,.1,null,1.6),
+ wM=[M(0xffffff,.7,.5,wsT,.9),M(0xffffff,.7,.5,wcT,.9),M(0xffffff,.7,.5,wcT,.9)];
+// ---------- rover (modelled in metres, then scaled) ----------
+var rover=new THREE.Group();
+function bxm(w,hh,d,mat,x,y,z){var o=new THREE.Mesh(new THREE.BoxGeometry(w,hh,d),mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;rover.add(o);return o}
+function tube(a,b,r,mat){var A=new THREE.Vector3(a[0],a[1],a[2]),B=new THREE.Vector3(b[0],b[1],b[2]),d=B.clone().sub(A),t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),12),mat);t.position.copy(A).add(B).multiplyScalar(.5);t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());t.castShadow=true;rover.add(t)}
+function cyl(r,l,mat,x,y,z,ax){var o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,20),mat);o.position.set(x,y,z);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;o.castShadow=true;rover.add(o);return o}
+function ball(r,mat,x,y,z){var o=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),mat);o.position.set(x,y,z);o.castShadow=true;rover.add(o)}
+var goldM=M(0xc9a03e,.9,.35,null,1),clM=M(0x8a8d90,.7,.55,null,.9),clg=new THREE.BoxGeometry(.012,.016,.15),
+sdT=mk(256,256,function(x,w,hh){x.fillStyle='#bdb8b0';x.fillRect(0,0,w,hh);var cs=['#a33a30','#3b7a4a','#3a5fa8','#7d7d7d'];for(var q=0;q<4;q++){x.fillStyle=cs[q];x.beginPath();x.moveTo(128,128);x.arc(128,128,120,q*1.5708,(q+1)*1.5708);x.fill()}x.strokeStyle='#222';x.lineWidth=4;x.beginPath();x.arc(128,128,122,0,6.283);x.stroke();dust(x,w,hh,300,.5)}),
+sdM=M(0xffffff,.1,.7,sdT,.5),deckM=[frM,frM,solM,frM,frM,frM];
+// body, deck, wings
+bxm(1.0,.32,.7,bodyM,0,.45,0);bxm(.3,.2,.01,goldM,.2,.44,.355);bxm(.3,.2,.01,goldM,-.2,.44,-.355);bxm(.4,.1,.01,frM,-.25,.46,.356);
+bxm(1.25,.03,.95,deckM,0,.63,0);
+[-1,1].forEach(function(z){bxm(1.27,.02,.02,frM,0,.65,z*.48);bxm(1.0,.025,.45,deckM,-.05,.625,z*.7);cyl(.012,1.0,stM,-.05,.62,z*.475,'x')});
+[-1,1].forEach(function(x){bxm(.02,.02,.96,frM,x*.63,.65,0)});
+for(var bi=0;bi<12;bi++)cyl(.008,.012,stM,-.55+bi*.1,.66,.455);
+// wheels, motors
+var wg=[];
+[-.52,0,.52].forEach(function(x){[-1,1].forEach(function(z){var g=new THREE.Group(),w=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,.16,40),wM);w.rotation.x=Math.PI/2;w.castShadow=true;g.add(w);
+ var hb=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.19,20),frM);hb.rotation.x=Math.PI/2;g.add(hb);
+ for(var k=0;k<24;k++){var a=k*.2618,cl=new THREE.Mesh(clg,clM);cl.position.set(Math.cos(a)*.134,Math.sin(a)*.134,0);cl.rotation.z=a;cl.castShadow=true;g.add(cl)}
+ g.position.set(x,.13,z*.6);rover.add(g);wg.push(g);cyl(.04,.07,frM,x,.13,z*.71,'z');if(x!==0)cyl(.035,.12,frM,x,.28,z*.6)})});
+// rocker-bogie
+[-1,1].forEach(function(z){var zz=z*.6,zb=z*.38;
+ tube([.52,.13,zz],[.04,.4,zz],.018,stM);tube([-.52,.13,zz],[-.12,.34,zz],.018,stM);tube([0,.13,zz],[-.12,.34,zz],.018,stM);tube([-.12,.34,zz],[.04,.4,zz],.018,stM);tube([.04,.4,zz],[0,.45,zb],.022,stM);
+ ball(.03,stM,.04,.4,zz);ball(.028,stM,-.12,.34,zz)});
+// mast, cameras, Mini-TES
+cyl(.05,.1,frM,.45,.7,0);cyl(.03,.01,glM,.497,.7,0,'x');
+tube([.45,.75,0],[.45,1.1,0],.035,stM);ball(.03,frM,.45,1.1,0);tube([.45,1.1,0],[.45,1.45,0],.025,stM);bxm(.12,.1,.38,frM,.46,1.5,0);
+[-.08,.08].forEach(function(z){cyl(.03,.07,frM,.52,1.5,z,'x');cyl(.022,.01,glM,.557,1.5,z,'x')});
+[-.15,.15].forEach(function(z){cyl(.022,.05,frM,.5,1.5,z,'x');cyl(.016,.01,glM,.527,1.5,z,'x')});
+[-1,1].forEach(function(z){[.51,-.51].forEach(function(x){var sx=x>0?1:-1;bxm(.04,.08,.1,frM,x*.99,.42,z*.14);[-.03,.03].forEach(function(o){cyl(.015,.01,glM,sx*.527,.42,z*.14+o,'x')})})});
+// calibration sundial
+var sd=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.012,32),[frM,sdM,frM]);sd.position.set(0,.66,.33);sd.castShadow=true;rover.add(sd);cyl(.004,.045,stM,0,.69,.33);
+// antennas
+var dsM=M(0xd5d0c8,.6,.4,null,1);dsM.side=THREE.DoubleSide;
+tube([-.45,.64,-.25],[-.45,.78,-.25],.02,stM);bxm(.06,.05,.06,frM,-.45,.8,-.25);
+var dsh=new THREE.Mesh(new THREE.SphereGeometry(.14,28,14,0,6.2832,0,1.05),dsM);dsh.position.set(-.45,.88,-.25);dsh.rotation.set(Math.PI,0,.35);dsh.castShadow=true;rover.add(dsh);
+tube([-.45,.88,-.25],[-.4,1.0,-.25],.008,stM);ball(.015,frM,-.4,1.0,-.25);
+cyl(.025,.07,frM,-.55,.675,0);cyl(.018,.03,bodyM,-.55,.725,0);
+cyl(.015,.03,frM,-.5,.66,.3);tube([-.5,.66,.3],[-.5,1.02,.3],.006,frM);ball(.01,frM,-.5,1.02,.3);
+// instrument arm and turret tools
+tube([.5,.42,-.12],[.76,.36,-.12],.026,stM);tube([.76,.36,-.12],[.74,.28,-.04],.022,stM);ball(.035,frM,.5,.42,-.12);ball(.035,frM,.76,.36,-.12);ball(.03,frM,.74,.28,-.04);
+cyl(.09,.1,frM,.8,.3,-.04,'x');
+cyl(.024,.09,frM,.88,.35,-.04,'x');cyl(.016,.02,glM,.935,.35,-.04,'x');
+cyl(.026,.1,goldM,.88,.25,-.04,'x');
+cyl(.024,.09,stM,.88,.3,.01,'x');cyl(.026,.02,frM,.935,.3,.01,'x');
+cyl(.03,.08,frM,.88,.3,-.09,'x');cyl(.034,.015,stM,.935,.3,-.09,'x');
+rover.scale.setScalar(1.5);
+rover.traverse(function(o){if(o.isMesh)o.receiveShadow=true});
+S.add(rover);
+
+
+// ---------- dust and stars ----------
+var DN=1600,dg=new THREE.BufferGeometry(),dp=new Float32Array(DN*3);
+for(var d=0;d<DN;d++){dp[d*3]=(Math.random()-.5)*40;dp[d*3+1]=(Math.random()-.5)*16;dp[d*3+2]=-Math.random()*28}
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+var dm=new THREE.PointsMaterial({color:0xe0a46c,size:.09,transparent:true,opacity:0,depthWrite:false});cam.add(new THREE.Points(dg,dm));
+var bl=document.createElement('canvas');bl.width=bl.height=128;var bgx=bl.getContext('2d'),bgr=bgx.createRadialGradient(64,64,0,64,64,64);bgr.addColorStop(0,'rgba(255,255,255,.5)');bgr.addColorStop(1,'rgba(255,255,255,0)');bgx.fillStyle=bgr;bgx.fillRect(0,0,128,128);
+var HN=140,hg=new THREE.BufferGeometry(),hp=new Float32Array(HN*3);for(var hq=0;hq<HN;hq++){hp[hq*3]=(Math.random()-.5)*50;hp[hq*3+1]=(Math.random()-.4)*14;hp[hq*3+2]=-2-Math.random()*40}
+hg.setAttribute('position',new THREE.BufferAttribute(hp,3));
+var hm=new THREE.PointsMaterial({color:0x9a6a48,size:9,map:new THREE.CanvasTexture(bl),transparent:true,opacity:0,depthWrite:false,fog:false}),hpts=new THREE.Points(hg,hm);hpts.frustumCulled=false;cam.add(hpts);
+var sfx=document.getElementById('sfx');
+var sg=new THREE.BufferGeometry(),spp=new Float32Array(1800*3);
+for(var s2=0;s2<1800;s2++){var th=Math.random()*6.283,ph=Math.acos(Math.random()*.95+.02),rr=500;spp[s2*3]=rr*Math.sin(ph)*Math.cos(th);spp[s2*3+1]=rr*Math.cos(ph);spp[s2*3+2]=rr*Math.sin(ph)*Math.sin(th)}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));
+var sm2=new THREE.PointsMaterial({color:0xffffff,size:1.6,sizeAttenuation:false,transparent:true,opacity:1,fog:false,depthWrite:false});S.add(new THREE.Points(sg,sm2));
+// ---------- story keyframes ----------
+var K=[
+{x:-36,o:[-8,3.2,14],st:0,sky:0x2b1626,fog:.008,star:1,sun:1.4},
+{x:-36,o:[8,1.6,9],st:0,sky:0x0a0d24,fog:.006,star:1,sun:.45},
+{x:-34,o:[5,2.6,8],st:0,sky:0xb89478,fog:.012,star:0,sun:2.5},
+{x:-19,o:[-2.5,1.2,4.6],st:0,sky:0xb89478,fog:.012,star:0,sun:2.5},
+{x:-15,o:[3,1.3,5],st:0,sky:0xbd9a7c,fog:.012,star:0,sun:2.5},
+{x:-9,o:[-5,.9,5.5],st:0,sky:0xb28d70,fog:.014,star:0,sun:2.3},
+{x:-3,o:[-9,3.5,10],st:0,sky:0xae896c,fog:.014,star:0,sun:2.3},
+{x:6,o:[-11,3,9],st:0,sky:0xb28d70,fog:.016,star:0,sun:2.2},
+{x:13,o:[5,1.8,6],st:.15,sky:0xa08166,fog:.022,star:0,sun:1.8},
+{x:18,o:[4,2.2,7],st:.8,sky:0x6a4632,fog:.045,star:0,sun:.7},
+{x:22,o:[3,1.3,4.5],st:1,sky:0x1d1310,fog:.05,star:.5,sun:.25},
+{x:22,o:[0,10,24],st:.6,sky:0x08040a,fog:.02,star:1,sun:.1}];
+// ---------- inspect mode ----------
+var P=[
+{g:'Body and power',n:'Warm electronics box',f:[0,.45,.36],d:4.2,s:'Whole rover: about 185 kg',a:'The insulated body that holds the rover’s brain, radio, batteries and heaters.',b:'Mars nights fall below −90 °C. Aerogel insulation, electric heaters and eight small radioactive heater units kept the electronics inside warm enough to work.',t:'Its radiation-hardened computer had 128 MB of memory.'},
+{g:'Body and power',n:'Solar deck',f:[.1,.64,-.1],d:4.4,p:.9,s:'About 1.3 m² of solar cells in total',a:'A flat deck of triple-junction solar cells on top of the body.',b:'In clear sun it made about 140 watts at first, enough for roughly four hours of work each sol. Batteries stored the rest for the night.',t:'It was Opportunity’s only energy source, which is why the 2018 storm was so dangerous.'},
+{g:'Body and power',n:'Side solar wings',f:[-.05,.64,.7],d:4.2,p:.9,a:'Two side panels that opened outward after landing, hinged along the deck edges.',b:'They roughly doubled the area catching sunlight. Dust built up on them over years, and wind gusts sometimes blew them clean.',t:'Each cleaning event gave the rover a surprise power boost.'},
+{g:'Driving',n:'Wheels',f:[.52,.13,.68],d:2.4,s:'Six wheels, about 26 cm across',a:'Six aluminium wheels with raised cleats and flexible spokes inside.',b:'The cleats gripped sand and rock, and the spokes absorbed bumps. Top speed was about 5 cm per second.',t:'Slow on purpose: a stuck rover cannot be rescued.'},
+{g:'Driving',n:'Wheel motors',f:[.52,.3,.62],d:1.7,s:'Ten motors: six drive, four steering',a:'Every wheel has its own drive motor. The four corner wheels also have steering motors.',b:'This let Opportunity turn on the spot and keep driving even if one motor weakened.',t:'Wear in a front wheel motor is why it later drove backward.'},
+{g:'Driving',n:'Rocker arm',f:[.28,.27,.6],d:2.4,a:'The long suspension arm on each side that carries the front wheel.',b:'It pivots at the body, so the wheels can rise and fall over rocks without springs.',t:'There are no springs anywhere in the suspension.'},
+{g:'Driving',n:'Bogie',f:[-.32,.24,.6],d:2.4,a:'The shorter pivoting arm that carries the middle and rear wheels.',b:'Together with the rocker it keeps all six wheels on the ground and lets the rover tilt up to 45 degrees without tipping.',t:'The same rocker-bogie idea is used on Curiosity and Perseverance.'},
+{g:'Eyes',n:'Mast',f:[.45,1.1,0],d:3.2,s:'About 1.5 m above the ground',a:'The rover’s neck. It turns and tilts the camera head.',b:'Raising the cameras gave a long view across the plain, like a person standing up.',t:'Every panorama, including the last, came from this head.'},
+{g:'Eyes',n:'Pancam',f:[.55,1.5,.08],d:1.6,s:'Two eyes about 30 cm apart',a:'A pair of color cameras that each look through a wheel of filters.',b:'The filters let scientists tell rock types apart by color, including iron-rich minerals, and the two eyes gave a sense of depth.',t:'Pancam photographed the sky and sun as well as rocks.'},
+{g:'Eyes',n:'Navcam',f:[.53,1.5,-.15],d:1.6,a:'A pair of wide-angle black-and-white cameras just below the Pancam eyes.',b:'Engineers used their pictures on Earth to plan each day’s safe drive.',t:'They looked at the ground ahead, not at the horizon.'},
+{g:'Eyes',n:'Mini-TES',f:[.5,.7,0],d:1.5,a:'An infrared spectrometer inside the body that looks out through the mast like a periscope.',b:'It measured heat and infrared light from rocks and soil, from far away, to guess their minerals before the rover drove closer.',t:'It helped decide which rock was worth the trip.'},
+{g:'Eyes',n:'Hazard cameras',f:[.53,.42,.14],d:1.3,a:'Wide-angle black-and-white cameras on the front and rear of the body.',b:'They watched for rocks and holes right next to the wheels, and let the rover stop itself if something looked unsafe.',t:'They sit low, so they see the ground the way a wheel would.'},
+{g:'Eyes',n:'Calibration sundial',f:[0,.68,.33],d:1.3,p:.8,a:'A small sundial with color patches, mounted on the deck.',b:'Pancam looked at its known colors to correct its pictures, and its shadow told the time on Mars. It carries a message for future explorers.',t:'It is both a science tool and a tiny monument.'},
+{g:'Talking to Earth',n:'High-gain antenna',f:[-.45,.9,-.25],d:2.4,s:'About 28 cm wide dish',a:'A steerable dish that points straight at Earth.',b:'It sent and received radio signals directly, taking between about 3 and 22 minutes one way depending on where the planets were.',t:'It is how Earth’s commands reached the rover.'},
+{g:'Talking to Earth',n:'Low-gain antenna',f:[-.55,.73,0],d:1.8,a:'A short antenna that works in all directions without aiming.',b:'It was a slow backup that could still hear Earth when the dish could not be pointed.',t:'It was the rover’s ear in the dark.'},
+{g:'Talking to Earth',n:'UHF antenna',f:[-.5,1.0,.3],d:2.4,s:'Up to about 128 kilobits per second',a:'A thin rod that talks to orbiters passing overhead.',b:'Mars Odyssey and later Mars Reconnaissance Orbiter relayed data at much higher speed than the dish, so most pictures travelled this way.',t:'Orbiters were Opportunity’s mail carriers.'},
+{g:'Science arm',n:'Instrument arm',f:[.62,.39,-.12],d:2.4,s:'Five joints',a:'A folded robot arm with a turret of four tools at its tip.',b:'It placed each tool against a rock, like a geologist’s hand, so tools could touch what cameras could only see.',t:'Its official name is the Instrument Deployment Device.'},
+{g:'Science arm',n:'Microscopic Imager',f:[.94,.35,-.04],d:1.2,a:'A close-up camera on the turret.',b:'It photographed rock and soil grains finer than sand, showing how they were layered or cemented.',t:'It revealed the ripples that told of shallow water.'},
+{g:'Science arm',n:'Mössbauer spectrometer',f:[.89,.25,-.04],d:1.2,a:'A tool that identifies iron-bearing minerals using a small cobalt-57 source.',b:'It found jarosite and hematite, minerals that form in water.',t:'The gold color is part of its sensor housing.'},
+{g:'Science arm',n:'APXS',f:[.94,.3,.01],d:1.2,s:'Alpha Particle X-ray Spectrometer',a:'A tool with a small curium-244 source that makes rock glow in X-rays.',b:'The X-rays reveal which chemical elements a rock is made of, such as sulfur, chlorine and bromine.',t:'It showed Meridiani rocks were salty.'},
+{g:'Science arm',n:'Rock Abrasion Tool',f:[.94,.3,-.09],d:1.2,s:'Grinds a hole about 45 mm wide, up to 5 mm deep',a:'A grinder with a diamond-toothed head and a brush.',b:'It ground away dusty weathered rock to expose fresh surface, then brushed it clean for the other tools to read.',t:'It let Opportunity look under the dust.'}];
+P.forEach(function(o){o.w=[o.f[0]*1.5,o.f[1]*1.5,o.f[2]*1.5];if(o.y===undefined)o.y=(Math.abs(o.f[0])+Math.abs(o.f[2])>.2)?Math.atan2(o.f[0],o.f[2]):.6;if(o.p===undefined)o.p=.3});
+var OV={n:'Opportunity at a glance',a:'About 185 kg and the size of a golf cart, with six wheels and a robot arm.',b:'Launched July 7, 2003, landed January 25, 2004 (UTC) on Meridiani Planum.',t:'Planned for 90 sols. It worked for 5,111.'};
+var INS=true,sel=-1,yaw=.6,yT=.6,pit=.28,dist=9.5,dT=9.5,drag=false,lx=0,ly=0,tg=new THREE.Vector3(0,1.1,-34),tv=new THREE.Vector3(),lk=new THREE.Vector3(),first=true;
+var pl=$('#plist'),pin=$('#pin');
+function show(o){$('#pg').textContent=o.g||'';$('#pn').textContent=o.n;$('#pa').textContent=o.a;$('#pb').textContent=o.b;$('#pt').textContent=o.t;$('#ps').textContent=o.s||''}
+var pitT=.28,hots=[],occ=[],hc=0,rc=new THREE.Raycaster(),hv=new THREE.Vector3();
+function pick(i){sel=i;if(i>=0){yT=P[i].y;dT=P[i].d;pitT=P[i].p}else{dT=9.5;pitT=.28}
+ pl.querySelectorAll('button').forEach(function(b,k){b.className=k-1===i?'on':''});hots.forEach(function(h,k){h.className=k===i?'hot on':'hot'});show(i<0?OV:P[i])}
+[{n:'Whole rover'}].concat(P).forEach(function(o,k){if(o.g&&(k<2||P[k-2].g!==o.g)){var gh=document.createElement('div');gh.className='gh';gh.textContent=o.g;pl.appendChild(gh)}
+ var b=document.createElement('button');b.textContent=o.n;b.onclick=function(){pick(k-1)};pl.appendChild(b)});
+P.forEach(function(o,k){var h=document.createElement('button');h.className='hot';h.innerHTML=(k+1)+'<span>'+o.n+'</span>';h.setAttribute('aria-label',o.n);h.onclick=function(){pick(k)};$('#insp').appendChild(h);hots.push(h);occ.push(false)});
+pick(-1);
+function ang(a){while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a}
+var cvs=$('#c');
+cvs.addEventListener('pointerdown',function(e){if(INS){drag=true;lx=e.clientX;ly=e.clientY;cvs.setPointerCapture(e.pointerId)}});
+cvs.addEventListener('pointermove',function(e){if(drag){yT-=(e.clientX-lx)*.006;yaw=yT;pit=Math.min(1.3,Math.max(.05,pit+(e.clientY-ly)*.005));pitT=pit;lx=e.clientX;ly=e.clientY}});
+cvs.addEventListener('pointerup',function(){drag=false});
+cvs.addEventListener('wheel',function(e){if(INS){e.preventDefault();dT=Math.min(14,Math.max(2,dT+e.deltaY*.005))}},{passive:false});
+$('#go').onclick=function(){INS=false;document.body.className='story';scrollTo(0,0);sp=0;tp=0};
+$('#back').onclick=function(){INS=true;document.body.className='insp';pick(-1)};
+// ---------- scene state ----------
+var c1=new THREE.Color(),c2=new THREE.Color(),sp=0,tp=0,mx=0,my=0;
+function resize(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+function prog(){var m=document.documentElement.scrollHeight-innerHeight;tp=m>0?scrollY/m:0}
+addEventListener('scroll',prog);prog();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count)}})},{threshold:.35});
+document.querySelectorAll('.card').forEach(function(c){io.observe(c)});
+function count(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,dec=+(el.dataset.dec||0),t0=performance.now();
+ (function f(t){var k=Math.min(1,(t-t0)/1800);el.textContent=(to*(1-Math.pow(1-k,3))).toLocaleString('en',{minimumFractionDigits:dec,maximumFractionDigits:dec});if(k<1)requestAnimationFrame(f)})(t0)}
+var dots=nav.children;
+function frame(t){requestAnimationFrame(frame);
+ sp+=(tp-sp)*.05;var c=INS?2:sp*(N-1),i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1];
+ for(var d=0;d<N;d++)dots[d].className=d===Math.round(c)?'on':'';
+ var rx=lp(a.x,b.x,e),st=lp(a.st,b.st,e),tpos=new THREE.Vector3(),tlook=new THREE.Vector3();
+ var dx=rx-rover.position.x;wg.forEach(function(g){g.rotation.z-=dx/.195});
+ rover.position.set(rx,H(rx,0)+.02,0);
+ if(INS){var fo=sel<0?[0,1.1,0]:P[sel].w;tv.set(rx+fo[0],rover.position.y+fo[1],fo[2]);tg.lerp(tv,.08);dist+=(dT-dist)*.08;pit+=(pitT-pit)*.06;
+  if(!drag){if(sel<0)yT+=.0018;yaw+=ang(yT-yaw)*.06}
+  tpos.set(tg.x+dist*Math.cos(pit)*Math.sin(yaw),Math.max(.4,tg.y+dist*Math.sin(pit)),tg.z+dist*Math.cos(pit)*Math.cos(yaw));tlook.copy(tg)}
+ else{var ox=lp(a.o[0],b.o[0],e)+mx*1.6,oy=lp(a.o[1],b.o[1],e)-my*.8,oz=lp(a.o[2],b.o[2],e),cxp=rx+ox;
+  tpos.set(cxp,Math.max(H(cxp,oz)+.7,0)+oy-.5,oz);tlook.set(rx,1.1,0)}
+ if(first){cam.position.copy(tpos);lk.copy(tlook);first=false}else{var k=INS?.1:.12;cam.position.lerp(tpos,k);lk.lerp(tlook,k)}
+ cam.lookAt(lk);
+ if(INS){hc++;for(var hi=0;hi<P.length;hi++){hv.set(rover.position.x+P[hi].w[0],rover.position.y+P[hi].w[1],P[hi].w[2]);var pv=hv.clone().project(cam),el=hots[hi];
+  if(pv.z>1||Math.abs(pv.x)>1.05||Math.abs(pv.y)>1.05){el.style.display='none';continue}
+  el.style.display='block';el.style.left=((pv.x*.5+.5)*innerWidth)+'px';el.style.top=((-pv.y*.5+.5)*innerHeight)+'px';
+  if(hc%8===hi%8){var dv=hv.clone().sub(cam.position),dl=dv.length();rc.set(cam.position,dv.normalize());rc.far=dl-.14;occ[hi]=rc.intersectObject(rover,true).length>0}
+  el.style.opacity=occ[hi]?.22:1}}
+ c1.set(a.sky);c2.set(b.sky);c1.lerp(c2,e);S.background.copy(c1);S.fog.color.copy(c1);S.fog.density=lp(a.fog,b.fog,e);
+ sun.intensity=lp(a.sun,b.sun,e);sun.position.set(rx-18,22,14);sun.target.position.set(rx,0,0);
+ sm2.opacity=lp(a.star,b.star,e);dm.opacity=st*.75;
+ var ha=hg.attributes.position.array;for(var h2=0;h2<HN;h2++){ha[h2*3]+=.03+st*.12;if(ha[h2*3]>25)ha[h2*3]-=50}hg.attributes.position.needsUpdate=true;
+ hm.opacity=st*(.28+.1*Math.sin(t*.0006));sfx.style.opacity=st*.6;R.toneMappingExposure=lp(1.1,.85,st);hemi.intensity=.7+.45*st;
+ var ei=Math.min(1,Math.max(.06,sun.intensity/2.5));EM.forEach(function(p){p[0].envMapIntensity=p[1]*ei});
+ var arr=dg.attributes.position.array;for(var q=0;q<DN;q++){arr[q*3]+=.05+st*.18;if(arr[q*3]>20)arr[q*3]-=40;arr[q*3+1]+=Math.sin(t*.001+q)*.003}
+ dg.attributes.position.needsUpdate=true;
+ R.render(S,cam)}
+requestAnimationFrame(frame);
+})();
+</script>
+
+
+<script src="story-extras.js"></script>
+<script>
+StoryExtras.init({
+  "craftName": "Opportunity Rover (MER-B)",
+  "craftType": "rover",
+  "nssdcaId": "2003-032A",
+  "archiveName": "Mars Exploration Rover Mission Archive, NASA/JPL",
+  "distanceAU": 1.52,
+  "juniorSteps": [
+    "I am Opportunity, the rover that was built to last 90 days on Mars and kept going for nearly 15 years! My journey is one of the greatest endurance adventures in human history.",
+    "A nine-year-old girl named Sofi Collis won the NASA naming contest for me and my twin sister Spirit. She wrote: 'In America, I can make all my dreams come true. Thank you for the Spirit and the Opportunity.'",
+    "On January 25, 2004, I bounded onto Meridiani Planum inside giant airbags and rolled straight into a small crater. It was an interplanetary hole-in-one with ancient bedrock right at my wheels!",
+    "When I ground into the rocks with my robotic arm, I made a revolutionary discovery: sulfate minerals called jarosite that only form in liquid water, and tiny grey hematite spheres nicknamed 'blueberries'!",
+    "In January 2005, while driving across the vast sand plains, I discovered a dark, pitted lump of metal: 'Heat Shield Rock', the first meteorite ever identified on another planet.",
+    "Not every sol was easy! In April 2005, my wheels got stuck deep into a soft sand dune called 'Purgatory Ripple'. It took my engineers on Earth five nerve-wracking weeks to carefully spin me free.",
+    "In September 2006, I arrived at Victoria Crater\u2014a massive bowl 730 metres wide with 70-metre cliffs. I drove along the edge and peered inside to read billions of years of layered Martian climate history.",
+    "My scientists challenged me to drive toward Endeavour Crater, 21 kilometres away! The trek took three years. By the time I arrived, I had driven the distance of a full Olympic marathon on Mars.",
+    "As years passed, I lost the steering on my right-front wheel, my heater was stuck on, and my flash memory grew forgetful. Yet dust-cleaning wind gusts kept sweeping my solar panels clean, keeping me alive sol after sol.",
+    "In May 2018, a catastrophic global dust storm swept across Mars, blocking sunlight and turning the sky dark as night. My solar panels couldn't generate power to keep my batteries warm.",
+    "On June 10, 2018, I sent my final telemetry signal from Perseverance Valley: my power was dropping critically low. For eight months, NASA sent hundreds of wake-up commands, but I never replied.",
+    "Over 5,111 sols, I drove 45.16 kilometres\u2014more than any wheeled vehicle has ever driven on another world\u2014proving that ancient Mars was once warm, wet, and habitable for life!"
+  ],
+  "specialistSteps": [
+    "NSSDCA ID: 2003-032A. I am MER-B (Opportunity): 185 kg landed mass, six-wheel solar-powered field geologist. Prime contractor: NASA/JPL. Designed for a 90-sol nominal surface baseline.",
+    "Entry, Descent & Landing (EDL): Direct atmospheric entry at 5.4 km/s protected by ablative heat shield, 14.1 m disk-gap-band parachute, RAD retrorockets, and 24-lobe Vectran airbags.",
+    "Eagle Crater Interplanetary Target: Bounced to rest at Meridiani Planum (1.95\u00b0 S, 354.47\u00b0 E), rolling into a 22 m impact crater and presenting layered outcrop bedrock within arm reach on Sol 1.",
+    "Mineralogical Proof of Acidic Water: M\u00f6ssbauer and APXS spectrometers confirmed jarosite\u2014a hydrous potassium-iron sulfate\u2014and hematite-rich concretion spherules ('blueberries') precipitated in acidic water.",
+    "Extraterrestrial Iron Meteorite: Identified 'Heat Shield Rock' (Meridiani Planum meteorite) on Sol 346, composed of 93% iron, 7% nickel with traces of germanium, verifying preservation in vacuum-dry atmosphere.",
+    "Purgatory Ripple Extraction: Trapped in soft sand ripple with 80% slip on Sol 446. JPL engineers recreated conditions in sandbox testbeds, commanding 192 m of wheel turns over five weeks to gain 1 metre of travel.",
+    "Victoria Crater Stratigraphy: Traversed 750 m diameter crater rim (Cape Verde, Duck Bay) between Sols 951\u20131630, logging layered cross-bedding evidence of ancient windblown sand dunes saturated by groundwater.",
+    "Endeavour Crater Long-Baseline Traverse: Completed 21 km trek to 22 km wide Noachian impact basin Endeavour (Sol 2652), analyzing phyllosilicate clay minerals indicating neutral-pH, habitable water.",
+    "Off-World Marathon Milestone: Surpassed 42.195 km cumulative distance on Sol 3968 (March 24, 2015), establishing the all-time extraterrestrial driving record across 5,111 operational sols.",
+    "Global Dust Storm Atmospheric Quench: Tau atmospheric opacity spiked above 10.8 in June 2018; solar array generation plunged from ~600 Wh/day to under 22 Wh/day, breaching survival threshold.",
+    "Final Telemetry Broadcast: Last transmission received at 05:12 UT on June 10, 2018 from Perseverance Valley. Mission concluded February 13, 2019 following >1,000 recovery transmissions.",
+    "Scientific Heritage Summary: Demonstrated ancient surface habitability, aqueous diagenesis, and logged 217,594 raw images, 45.16 km total odometer traverse, and 14 years, 136 days of continuous surface operation."
+  ],
+  "quiz": [
+    {
+      "q": "How many Martian days (sols) was Opportunity designed to operate versus how long it actually survived?",
+      "options": [
+        "90 sols designed, lasted 5,111 sols",
+        "10 sols designed, lasted 100 sols",
+        "1 year designed, lasted 2 years",
+        "5,000 sols designed, lasted 5,111 sols"
+      ],
+      "answer": 0,
+      "explain": "Opportunity was designed for a 90-sol primary mission, but operated for 5,111 sols (over 14 years)!"
+    },
+    {
+      "q": "What mineral did Opportunity discover that proved ancient Mars was soaked in liquid water?",
+      "options": [
+        "Jarosite",
+        "Quartz crystals",
+        "Pure gold",
+        "Dry ice"
+      ],
+      "answer": 0,
+      "explain": "Jarosite is a hydrated sulfate mineral that forms only in the presence of acidic liquid water."
+    },
+    {
+      "q": "What was the total distance Opportunity drove on Mars?",
+      "options": [
+        "5 kilometres",
+        "15.2 kilometres",
+        "45.16 kilometres",
+        "120 kilometres"
+      ],
+      "answer": 2,
+      "explain": "Opportunity completed 45.16 km\u2014the longest distance driven by any wheeled vehicle on another celestial body."
+    },
+    {
+      "q": "What event finally silenced Opportunity in 2018?",
+      "options": [
+        "A software glitch",
+        "A wheel snapped off",
+        "A catastrophic planet-encircling dust storm blocked the Sun",
+        "Its battery exploded"
+      ],
+      "answer": 2,
+      "explain": "A planet-wide dust storm blocked sunlight, preventing the solar arrays from recharging the rover's batteries."
+    }
+  ]
+});
+</script>
+
+</body>
+</html>

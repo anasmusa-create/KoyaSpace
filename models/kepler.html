@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kepler: the planet hunter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--ink:#f6e9da;--dim:#d3bba6;--rust:#c2693c;--blue:#9db2c7;--night:#0a0506;--card:rgba(24,11,7,.52);--line:rgba(255,214,170,.2);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--night:#0a0506}}
+:root[data-theme="dark"]{--night:#0a0506}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,2,.7))}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 22px 14px;font-size:14px;color:var(--dim)}
+header b{font-weight:500;color:var(--ink)}
+nav{display:flex;gap:8px}
+nav i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);transition:.4s}
+nav i.on{background:var(--rust);border-color:var(--rust);box-shadow:0 0 12px var(--rust)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+section.r{justify-content:flex-end}
+.card{max-width:460px;padding:30px 32px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12);opacity:.001;transform:translateY(26px);transition:opacity 1s,transform 1s}
+.card.in{opacity:1;transform:none}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(64px,13vw,170px);font-weight:600;letter-spacing:-.035em;text-shadow:0 8px 60px rgba(0,0,0,.6)}
+h2{font-size:clamp(30px,4vw,44px)}
+p{margin:0 0 12px}
+.hero{display:block;padding-top:24vh}
+.hero p{max-width:30ch;font-size:clamp(19px,2.2vw,26px);line-height:1.4;color:var(--ink);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.hero small{display:block;margin-top:22px;color:var(--dim);font-size:14px}
+.num{font-family:Fraunces,Georgia,serif;font-size:56px;font-weight:600;color:var(--ink);line-height:1}
+.stats{display:flex;gap:26px;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{display:block;font-size:13px;color:var(--dim);margin-top:4px}
+.note{font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--blue)}
+footer{font-size:13px;color:var(--dim);margin-top:18px}
+@media (max-width:760px){section,section.r{align-items:flex-end;justify-content:center;padding:0 16px 7vh}.card{padding:22px}.hero{align-items:flex-start;padding-top:20vh}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+header span{display:flex;align-items:center}
+body.insp{overflow:hidden}body.insp main,body.insp nav,body.insp #back{display:none}body.story #insp{display:none}
+#c{touch-action:none}body.story #c{touch-action:auto}
+#insp{position:fixed;inset:0;z-index:4;pointer-events:none}#insp>*{pointer-events:auto}
+.ip{position:absolute;left:22px;top:calc(env(safe-area-inset-top,0px) + 64px);width:290px}
+.ip h2{font-size:clamp(32px,4vw,46px)}.lead{color:var(--dim);font-size:15px;margin-bottom:14px}
+#plist{display:flex;flex-direction:column;gap:6px}
+#plist button,#back,#go{font:inherit;color:var(--ink);cursor:pointer}
+#plist button{text-align:left;padding:9px 14px;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px 4px 12px 4px;transition:.25s}
+#plist button:hover,#plist button.on{border-color:var(--rust);background:rgba(194,105,60,.3)}
+.pc{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:min(400px,38vw);padding:26px 28px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12)}
+.pc h3{font:300 30px/1.1 Fraunces,Georgia,serif;margin:0 0 10px}.pc p{font-size:15.5px}
+#go{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);transform:translateX(-50%);padding:14px 32px;border-radius:999px;border:1px solid var(--rust);background:linear-gradient(#d2784a,#a4512a);font-weight:500;box-shadow:0 10px 40px rgba(194,105,60,.45)}
+#back{padding:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;margin-right:14px;font-size:13px}
+#pin{position:absolute;width:38px;height:38px;margin:-19px 0 0 -19px;border:2px solid #fff;border-radius:50%;pointer-events:none!important;display:none;box-shadow:0 0 18px rgba(255,200,150,.8);animation:pl 1.6s infinite}
+@keyframes pl{50%{transform:scale(1.25);opacity:.5}}
+@media (max-width:760px){.ip{width:auto;right:16px;left:16px}.lead{display:none}#plist{flex-direction:row;overflow-x:auto;padding-bottom:6px}#plist button{white-space:nowrap}.pc{top:auto;bottom:84px;right:16px;left:16px;width:auto;transform:none;max-height:34vh;overflow:auto;padding:18px}}
+#c{filter:saturate(.95) contrast(1.1)}#sfx{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;mix-blend-mode:multiply;background:radial-gradient(ellipse at 50% 40%,rgba(120,80,50,.2),rgba(55,32,20,.8))}
+.gk{font-size:13px;color:#e08a5a;margin:0 0 4px}.spec{font-size:13.5px;color:var(--blue);margin:8px 0 0}.pc{max-height:76vh;overflow:auto}
+#plist{max-height:calc(100vh - 250px);overflow:auto;padding-right:4px}.gh{font-size:12px;color:var(--dim);margin:10px 0 2px}
+.hot{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:1.5px solid #fff;background:rgba(194,105,60,.8);color:#fff;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:0;cursor:pointer;box-shadow:0 0 12px rgba(255,200,150,.7);display:none;z-index:1;transition:opacity .3s}
+.hot.on{background:#fff;color:#7a3a1c;box-shadow:0 0 20px #fff;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:2}
+.hot span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:6px;background:rgba(20,10,6,.85);color:var(--ink);font-size:12px;display:none}
+.hot:hover span,.hot.on span{display:block}
+@media (max-width:760px){.gh{display:none}#plist{max-height:none}.pc{max-height:30vh}}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:6px 0 4px;font-size:15px}.kv dt{color:var(--dim)}.kv dd{margin:0}
+.chips b{font-weight:500;color:var(--ink)}
+@media (max-width:760px){.chips span{font-size:12px;padding:4px 10px}.kv{font-size:13.5px}.num{font-size:44px}h2{font-size:30px}}
+</style>
+</head>
+<body class="insp" style="background-color: #05070B; margin: 0;">
+<div id="se-loader" style="position:fixed;inset:0;background:#05070B;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9da;font-family:'IBM Plex Sans',system-ui,sans-serif;transition:opacity 0.6s ease, visibility 0.6s ease;">
+  <div style="width:48px;height:48px;border:3px solid rgba(255,214,170,0.18);border-top:3px solid #c2693c;border-radius:50%;animation:se-spin 1s linear infinite;margin-bottom:18px;"></div>
+  <div style="font-family:Fraunces,Georgia,serif;font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;">Kepler Space Telescope</div>
+  <div style="font-size:12px;color:#9db2c7;letter-spacing:0.08em;text-transform:uppercase;">Establishing NSSDCA Telemetry Link...</div>
+</div>
+<style>
+@keyframes se-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+<canvas id="c"></canvas><div class="vig"></div><div id="sfx"></div><div class="grain"></div>
+<header><b>Space Apps Challenge, Sulaymaniyah 2026</b><span><button id="back">Inspect the telescope</button><nav id="nav"></nav></span></header>
+<div id="insp"><div class="ip"><h2>Meet Kepler</h2><p class="lead">Drag to turn it. Scroll to zoom. Pick a part to learn what it did.</p><div id="plist"></div></div>
+<div class="pc"><p class="gk" id="pg"></p><h3 id="pn"></h3><p id="pa"></p><p id="pb"></p><p class="note" id="pt"></p><p class="spec" id="ps"></p></div>
+<button id="go">Start the journey</button><i id="pin"></i></div>
+
+<main>
+<section class="hero"><div class="card in" style="background:none;border:0;box-shadow:none;backdrop-filter:none;padding:0 0 0 2vw;max-width:none">
+<h1>Kepler / K2</h1><p>NASA’s first planet-hunting mission. It showed the sky holds more planets than stars.</p>
+<small>Abandoned but Not Forgotten: scroll to follow its story</small></div></section>
+<section><div class="card"><h2>Staring at one patch of sky</h2>
+<p>Launched on March 6, 2009, Kepler carried the largest digital camera sent to space up to that time. It stared at one star-filled patch of Cygnus, watching about 150,000 stars at once for Earth-sized planets.</p>
+<div class="stats"><div><div class="num" data-to="150000">0</div><span>stars watched at once</span></div></div>
+<p class="note">Its main mirror was 1.4 m (4 ft 7 in) wide, one of the largest beyond Earth orbit.</p></div></section>
+<section class="r"><div class="card"><h2>How a planet shows itself</h2>
+<p>Kepler detected planets by transits: tiny dips in a star’s brightness when a planet crosses in front of it. Watch the dip in the curve as the dark planet slides across the star.</p>
+<canvas id="lc" width="320" height="90" style="width:100%;margin-top:10px;border-radius:10px;background:rgba(255,255,255,.05)"></canvas></div></section>
+<section><div class="card"><h2>Five planets in six weeks</h2>
+<p>In its first six weeks Kepler found five exoplanets, Kepler 4b to 8b, announced in January 2010. In April 2010 it found Kepler-9, the first confirmed system with more than one planet transiting the same star, after surveying more than 156,000 stars over seven months.</p>
+<div class="stats"><div><div class="num" data-to="156000">0</div><span>stars surveyed for Kepler-9</span></div></div></div></section>
+<section class="r"><div class="card"><h2>Kepler-11: a crowded system</h2>
+<p>Kepler-11, a yellow dwarf about 2,000 light years away, has six planets, all larger than Earth. Kepler found that nature often packs planets close to their stars, so our own inner solar system looks sparse by comparison.</p>
+<div class="stats"><div><div class="num" data-to="6">0</div><span>planets around one star</span></div></div></div></section>
+<section><div class="card"><h2>Planets are everywhere</h2>
+<p>When the mission was first imagined, 35 years earlier, no planet outside our solar system was known, said founding investigator William Borucki. The most common size Kepler found, between Earth and Neptune, does not exist in our solar system at all.</p></div></section>
+<section class="r"><div class="card"><h2>A wheel fails</h2>
+<p>In May 2013 Kepler lost the second of its four reaction wheels, the gyroscope-like parts that point the telescope. It needs three. Without them, sunlight itself, which pushes on the telescope, kept nudging Kepler off target.</p></div></section>
+<section><div class="card"><h2>K2: steering with sunlight</h2>
+<p>Engineers balanced the telescope against the pressure of sunlight, like a kayak steering into a current. The new mission, K2, scanned the sky along the ecliptic, changing fields about every three months. Planners expected 10 campaigns; it managed 19, and raised the count of surveyed stars above 500,000.</p>
+<div class="stats"><div><div class="num" data-to="19">0</div><span>K2 campaigns</span></div></div></div></section>
+<section class="r"><div class="card"><h2>Last light</h2>
+<p>After nine years in deep space, Kepler ran out of the fuel needed for science. NASA retired it on October 30, 2018, in a safe orbit away from Earth, having found more than 2,600 planets outside our solar system.</p>
+<div class="stats"><div><div class="num" data-to="2600">0</div><span>planets discovered</span></div></div></div></section>
+<section><div class="card"><h2>What it left behind</h2>
+<p>Kepler’s results suggest 20 to 50 percent of the stars we see have small, possibly rocky planets in their habitable zones, where liquid water might pool. K2’s data were public immediately, and TESS, launched in April 2018, builds on Kepler’s work.</p></div></section>
+<section class="r"><div class="card"><h2>Mission file</h2>
+<dl class="kv"><dt>Type</dt><dd>Space telescope</dd><dt>Destination</dt><dd>Heliocentric orbit</dd><dt>Launch</dt><dd>March 6, 2009</dd><dt>Objective</dt><dd>Search for exoplanets</dd><dt>Mirror</dt><dd>1.4 m wide</dd></dl>
+<div class="chips"><span>NASA’s first planet-hunting mission</span><span>First Earth-size planets in habitable zones</span><span>9 years in deep space</span><span>2,600+ planets</span></div>
+<footer>Facts from NASA’s Kepler / K2 mission page. The telescope is procedural 3D art, not to scale.</footer></div></section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var N=11,$=function(s){return document.querySelector(s)};
+var nav=$('#nav');for(var i=0;i<N;i++)nav.appendChild(document.createElement('i'));
+function lp(a,b,t){return a+(b-a)*t}
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+function mk(w,hh,fn){var c=document.createElement('canvas');c.width=w;c.height=hh;var x=c.getContext('2d');fn(x,w,hh);var t=new THREE.CanvasTexture(c);t.anisotropy=8;return t}
+var R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+var S=new THREE.Scene();S.background=new THREE.Color(0x02030a);
+var cam=new THREE.PerspectiveCamera(50,1,.1,3000);S.add(cam);
+var sun=new THREE.DirectionalLight(0xfff1dc,3.2);sun.position.set(-9,5,-1);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);var sc=sun.shadow.camera;sc.left=sc.bottom=-7;sc.right=sc.top=7;sc.far=40;S.add(sun);
+var hemi=new THREE.HemisphereLight(0x6d7fb0,0x151520,.35);S.add(hemi);
+var pm=new THREE.PMREMGenerator(R),es=new THREE.Scene();es.add(new THREE.Mesh(new THREE.SphereGeometry(60,16,8),new THREE.MeshBasicMaterial({color:0x07080f,side:THREE.BackSide})));var sb=new THREE.Mesh(new THREE.SphereGeometry(8,16,12),new THREE.MeshBasicMaterial({color:0xfff2dd}));sb.position.set(-30,20,-24);es.add(sb);S.environment=pm.fromScene(es,.04).texture;
+// stars: a uniform sky plus a dense patch toward +z (Kepler's field in Cygnus)
+function gauss(){return (Math.random()+Math.random()+Math.random()-1.5)*.9}
+var sg=new THREE.BufferGeometry(),spp=new Float32Array(3300*3),d0=new THREE.Vector3(.35,.2,1).normalize();
+for(var s2=0;s2<3300;s2++){var v=new THREE.Vector3();if(s2<1500){v.set(Math.random()-.5,Math.random()-.5,Math.random()-.5)}else{v.copy(d0).add(new THREE.Vector3(gauss(),gauss(),gauss()).multiplyScalar(.22))}v.normalize().multiplyScalar(1500);spp.set([v.x,v.y,v.z],s2*3)}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));S.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:1.5,sizeAttenuation:false})));
+// the target star, its glow, a transiting planet, and a crowded system
+var TS=new THREE.Vector3(7,2,22);
+var stT=mk(512,256,function(x,w,hh){var g=x.createLinearGradient(0,0,0,hh);g.addColorStop(0,'#ffcf80');g.addColorStop(.5,'#ffeab4');g.addColorStop(1,'#ffcf80');x.fillStyle=g;x.fillRect(0,0,w,hh);for(var k=0;k<4500;k++){x.fillStyle='rgba('+(k%2?'255,250,225':'235,150,70')+','+Math.random()*.18+')';x.beginPath();x.arc(Math.random()*w,Math.random()*hh,2+Math.random()*6,0,6.283);x.fill()}for(var s3=0;s3<7;s3++){var sx=Math.random()*w,sy=hh*(.3+Math.random()*.4);x.fillStyle='rgba(150,70,30,.4)';x.beginPath();x.ellipse(sx,sy,14+Math.random()*8,9+Math.random()*4,0,0,6.283);x.fill();x.fillStyle='rgba(55,22,8,.75)';x.beginPath();x.ellipse(sx,sy,6+Math.random()*8,4+Math.random()*4,0,0,6.283);x.fill()}});
+var tstar=new THREE.Mesh(new THREE.SphereGeometry(4,64,40),new THREE.MeshBasicMaterial({map:stT}));tstar.position.copy(TS);S.add(tstar);
+var glT=mk(128,128,function(x,w,hh){var g=x.createRadialGradient(64,64,4,64,64,64);g.addColorStop(0,'rgba(255,240,200,.9)');g.addColorStop(.3,'rgba(255,200,120,.25)');g.addColorStop(1,'rgba(255,200,120,0)');x.fillStyle=g;x.fillRect(0,0,w,hh)});
+function mkGlow(o){var g=new THREE.Sprite(new THREE.SpriteMaterial({map:glT,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:o}));g.position.copy(TS);S.add(g);return g}
+var glow=mkGlow(1),glow2=mkGlow(.35);
+var tpl=new THREE.Mesh(new THREE.SphereGeometry(.5,24,16),new THREE.MeshBasicMaterial({color:0x000000}));S.add(tpl);
+var orb=new THREE.Group();orb.position.copy(TS);S.add(orb);var PV=[];
+var disk=new THREE.Mesh(new THREE.RingGeometry(4.6,21,96),new THREE.MeshBasicMaterial({color:0x6a7fa8,transparent:true,opacity:.05,side:THREE.DoubleSide,depthWrite:false}));disk.rotation.x=-Math.PI/2;orb.add(disk);
+function ptx(cols,seed,mode){return mk(512,256,function(x,w,hh){var n=cols.length;for(var i=0;i<24;i++){x.fillStyle=cols[(i*7+seed)%n];x.fillRect(0,i*hh/24,w,hh/24+1)}
+ for(var k=0;k<900;k++){x.fillStyle='rgba('+(mode==='lava'?'255,110,30':'255,255,255')+','+Math.random()*(mode==='gas'?.1:.07)+')';x.beginPath();x.ellipse(Math.random()*w,Math.random()*hh,8+Math.random()*60,.6+Math.random()*(mode==='gas'?4:2.5),0,0,6.283);x.fill()}
+ if(mode!=='gas'){for(var c=0;c<70;c++){x.strokeStyle='rgba(0,0,0,.35)';x.lineWidth=2;x.beginPath();x.arc(Math.random()*w,Math.random()*hh,3+Math.random()*16,0,6.283);x.stroke()}}
+ if(mode==='lava'){x.strokeStyle='rgba(255,120,30,.85)';x.lineWidth=1.5;for(var l=0;l<60;l++){x.beginPath();var lx=Math.random()*w,ly=Math.random()*hh;x.moveTo(lx,ly);for(var j=0;j<6;j++){lx+=Math.random()*30-15;ly+=Math.random()*20-10;x.lineTo(lx,ly)}x.stroke()}}
+ if(mode==='gas'){x.fillStyle='rgba(255,255,255,.3)';x.beginPath();x.ellipse(Math.random()*w,hh*.62,26,12,0,0,6.283);x.fill()}})}
+function atmo(r,c){return new THREE.Mesh(new THREE.SphereGeometry(r*1.12,32,20),new THREE.ShaderMaterial({uniforms:{uC:{value:new THREE.Color(c[0],c[1],c[2])}},vertexShader:'varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform vec3 uC;varying vec3 vN;void main(){float i=pow(max(.0,.7-dot(vN,vec3(0.,0.,1.))),3.);gl_FragColor=vec4(uC*i*1.8,i);}',side:THREE.BackSide,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}))}
+function lab(ch){var sp3=new THREE.Sprite(new THREE.SpriteMaterial({map:mk(64,64,function(x){x.fillStyle='rgba(255,255,255,.9)';x.font='bold 40px sans-serif';x.textAlign='center';x.fillText(ch,32,46)}),depthTest:false,transparent:true}));sp3.scale.set(1.2,1.2,1);return sp3}
+[[6,.34,'lava',['#2a1c18','#4a2c1e','#6b3a22'],[1,.5,.2],'b'],[7.6,.5,'rock',['#8a7a6a','#a89684','#6e6256'],[.9,.8,.6],'c'],[9.2,.55,'gas',['#d8c9a8','#c2ae88','#e8dcc0'],[.9,.85,.6],'d'],[12,.8,'gas',['#3b6fa8','#4f86c0','#2f5a8c','#7fb0d8'],[.4,.7,1],'e'],[15,.9,'gas',['#4aa8b8','#62c0cc','#388ea0'],[.4,.9,1],'f'],[19,.7,'gas',['#a8b8c8','#8aa0b8','#c8d4e0'],[.7,.85,1],'g']].forEach(function(o,k){var pv=new THREE.Group();pv.rotation.x=.12*(k%3-1);pv.userData.sp=.0006/(1+k*.5);var m=new THREE.Mesh(new THREE.SphereGeometry(o[1],48,32),new THREE.MeshStandardMaterial({map:ptx(o[3],k,o[2]),roughness:.85,emissive:o[2]==='lava'?0x401404:0x000000}));m.position.x=o[0];m.add(atmo(o[1],o[4]));var lb=lab(o[5]);lb.position.y=o[1]+.9;m.add(lb);pv.add(m);pv.rotation.y=k*1.3;var pts=[];for(var q=0;q<=96;q++)pts.push(new THREE.Vector3(Math.cos(q/96*6.2832)*o[0],0,Math.sin(q/96*6.2832)*o[0]));var ln=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.22}));ln.rotation.x=pv.rotation.x;orb.add(ln);orb.add(pv);PV.push(pv)});
+// sunlight pressure particles
+var RN=160,rg=new THREE.BufferGeometry();rg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(RN*3),3));var rpm=new THREE.PointsMaterial({color:0xffd9a0,size:2.5,sizeAttenuation:false,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}),rays=new THREE.Points(rg,rpm);rays.frustumCulled=false;S.add(rays);var SD=sun.position.clone().normalize();
+// Kepler (axis +z): sunshade, Schmidt corrector, hexagonal bus around the mirror, 3 solar wings
+function mat(c,m,r,map){return new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r,map:map||null})}
+var HP=Math.PI/2,foilT=mk(512,512,function(x,w,hh){var g=x.createLinearGradient(0,0,w,hh);g.addColorStop(0,'#a87a22');g.addColorStop(.5,'#e8c35c');g.addColorStop(1,'#946a1c');x.fillStyle=g;x.fillRect(0,0,w,hh);for(var c=0;c<500;c++){x.strokeStyle=c%2?'rgba(255,240,180,.4)':'rgba(70,45,5,.45)';var a=Math.random()*w,b=Math.random()*hh;x.beginPath();x.moveTo(a,b);x.lineTo(a+Math.random()*40-20,b+Math.random()*40-20);x.stroke()}x.strokeStyle='rgba(20,15,5,.6)';x.lineWidth=3;for(var i=1;i<4;i++){x.beginPath();x.moveTo(i*w/4,0);x.lineTo(i*w/4,hh);x.stroke()}x.fillStyle='rgba(30,20,5,.7)';for(var r=0;r<30;r++)for(var q=1;q<4;q++)x.fillRect(q*w/4-8,r*hh/30+4,3,3)}),
+panT=mk(256,256,function(x,w,hh){var g=x.createLinearGradient(0,0,w,hh);g.addColorStop(0,'#16286a');g.addColorStop(1,'#0d1a4c');x.fillStyle=g;x.fillRect(0,0,w,hh);x.strokeStyle='rgba(190,200,230,.55)';x.lineWidth=1;for(var i=0;i<=16;i++){x.beginPath();x.moveTo(i*w/16,0);x.lineTo(i*w/16,hh);x.stroke();x.beginPath();x.moveTo(0,i*hh/16);x.lineTo(w,i*hh/16);x.stroke()}x.fillStyle='rgba(210,215,230,.8)';for(var j=0;j<16;j++)x.fillRect(j*w/16+w/32-1,0,2,hh)}),
+mrT=mk(512,512,function(x,w,hh){x.fillStyle='#9aa4b2';x.fillRect(0,0,w,hh);x.strokeStyle='rgba(40,50,64,.55)';x.lineWidth=2;for(var r=-9;r<=9;r++)for(var c=-9;c<=9;c++){var cx=w/2+c*34+(r%2?17:0),cy=hh/2+r*29.4;x.beginPath();for(var k=0;k<6;k++){var a=k*Math.PI/3+Math.PI/6;x.lineTo(cx+Math.cos(a)*19.6,cy+Math.sin(a)*19.6)}x.closePath();x.stroke()}var gr=x.createRadialGradient(w/2,hh/2,20,w/2,hh/2,w/2);gr.addColorStop(0,'rgba(255,255,255,.28)');gr.addColorStop(1,'rgba(0,0,0,.28)');x.fillStyle=gr;x.fillRect(0,0,w,hh)}),
+fpT=mk(512,512,function(x,w,hh){x.fillStyle='#16171b';x.fillRect(0,0,w,hh);for(var r=0;r<5;r++)for(var c=0;c<5;c++){if((r%4===0)&&(c%4===0))continue;var px=36+c*88,py=36+r*88;x.fillStyle='#26336a';x.fillRect(px,py,80,80);x.fillStyle='#8d9bc8';x.fillRect(px+5,py+5,32,70);x.fillRect(px+43,py+5,32,70);x.strokeStyle='#c9a24a';x.lineWidth=2;x.strokeRect(px,py,80,80)}});
+foilT.wrapS=foilT.wrapT=panT.wrapS=panT.wrapT=THREE.RepeatWrapping;foilT.repeat.set(.7,.7);
+var tbM=mat(0xe2e4e7,.4,.5),inM=mat(0x0b0b0e,.3,.8),foilM=mat(0xffffff,.8,.35,foilT),panM=mat(0xffffff,.4,.35,panT),alM=mat(0xc2c6cb,.9,.3),mrM=mat(0xffffff,1,.1,mrT),gdM=mat(0xd2a53c,.9,.3),dkM=mat(0x1c1c20,.6,.5),whM=mat(0xeceef0,.3,.6),fpM=mat(0xffffff,.3,.5,fpT),glM=new THREE.MeshStandardMaterial({color:0x9fd0ff,metalness:0,roughness:0,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false}),dsM=mat(0xe2e3e6,.5,.45);
+inM.side=THREE.BackSide;foilM.side=dsM.side=dkM.side=THREE.DoubleSide;
+var SCG=new THREE.Group();S.add(SCG);
+function V(a){return new THREE.Vector3(a[0],a[1],a[2])}
+function tube(a,b,r,m){var A=V(a),B=V(b),d=B.clone().sub(A),t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),10),m);t.position.copy(A).add(B).multiplyScalar(.5);t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());t.castShadow=true;SCG.add(t)}
+function ad(geo,m,x,y,z,rx,ry,rz,par){var o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.rotation.set(rx||0,ry||0,rz||0);o.castShadow=o.receiveShadow=true;(par||SCG).add(o);return o}
+function hexS(R){var s=new THREE.Shape();for(var k=0;k<6;k++){var a=k*Math.PI/3;k?s.lineTo(Math.cos(a)*R,Math.sin(a)*R):s.moveTo(Math.cos(a)*R,Math.sin(a)*R)}s.closePath();return s}
+ad(new THREE.CylinderGeometry(1,1,2.7,64,1,true),tbM,0,0,2.55,HP);ad(new THREE.CylinderGeometry(.985,.985,2.7,64,1,true),inM,0,0,2.55,HP);ad(new THREE.TorusGeometry(1,.035,8,64),alM,0,0,3.9);
+[1.9,2.45,3,3.5].forEach(function(z){ad(new THREE.TorusGeometry(.96,.03,6,48),dkM,0,0,z)});
+for(var sk=0;sk<12;sk++){var sa=sk*Math.PI/6;ad(new THREE.BoxGeometry(.04,.02,2.7),alM,Math.cos(sa)*1.02,Math.sin(sa)*1.02,2.55,0,0,sa)}
+var hs=hexS(1.5);hs.holes.push(new THREE.Path(hexS(1.44).getPoints()));var bg=new THREE.ExtrudeGeometry(hs,{depth:2.8,bevelEnabled:false});bg.translate(0,0,-1.6);ad(bg,foilM,0,0,0);
+var tp=hexS(1.52),hole=new THREE.Path();hole.absarc(0,0,.95,0,6.2832,true);tp.holes.push(hole);ad(new THREE.ExtrudeGeometry(tp,{depth:.08,bevelEnabled:false}),alM,0,0,1.2);
+ad(new THREE.CircleGeometry(.95,64),glM,0,0,1.24);ad(new THREE.TorusGeometry(.95,.02,8,64),alM,0,0,1.25);
+ad(new THREE.ShapeGeometry(hexS(1.44)),dkM,0,0,-1.55);
+ad(new THREE.CircleGeometry(.7,64),mrM,0,0,-1.2);ad(new THREE.TorusGeometry(.7,.025,8,64),alM,0,0,-1.2);
+ad(new THREE.PlaneGeometry(.95,.95),fpM,0,0,-.2);ad(new THREE.PlaneGeometry(.95,.95),fpM,0,0,-.2,0,Math.PI,0);ad(new THREE.BoxGeometry(1.0,1.0,.04),dkM,0,0,-.23);
+[90,210,330].forEach(function(d){var a=d*Math.PI/180;tube([Math.cos(a)*.5,Math.sin(a)*.5,-.22],[Math.cos(a)*1.36,Math.sin(a)*1.36,-.5],.018,alM)});
+ad(new THREE.CylinderGeometry(1.25,1.25,.1,48),whM,0,0,-1.8,HP);[.4,.7,1.0].forEach(function(r){ad(new THREE.TorusGeometry(r,.02,6,48),dkM,0,0,-1.87)});
+[30,150,270].forEach(function(d,k){var a=d*Math.PI/180;ad(new THREE.BoxGeometry(.03,.9,1.6),k%2?alM:dkM,Math.cos(a)*1.33,Math.sin(a)*1.33,-.4,0,0,a);ad(new THREE.BoxGeometry(.05,.14,.04),alM,Math.cos(a)*1.36,Math.sin(a)*1.36,.2,0,0,a)});
+for(var th=0;th<6;th++){var ta=th*Math.PI/3;ad(new THREE.ConeGeometry(.04,.14,12),dkM,Math.cos(ta)*1.4,Math.sin(ta)*1.4,-1.7,-HP)}
+[[1.05,.75],[-1.05,.75]].forEach(function(q){ad(new THREE.CylinderGeometry(.08,.1,.3,16),dkM,q[0],q[1],1.43,HP);ad(new THREE.TorusGeometry(.1,.015,6,20),alM,q[0],q[1],1.58)});
+tube([.8,-.8,1.28],[.8,-.8,1.9],.01,alM);ad(new THREE.SphereGeometry(.03,10,8),alM,.8,-.8,1.9);
+[90,210,330].forEach(function(d){var g=new THREE.Group();g.rotation.z=d*Math.PI/180;SCG.add(g);var pg=new THREE.Group();pg.position.set(1.32,0,-.25);pg.rotation.y=.35;g.add(pg);
+ var sh=new THREE.Shape();sh.moveTo(0,-.7);sh.lineTo(2.4,-1.1);sh.lineTo(2.4,1.1);sh.lineTo(0,.7);sh.closePath();ad(new THREE.ExtrudeGeometry(sh,{depth:.05,bevelEnabled:false}),panM,0,0,0,0,0,0,pg);
+ [-.4,.4].forEach(function(v){ad(new THREE.BoxGeometry(2.3,.03,.03),alM,1.2,v,-.03,0,0,0,pg)});ad(new THREE.CylinderGeometry(.045,.045,1.5,12),alM,0,0,.02,0,0,0,pg)});
+tube([-1.15,.665,-.9],[-1.9,1.1,-1.5],.04,alM);var dp=[];for(var q=0;q<=16;q++){var r3=.28*q/16;dp.push(new THREE.Vector2(r3,.1*Math.pow(r3/.28,2)))}
+ad(new THREE.LatheGeometry(dp,32),dsM,-1.9,1.1,-1.5,-HP,0,0);tube([-1.9,1.1,-1.5],[-1.9,1.1,-1.35],.012,alM);
+var P=[
+{g:'Optics',n:'Sunshade and barrel',f:[0,1,3.5],d:10,p:.2,a:'A long barrel lined with dark vanes at the top of the telescope.',b:'It keeps stray sunlight out so the telescope can see the faint dips of distant stars.',t:'The telescope looks along this barrel at one patch of Cygnus.'},
+{g:'Optics',n:'Schmidt corrector plate',f:[0,0,1.24],d:6,p:.3,y:.3,s:'About 1 m (3 ft) aperture',a:'The glass plate across the telescope’s front opening.',b:'It lets the light of about 150,000 stars into the telescope.',t:'It is only visible when you look down the barrel.'},
+{g:'Optics',n:'Primary mirror',f:[0,0,-1.2],d:7,p:.25,y:.3,s:'1.4 m (4 ft 7 in) across',a:'A lightweight honeycomb mirror at the bottom of the telescope.',b:'It was one of the largest mirrors beyond Earth orbit.',t:'It focuses the starlight onto the detectors.'},
+{g:'Optics',n:'Focal plane (CCD array)',f:[0,0,-.2],d:5,p:.2,y:.3,s:'42 CCDs in 21 modules, about 95 megapixels',a:'The sensor that measured every star’s brightness.',b:'It was the largest digital camera outfitted for outer-space observations at that time.',t:'It caught transits: tiny dips as planets cross stars.'},
+{g:'Telescope body',n:'Hexagonal bus',f:[1.17,.68,-.4],d:6,a:'The six-sided body wrapped around the mirror.',b:'It carries the electronics, power and pointing systems.',t:'It orbits the Sun in a heliocentric orbit.'},
+{g:'Telescope body',n:'Solar array',f:[0,2.4,-1.0],d:7,p:.3,a:'Three fan-shaped panels around the bus.',b:'The Sun powered Kepler, and also pushed it around with the pressure of its light.',t:'K2 later used that pressure to steer.'},
+{g:'Telescope body',n:'Star trackers',f:[1.05,.75,1.5],d:4,p:.3,a:'Small cameras that read star patterns to know where the telescope points.',b:'Precise pointing was essential for holding the same stars steady.',t:'Pointing control is what failed in 2013.'},
+{g:'Pointing',n:'Reaction wheels',f:[0,0,-1.45],d:5,y:3.14,p:.2,a:'Gyroscope-like wheels used to point the telescope precisely.',b:'Kepler had four. It lost the second in May 2013, and needed three.',t:'That ended the original mission’s new data.'},
+{g:'Communication',n:'High-gain antenna',f:[-1.9,1.1,-1.5],d:4,y:3.5,p:.1,a:'A small dish on a short boom behind the bus.',b:'It sent Kepler’s science data to Earth, even after low-fuel warnings.',t:'Campaign 19 was the last data it sent.'},
+{g:'Thermal',n:'Radiator',f:[0,0,-1.85],d:6,y:3.14,p:.2,a:'A pale disc on the back of the telescope.',b:'It sheds heat from the electronics and the sensors.',t:'Keeping the detectors cool helps them see faint dips.'}];
+P.forEach(function(o){if(o.y===undefined)o.y=(Math.abs(o.f[0])+Math.abs(o.f[2])>.3)?Math.atan2(o.f[0],o.f[2]):.6;if(o.p===undefined)o.p=.3});
+var OV={n:'Kepler at a glance',a:'A space telescope built to search a patch of the Milky Way for Earth-sized planets.',b:'Launched March 6, 2009. It used transits to find planets around other stars.',t:'Its second act, K2, found planets for as long as the first mission.'};
+function KF(o,t,x){x=x||{};return {o:o,t:t,st:x.st||0,tr:x.tr||0,pl:x.pl||0,ray:x.ray||0,sun:x.sun||3.2}}
+var K=[KF([-6.5,3,11],[0,0,.8]),KF([-5,2,6],[3,1.5,14],{st:1}),KF([-3,1.2,4],[6,2,22],{st:1,tr:.5}),KF([-5,2,7],[3,1.5,12],{st:1,tr:1}),KF([-9,7,12],[7,2,22],{st:1,tr:1,pl:1}),KF([8,3,8],[0,0,.5]),KF([2.8,1.2,-4.6],[0,0,-1.4]),KF([-7,4,-2],[0,0,0],{ray:1}),KF([-9,3,12],[0,0,0],{sun:1.6}),KF([6,3,13],[0,0,.5],{sun:1.2}),KF([-2,2.4,16],[0,0,.5],{sun:1})];
+// inspect mode
+var INS=true,sel=-1,yaw=.6,yT=.6,cp=.28,pitT=.28,dist=13,dT=13,drag=false,lx=0,ly0=0,tg=new THREE.Vector3(0,0,.7),tv=new THREE.Vector3(),lk=new THREE.Vector3(),first=true;
+var pl=$('#plist'),hots=[],occ=[],hc=0,rc=new THREE.Raycaster(),hv=new THREE.Vector3();
+function show(o){$('#pg').textContent=o.g||'';$('#pn').textContent=o.n;$('#pa').textContent=o.a;$('#pb').textContent=o.b;$('#pt').textContent=o.t;$('#ps').textContent=o.s||''}
+function pick(i){sel=i;if(i>=0){yT=P[i].y;dT=P[i].d;pitT=P[i].p}else{dT=13;pitT=.28}
+ pl.querySelectorAll('button').forEach(function(b,k){b.className=k-1===i?'on':''});hots.forEach(function(h2,k){h2.className=k===i?'hot on':'hot'});show(i<0?OV:P[i])}
+[{n:'Whole telescope'}].concat(P).forEach(function(o,k){if(o.g&&(k<2||P[k-2].g!==o.g)){var gh=document.createElement('div');gh.className='gh';gh.textContent=o.g;pl.appendChild(gh)}var b=document.createElement('button');b.textContent=o.n;b.onclick=function(){pick(k-1)};pl.appendChild(b)});
+P.forEach(function(o,k){var b=document.createElement('button');b.className='hot';b.innerHTML=(k+1)+'<span>'+o.n+'</span>';b.setAttribute('aria-label',o.n);b.onclick=function(){pick(k)};$('#insp').appendChild(b);hots.push(b);occ.push(false)});
+pick(-1);
+function ang(a){while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a}
+var cvs=$('#c');
+cvs.addEventListener('pointerdown',function(e){if(INS){drag=true;lx=e.clientX;ly0=e.clientY;cvs.setPointerCapture(e.pointerId)}});
+cvs.addEventListener('pointermove',function(e){if(drag){yT-=(e.clientX-lx)*.006;yaw=yT;cp=Math.min(1.3,Math.max(-1.2,cp+(e.clientY-ly0)*.005));pitT=cp;lx=e.clientX;ly0=e.clientY}});
+cvs.addEventListener('pointerup',function(){drag=false});cvs.addEventListener('pointercancel',function(){drag=false});
+cvs.addEventListener('wheel',function(e){if(INS){e.preventDefault();dT=Math.min(20,Math.max(2,dT+e.deltaY*.008))}},{passive:false});
+$('#go').onclick=function(){INS=false;document.body.className='story';scrollTo(0,0);sp=0;tp=0};
+$('#back').onclick=function(){INS=true;document.body.className='insp';pick(-1)};
+var sp=0,tp=0,mx=0,my=0,mxs=0,mys=0,lt=0;
+function resize(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+function prog(){var m=document.documentElement.scrollHeight-innerHeight;tp=m>0?scrollY/m:0}
+addEventListener('resize',function(){resize();prog()});resize();
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+addEventListener('scroll',prog,{passive:true});prog();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count)}})},{threshold:.15});
+document.querySelectorAll('.card').forEach(function(c){io.observe(c)});
+function count(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/1800);el.textContent=Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('en');if(k<1)requestAnimationFrame(f)})(t0)}
+// light curve
+var lcv=$('#lc'),lx2=lcv.getContext('2d');
+function bright(u){return 1-.14*sm(-1,-.8,u)*(1-sm(.8,1,u))}
+function drawLC(u){var w=320,hh=90;lx2.clearRect(0,0,w,hh);lx2.strokeStyle='rgba(255,220,170,.9)';lx2.lineWidth=2;lx2.beginPath();for(var i=0;i<=160;i++){var uu=-1.6+i/160*3.2,x=i/160*w,y=14+(1-bright(uu))*300;i?lx2.lineTo(x,y):lx2.moveTo(x,y)}lx2.stroke();var dx=(u+1.6)/3.2*w,dy=14+(1-bright(u))*300;lx2.fillStyle='#fff';lx2.beginPath();lx2.arc(dx,dy,4,0,6.283);lx2.fill();lx2.fillStyle='rgba(255,255,255,.55)';lx2.font='11px sans-serif';lx2.fillText('brightness',6,84)}
+var dots=nav.children,tpos=new THREE.Vector3(),tlook=new THREE.Vector3();
+function frame(t){requestAnimationFrame(frame);var dt=Math.min(.05,(t-lt)/1000)||.016;lt=t;var k60=function(k){return 1-Math.pow(1-k,dt*60)};
+ mxs+=(mx-mxs)*k60(.05);mys+=(my-mys)*k60(.05);sp+=(tp-sp)*k60(.06);
+ var c=INS?1:sp*(N-1),i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1];
+ for(var d=0;d<N;d++)dots[d].className=d===Math.round(c)?'on':'';
+ var sv=INS?0:lp(a.st,b.st,e);tstar.visible=glow.visible=glow2.visible=sv>.02;tstar.scale.setScalar(Math.max(sv,.01));glow.scale.setScalar(26*Math.max(sv,.01));glow2.scale.setScalar(52*Math.max(sv,.01));tstar.rotation.y=t*.00005;
+ var tr=lp(a.tr,b.tr,e),u=lp(-1.6,1.6,tr);tpl.visible=!INS&&c>1.1&&c<3.6;tpl.position.set(TS.x+u*4.5,TS.y+.6,TS.z-2.5);if(tpl.visible&&c>1.4&&c<3.6)drawLC(u);
+ var ov=INS?0:lp(a.pl,b.pl,e);orb.visible=ov>.02;orb.scale.setScalar(Math.max(ov,.01));PV.forEach(function(p){p.rotation.y+=p.userData.sp*dt*1000;p.children[0].rotation.y+=dt*.4});
+ var ry=INS?0:lp(a.ray,b.ray,e);rpm.opacity=ry*.8;rays.visible=ry>.02;if(rays.visible){var rp=rg.attributes.position.array;for(var q=0;q<RN;q++){var ph=((t*.00025)+q/RN)%1,dd=34*(1-ph);rp[q*3]=SD.x*dd+Math.sin(q*12.9)*3;rp[q*3+1]=SD.y*dd+Math.sin(q*7.3)*3;rp[q*3+2]=SD.z*dd+Math.sin(q*3.1)*3}rg.attributes.position.needsUpdate=true}
+ SCG.rotation.x=INS?0:.03*Math.sin(t*.0004);
+ if(INS){var fo=sel<0?[0,0,.7]:P[sel].f;tv.set(fo[0],fo[1],fo[2]);tg.lerp(tv,k60(.08));dist+=(dT-dist)*k60(.08);cp+=(pitT-cp)*k60(.06);
+  if(!drag){if(sel<0)yT+=.0018;yaw+=ang(yT-yaw)*k60(.06)}
+  tpos.set(tg.x+dist*Math.cos(cp)*Math.sin(yaw),tg.y+dist*Math.sin(cp),tg.z+dist*Math.cos(cp)*Math.cos(yaw));tlook.copy(tg)}
+ else{tpos.set(lp(a.o[0],b.o[0],e)+mxs*1.6,lp(a.o[1],b.o[1],e)-mys*.8,lp(a.o[2],b.o[2],e));tlook.set(lp(a.t[0],b.t[0],e),lp(a.t[1],b.t[1],e),lp(a.t[2],b.t[2],e))}
+ if(first){cam.position.copy(tpos);lk.copy(tlook);first=false}else{var kk=k60(INS?.1:.12);cam.position.lerp(tpos,kk);lk.lerp(tlook,kk)}
+ cam.lookAt(lk);
+ if(INS){hc++;for(var hi=0;hi<P.length;hi++){hv.set(P[hi].f[0],P[hi].f[1],P[hi].f[2]);var pv2=hv.clone().project(cam),el=hots[hi];
+  if(pv2.z>1||Math.abs(pv2.x)>1.05||Math.abs(pv2.y)>1.05){el.style.display='none';continue}
+  el.classList.toggle('lf',pv2.x>.35);el.style.display='block';el.style.left=((pv2.x*.5+.5)*innerWidth)+'px';el.style.top=((-pv2.y*.5+.5)*innerHeight)+'px';
+  if(hc%8===hi%8){var dv=hv.clone().sub(cam.position),dl=dv.length();rc.set(cam.position,dv.normalize());rc.far=dl-.14;occ[hi]=rc.intersectObject(SCG,true).length>0}
+  el.style.opacity=occ[hi]?.22:1}}
+ sun.intensity=lp(a.sun,b.sun,e);hemi.intensity=.12+.06*sun.intensity;
+ R.render(S,cam)}
+requestAnimationFrame(frame);
+})();
+</script>
+
+<script src="story-extras.js"></script>
+<script>
+StoryExtras.init({
+  "craftName": "Kepler Space Telescope",
+  "craftType": "telescope",
+  "nssdcaId": "2009-011A",
+  "archiveName": "Kepler & K2 Mission Archive, NASA Ames",
+  "distanceAU": 1.05,
+  "juniorSteps": [
+    "I am the Kepler Space Telescope. My mission was simple yet profound: to find out if Earth-sized worlds were rare or common in the Milky Way galaxy. I proved that the night sky is full of planets!",
+    "I launched on March 6, 2009, into an Earth-trailing orbit around the Sun. I carried the largest digital camera ever flown in deep space\u2014a massive 95-megapixel array of 42 light sensors.",
+    "I didn't travel from planet to planet. Instead, I stared unblinkingly at one single patch of sky containing 150,000 stars in the constellations Cygnus and Lyra for four straight years.",
+    "I detected planets using the transit method. Whenever a distant world crossed directly in front of its host star, it blocked a tiny fraction of starlight\u2014like a flea crawling across a car headlight!",
+    "In my first six weeks of observing, I found five new giant exoplanets. But my real goal was finding small, rocky worlds that could support liquid water\u2014the building blocks of life.",
+    "I found incredible alien worlds: Kepler-16b, a real-life Tatooine with two suns in the sky, and Kepler-11, a planetary system with six planets packed closer to their star than Mercury is to our Sun!",
+    "I discovered that the most common planets in our galaxy are 'super-Earths' and 'mini-Neptunes'\u2014sizes that don't even exist in our own Solar System!",
+    "In May 2013, disaster struck: the second of my four reaction wheels broke down. Without three wheels, I could no longer hold my gaze steady. Many thought my mission was over.",
+    "But NASA engineers had a brilliant idea! They balanced my telescope against the gentle pressure of sunlight hitting my solar panels like a sailboat. This began my second life: the K2 mission!",
+    "On October 30, 2018, after nine and a half years in deep space, my thruster fuel was completely exhausted. NASA sent the final 'goodnight' command, and I drifted peacefully into retirement.",
+    "In total, I discovered 2,662 confirmed exoplanets. My data proved that our galaxy holds more planets than stars\u2014forever changing humanity's place in the universe!"
+  ],
+  "specialistSteps": [
+    "NSSDCA ID: 2009-011A. I am the Kepler Space Telescope: 1,052 kg spacecraft bus with 0.95 m Schmidt telescope aperture and 1.4 m primary mirror. Managed by NASA Ames Research Center.",
+    "Optoelectronic Photometer Subsystem: Focal plane array composed of 42 CCD sensors (2200 \u00d7 1024 pixels each), forming a 94.6-megapixel detector with 115-square-degree field of view.",
+    "Heliocentric Earth-Trailing Orbit: Placed in a 372.5-day drift-away heliocentric orbit to eliminate Earth gravitational torques, occultations, and stray thermal emission.",
+    "Transit Photometry Sensitivity: Designed to achieve photometric precision of 20 parts per million (ppm) at V=12 magnitude, sufficient to resolve Earth-analog transits (84 ppm starlight dip across 6.5-hour duration).",
+    "Initial Exoplanet Detections: First five validated targets (Kepler-4b through 8b) announced within 43 days of commissioning, validating high-throughput automated light curve pipelines.",
+    "Multi-Transiting Systems & Architecture: Uncovered complex architectures including Kepler-11 (six coplanar transiting planets within 0.5 AU) and Kepler-16b (first confirmed circumbinary planet around two stars).",
+    "Statistical Demographics: Survey established planet occurrence frequency (eta-Earth): 20% to 50% of Sun-like stars host Earth-sized rocky planets in the habitable liquid-water zone.",
+    "Attitude Control Wheel Failure: Loss of reaction wheel #2 (July 2012) and #4 (May 2013) compromised 3-axis fine stabilization, terminating the primary stare survey.",
+    "K2 Solar Radiation Repurposing: Resumed operations in 2014 via K2 mission, using solar photon radiation pressure on symmetric solar panels as a virtual third reaction wheel to stabilize the ecliptic plane.",
+    "Terminal Hydrazine Depletion: Fuel depletion confirmed October 2018 at 0.77 AU distance. 'Goodnight' decommission sequence sent November 15, 2018, shutting down S-band transmitters.",
+    "Quantitative Mission Legacy: 2,662 confirmed exoplanets, 530,506 stars observed, and 678 scientific light-curve papers. Demonstrated mathematically that planetary systems are standard galactic architecture."
+  ],
+  "quiz": [
+    {
+      "q": "What method did Kepler use to discover thousands of alien worlds?",
+      "options": [
+        "Direct high-powered zoom photography",
+        "Transit method (measuring tiny dips in starlight as planets cross their stars)",
+        "Listening for radio signals",
+        "Measuring cosmic ray echoes"
+      ],
+      "answer": 1,
+      "explain": "Kepler measured the tiny dip in brightness when a planet transits across the face of its parent star."
+    },
+    {
+      "q": "How many confirmed exoplanets did the Kepler mission discover?",
+      "options": [
+        "12 planets",
+        "300 planets",
+        "2,662 planets",
+        "50,000 planets"
+      ],
+      "answer": 2,
+      "explain": "Kepler discovered 2,662 confirmed exoplanets, more than half of all exoplanets known today."
+    },
+    {
+      "q": "How did engineers keep Kepler pointing steady during the K2 mission after two reaction wheels broke?",
+      "options": [
+        "Using the gentle pressure of sunlight hitting its solar arrays like a sailboat",
+        "Using giant magnets",
+        "By spinning the entire telescope continuously",
+        "Using electric ion thrusters"
+      ],
+      "answer": 0,
+      "explain": "Engineers balanced Kepler against the photon pressure of sunlight on its solar arrays as a third stabilizing wheel."
+    },
+    {
+      "q": "What major conclusion did Kepler reach about planets in our Milky Way galaxy?",
+      "options": [
+        "Earth is the only planet in the galaxy",
+        "Planets are very rare, occurring around only 1 in a million stars",
+        "There are more planets than stars in our galaxy",
+        "All other planets are gas giants"
+      ],
+      "answer": 2,
+      "explain": "Kepler proved statistically that planets outnumber the hundreds of billions of stars in our galaxy!"
+    }
+  ]
+});
+</script>
+
+</body>
+</html>

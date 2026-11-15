@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05070B">
+<title>Echoes of Space — NASA Space Apps Challenge 2026</title>
+
+<!-- Pre-fetch 3D interactive story models to eliminate navigation latency -->
+<link rel="prefetch" href="models/surveyor3.html" as="document">
+<link rel="prefetch" href="models/apollo11.html" as="document">
+<link rel="prefetch" href="models/ingenuity.html" as="document">
+<link rel="prefetch" href="models/pathfinder.html" as="document">
+<link rel="prefetch" href="models/opportunity.html" as="document">
+<link rel="prefetch" href="models/pioneer10.html" as="document">
+<link rel="prefetch" href="models/kepler.html" as="document">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body style="background-color: #05070B; margin: 0;">
+<canvas id="scene" aria-label="Interactive 3D view of abandoned NASA equipment"></canvas>
+<div id="css-scene" aria-hidden="true"></div>
+<div class="skywash"></div>
+<div class="grain"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">ES</div>
+    <div class="brand-copy">
+      <strong>Echoes of Space</strong>
+      <span>NASA SPACE APPS CHALLENGE · SULAYMANIYAH 2026</span>
+    </div>
+  </div>
+  <nav class="destinations" aria-label="Choose a destination">
+    <button class="dest-btn active" data-place="moon">Moon <span class="num">04</span></button>
+    <button class="dest-btn" data-place="mars">Mars <span class="num">05</span></button>
+    <button class="dest-btn" data-place="deep">Deep Space <span class="num">04</span></button>
+  </nav>
+  <div class="topbar-right">
+    <div class="mode-toggle" role="group" aria-label="Explorer mode">
+      <button class="mode-btn active" data-mode="junior" title="Ages 6–12: First-person storytelling">🌟 Junior</button>
+      <button class="mode-btn" data-mode="specialist" title="Ages 13+: Engineering details">🔬 Specialist</button>
+    </div>
+    <div class="top-note">13 records <b class="dot">·</b> <span id="top-mode-label">Junior Explorer</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="left-col">
+    <div class="eyebrow">Abandoned but not forgotten</div>
+    <h1>Every mission leaves a <em>trace.</em></h1>
+    <p class="intro">A 3D field guide to the hardware that stayed behind — on the Moon, across Mars, and still travelling beyond the planets.</p>
+    <div class="collection">
+      <div class="collection-head">
+        <span id="list-heading">Moon · featured records</span>
+        <strong id="list-count">04</strong>
+      </div>
+      <div class="record-list" id="record-list"></div>
+      <div class="record-note" id="record-note">Verified NASA &amp; NSSDCA records. Click [3D STORY] badges to launch interactive WebGL tours.</div>
+    </div>
+  </section>
+
+  <section class="center-stage" aria-label="3D scene" id="center-stage">
+    <div class="planet-title">
+      <div class="sub" id="planet-kicker">Lunar surface · 4 working records</div>
+      <h2 id="planet-name">The Moon</h2>
+      <p id="planet-caption">A quiet landscape holding the origins of human lunar exploration.</p>
+    </div>
+    <div class="scene-help">
+      <span class="drag-icon" aria-hidden="true"></span>
+      Drag to rotate <span>·</span> Scroll to zoom
+    </div>
+  </section>
+
+  <aside class="right-col">
+    <div class="info-card fade-in">
+      <div class="info-top">
+        <div class="info-meta">
+          <span id="meta-category">Moon · Apollo &amp; Surveyor missions</span>
+          <span class="status" id="meta-status">Archive view</span>
+        </div>
+        <h3 id="story-title">Surveyor 3</h3>
+        <!-- Junior mode text -->
+        <p id="story-copy" class="mode-junior">Landed in Oceanus Procellarum on April 20, 1967. Proved lunar soil could bear the weight of Apollo astronauts. In 1969, Apollo 12 landed 180 m away and retrieved its camera for analysis on Earth.</p>
+        <!-- Specialist mode text -->
+        <p id="story-copy-spec" class="mode-specialist" style="display:none">NSSDCA ID: 1967-035A. Mass: 997.9 kg. Landing coords: 3.0° S, 23.41° W. First surface sampler arm on the Moon. Measured regolith bearing strength at ~98 kPa (~10 psi). Returned parts enabled the first material science study of long-term space exposure.</p>
+      </div>
+      <div class="info-stats">
+        <div class="stat"><b id="stat-count">04</b><span>Working records</span></div>
+        <div class="stat"><b id="stat-range">1967–1972</b><span id="stat-label">Featured missions</span></div>
+      </div>
+      <div class="story">
+        <div class="story-label" id="story-label">Why it matters</div>
+        <p id="story-extra">Surveyor 3 paved the way for human boots on the Moon by proving the lunar regolith was firm enough to support an Apollo Lunar Module.</p>
+        <div class="story-actions">
+          <a class="source-link" id="source-link" href="https://science.nasa.gov/mission/surveyor-3/" target="_blank" rel="noopener">
+            Open NASA source <span aria-hidden="true">↗</span>
+          </a>
+          <button class="open-story-btn" id="open-story-btn" style="display:none" onclick="openStoryPage()">
+            🚀 Open 3D Story
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="bottomline">
+  <span><strong>NASA Space Apps Challenge 2026</strong> · Sulaymaniyah · Echoes of Space</span>
+  <span>Authentic data from <a href="https://nssdc.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA NSSDCA Master Catalog</a> and NASA Science mission archives.</span>
+</footer>
+
+<!-- ── NASA Dossier Modal (for non-3D devices) ── -->
+<div id="dossier-overlay" role="dialog" aria-modal="true" aria-label="NASA Mission Dossier" style="display:none">
+  <div id="dossier-modal">
+    <button class="dossier-close" id="dossier-close" aria-label="Close">×</button>
+    <div class="dossier-header">
+      <div class="dossier-eyebrow" id="dos-eyebrow">NASA Mission Archive · Telemetry Dossier</div>
+      <h2 id="dos-title">Spacecraft Name</h2>
+      <p class="dossier-tagline" id="dos-tagline">“Mission Tagline”</p>
+      <div class="dossier-chips" id="dos-chips">
+        <span class="chip-status" id="dos-status">DORMANT</span>
+        <span class="chip-nssdca" id="dos-nssdca">NSSDCA ID</span>
+        <span class="chip-sector" id="dos-sector">SECTOR</span>
+      </div>
+    </div>
+    <div class="dossier-body">
+      <div class="dossier-section">
+        <h3>🪪 Mission Passport</h3>
+        <dl class="dossier-dl" id="dos-passport"></dl>
+      </div>
+      <div class="dossier-section">
+        <h3>📖 Field Story</h3>
+        <p class="dossier-story" id="dos-story"></p>
+      </div>
+      <div class="dossier-section" id="dos-extra-section">
+        <h3 id="dos-extra-title">⭐ Mission Highlights</h3>
+        <ul class="dossier-list" id="dos-extra-list"></ul>
+      </div>
+    </div>
+    <div class="dossier-footer">
+      <button class="dossier-dismiss-btn" id="dos-dismiss-btn">Close Dossier</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>

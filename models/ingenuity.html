@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ingenuity: the helicopter that flew on Mars</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--ink:#f6e9da;--dim:#d3bba6;--rust:#c2693c;--blue:#9db2c7;--night:#0a0506;--card:rgba(24,11,7,.52);--line:rgba(255,214,170,.2);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--night:#0a0506}}
+:root[data-theme="dark"]{--night:#0a0506}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,2,.7))}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 22px 14px;font-size:14px;color:var(--dim)}
+header b{font-weight:500;color:var(--ink)}
+nav{display:flex;gap:8px}
+nav i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);transition:.4s}
+nav i.on{background:var(--rust);border-color:var(--rust);box-shadow:0 0 12px var(--rust)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+section.r{justify-content:flex-end}
+.card{max-width:460px;padding:30px 32px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12);opacity:.001;transform:translateY(26px);transition:opacity 1s,transform 1s}
+.card.in{opacity:1;transform:none}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(64px,13vw,170px);font-weight:600;letter-spacing:-.035em;text-shadow:0 8px 60px rgba(0,0,0,.6)}
+h2{font-size:clamp(30px,4vw,44px)}
+p{margin:0 0 12px}
+.hero{display:block;padding-top:24vh}
+.hero p{max-width:30ch;font-size:clamp(19px,2.2vw,26px);line-height:1.4;color:var(--ink);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.hero small{display:block;margin-top:22px;color:var(--dim);font-size:14px}
+.num{font-family:Fraunces,Georgia,serif;font-size:56px;font-weight:600;color:var(--ink);line-height:1}
+.stats{display:flex;gap:26px;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{display:block;font-size:13px;color:var(--dim);margin-top:4px}
+.note{font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--blue)}
+footer{font-size:13px;color:var(--dim);margin-top:18px}
+@media (max-width:760px){section,section.r{align-items:flex-end;justify-content:center;padding:0 16px 7vh}.card{padding:22px}.hero{align-items:flex-start;padding-top:20vh}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+header span{display:flex;align-items:center}
+body.insp{overflow:hidden}body.insp main,body.insp nav,body.insp #back{display:none}body.story #insp{display:none}
+#c{touch-action:none}body.story #c{touch-action:auto}
+#insp{position:fixed;inset:0;z-index:4;pointer-events:none}#insp>*{pointer-events:auto}
+.ip{position:absolute;left:22px;top:calc(env(safe-area-inset-top,0px) + 64px);width:290px}
+.ip h2{font-size:clamp(32px,4vw,46px)}.lead{color:var(--dim);font-size:15px;margin-bottom:14px}
+#plist{display:flex;flex-direction:column;gap:6px}
+#plist button,#back,#go{font:inherit;color:var(--ink);cursor:pointer}
+#plist button{text-align:left;padding:9px 14px;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px 4px 12px 4px;transition:.25s}
+#plist button:hover,#plist button.on{border-color:var(--rust);background:rgba(194,105,60,.3)}
+.pc{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:min(400px,38vw);padding:26px 28px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12)}
+.pc h3{font:300 30px/1.1 Fraunces,Georgia,serif;margin:0 0 10px}.pc p{font-size:15.5px}
+#go{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);transform:translateX(-50%);padding:14px 32px;border-radius:999px;border:1px solid var(--rust);background:linear-gradient(#d2784a,#a4512a);font-weight:500;box-shadow:0 10px 40px rgba(194,105,60,.45)}
+#back{padding:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;margin-right:14px;font-size:13px}
+@media (max-width:760px){.ip{width:auto;right:16px;left:16px}.lead{display:none}#plist{flex-direction:row;overflow-x:auto;padding-bottom:6px}#plist button{white-space:nowrap}.pc{top:auto;bottom:84px;right:16px;left:16px;width:auto;transform:none;max-height:34vh;overflow:auto;padding:18px}}
+#c{filter:saturate(.8) contrast(1.06)}#sfx{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;mix-blend-mode:multiply;background:radial-gradient(ellipse at 50% 40%,rgba(120,80,50,.2),rgba(55,32,20,.8))}
+.gk{font-size:13px;color:#e08a5a;margin:0 0 4px}.spec{font-size:13.5px;color:var(--blue);margin:8px 0 0}.pc{max-height:76vh;overflow:auto}
+#plist{max-height:calc(100vh - 250px);overflow:auto;padding-right:4px}.gh{font-size:12px;color:var(--dim);margin:10px 0 2px}
+.hot{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:1.5px solid #fff;background:rgba(194,105,60,.8);color:#fff;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:0;cursor:pointer;box-shadow:0 0 12px rgba(255,200,150,.7);display:none;z-index:1;transition:opacity .3s}
+.hot.on{background:#fff;color:#7a3a1c;box-shadow:0 0 20px #fff;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:2}
+.hot span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:6px;background:rgba(20,10,6,.85);color:var(--ink);font-size:12px;display:none}
+.hot:hover span,.hot.on span{display:block}
+@media (max-width:760px){.gh{display:none}#plist{max-height:none}.pc{max-height:30vh}}
+</style>
+</head>
+<body class="insp" style="background-color: #05070B; margin: 0;">
+<div id="se-loader" style="position:fixed;inset:0;background:#05070B;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9da;font-family:'IBM Plex Sans',system-ui,sans-serif;transition:opacity 0.6s ease, visibility 0.6s ease;">
+  <div style="width:48px;height:48px;border:3px solid rgba(255,214,170,0.18);border-top:3px solid #c2693c;border-radius:50%;animation:se-spin 1s linear infinite;margin-bottom:18px;"></div>
+  <div style="font-family:Fraunces,Georgia,serif;font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;">Ingenuity Mars Helicopter</div>
+  <div style="font-size:12px;color:#9db2c7;letter-spacing:0.08em;text-transform:uppercase;">Establishing NSSDCA Telemetry Link...</div>
+</div>
+<style>
+@keyframes se-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+<canvas id="c"></canvas><div class="vig"></div><div id="sfx"></div><div class="grain"></div>
+<header><b>Space Apps Challenge, Sulaymaniyah 2026</b><span><button id="back">Inspect the helicopter</button><nav id="nav"></nav></span></header>
+<div id="insp"><div class="ip"><h2>Meet the helicopter</h2><p class="lead">Drag to turn it. Scroll to zoom. Pick a part to learn what it did.</p><div id="plist"></div></div>
+<div class="pc"><p class="gk" id="pg"></p><h3 id="pn"></h3><p id="pa"></p><p id="pb"></p><p class="note" id="pt"></p><p class="spec" id="ps"></p></div>
+<button id="go">Start the journey</button></div>
+
+<main>
+<section class="hero"><div class="card in" style="background:none;border:0;box-shadow:none;backdrop-filter:none;padding:0 0 0 2vw;max-width:none">
+<h1>Ingenuity</h1><p>A small helicopter that learned to fly on another world.</p>
+<small>Abandoned but Not Forgotten: scroll to follow its story</small></div></section>
+
+<section><div class="card"><h2>A name from a student</h2>
+<p>Ingenuity was named by Vaneeza Rupani, a high-school student who suggested the name in a NASA naming contest. The name fit: flying on Mars is an engineering puzzle.</p>
+<p>The air on Mars is only about 1% as thick as Earth’s, and gravity is about 38% as strong. To get any lift, the blades of this 1.8 kg (4 lb) helicopter had to spin at about 2,400 rpm, far faster than a helicopter on Earth.</p></div></section>
+
+<section class="r"><div class="card"><h2>Strapped under a rover</h2>
+<p>Ingenuity launched on July 30, 2020, from Cape Canaveral Air Force Station in Florida. It rode to Mars strapped beneath the Perseverance rover, folded up like cargo.</p>
+<p>The pair landed on February 18, 2021, in Jezero Crater, a place scientists think once held a lake.</p></div></section>
+
+<section><div class="card"><h2>Alone on the ground</h2>
+<p>In early April 2021, Ingenuity was released onto the surface and Perseverance drove away. For the first time the helicopter was on its own.</p>
+<p>It had to survive the Martian nights, which fall to about −90 °C (−130 °F), by using heaters powered by its battery and solar panel. If it failed that first test, it would never fly.</p></div></section>
+
+<section class="r"><div class="card"><h2>The Wright brothers moment</h2>
+<p>On April 19, 2021, Ingenuity made the first powered flight on another planet. It rose to about 3 m (10 ft), hovered for about 40 seconds, and landed safely on its four legs.</p>
+<p>Under its solar panel it carried a tiny piece of fabric from the wing of the Wright brothers’ first airplane.</p>
+<div class="stats"><div><div class="num" data-to="3">0</div><span>metres up</span></div><div><div class="num" data-to="40">0</div><span>seconds in the air</span></div></div></div></section>
+
+<section><div class="card"><h2>Five flights in thirty days</h2>
+<p>That was the whole plan: a technology demonstration with no more than five test flights in 30 days. Each flight pushed a little farther. On the fifth, Ingenuity did not come back. It flew one way to a new landing spot, proving it could operate away from where it started.</p></div></section>
+
+<section class="r"><div class="card"><h2>An aerial scout</h2>
+<p>Having beaten the plan, Ingenuity began a new job as an operations demonstration. It flew ahead of Perseverance and took photos from above, helping scientists and rover planners choose where to drive.</p>
+<p>It crossed rough ground the rover could not easily cross, including a dune field called Séítah.</p></div></section>
+
+<section><div class="card"><h2>Looking at the debris</h2>
+<p>Engineers also used Ingenuity to learn more about debris left from Perseverance’s landing. From the air, its camera could see parts of the landing system that had landed on the surface, something the rover could not study from the ground.</p></div></section>
+
+<section class="r"><div class="card"><h2>Higher and faster</h2>
+<p>In its final phase Ingenuity became an engineering demonstration, flying experimental tests to find the limits of how a helicopter flies in thin air. It reached as high as 24 m (79 ft) and as fast as 10 m/s (about 22 mph).</p>
+<div class="stats"><div><div class="num" data-to="72">0</div><span>flights in nearly three years</span></div><div><div class="num" data-to="704">0</div><span>metres, longest flight</span></div></div></div></section>
+
+<section><div class="card"><h2>The last flight</h2>
+<p>Ingenuity flew for the last time on January 18, 2024. Pictures taken afterward showed damage to at least one rotor blade, and its flying days were over. NASA declared the mission complete on January 25, 2024.</p></div></section>
+
+<section class="r"><div class="card"><h2>Why it still matters</h2>
+<p>Ingenuity was built to prove that flight on Mars was possible. Instead it flew 72 times and showed how aircraft can scout where rovers cannot easily go. Five years after its Wright brothers moment, it is still the first aircraft to fly on another world.</p>
+<footer>Facts from NASA’s Ingenuity Mars Helicopter mission page. The terrain and models are procedural 3D art, and the flight paths are shortened in this scene.</footer></div></section>
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+if(!window.THREE){document.body.className='story';return}
+var N=11,$=function(s){return document.querySelector(s)};
+var nav=$('#nav');for(var i=0;i<N;i++)nav.appendChild(document.createElement('i'));
+function h(x,y){var v=Math.sin(x*127.1+y*311.7)*43758.5453;return v-Math.floor(v)}
+function lp(a,b,t){return a+(b-a)*t}
+function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);return lp(lp(h(xi,yi),h(xi+1,yi),u),lp(h(xi,yi+1),h(xi+1,yi+1),u),v)}
+function fbm(x,y,o){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*vn(x,y);x*=2.03;y*=2.03;a*=.5}return s}
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+function pv(x,y,P){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=((xi%P)+P)%P,b=(a+1)%P,c=((yi%P)+P)%P,d=(c+1)%P;return lp(lp(h(a,c),h(b,c),u),lp(h(a,d),h(b,d),u),v)}
+function pf(x,y,o,P){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*pv(x,y,P);x*=2;y*=2;P*=2;a*=.5}return s}
+var SZ=190,SC=3;
+function H(x,z){var r=Math.hypot(x,z),e=(fbm(x*.03+7,z*.03+3,5)-.5)*10*sm(60,95,r)+(fbm(x*.07+11,z*.07+2,4)-.5)*1.4+Math.sin(x*.45+fbm(x*.08,z*.08,2)*6)*.09+(fbm(x*.3,z*.3,3)-.5)*.25;return e*Math.min(sm(1.5,7,r),sm(1.5,8,Math.hypot(x-58,z+12)))*(1-sm(80,95,r))}
+// ---------- renderer, sky, lights ----------
+var R;try{R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true,powerPreference:'high-performance'})}catch(err){document.body.className='story';return}
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.1;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+var S=new THREE.Scene();S.fog=new THREE.FogExp2(0xb89478,.0035);S.background=new THREE.Color(0xb89478);
+var cam=new THREE.PerspectiveCamera(52,1,.05,2500);S.add(cam);
+var skyU={uHor:{value:new THREE.Color()},uTop:{value:new THREE.Color()},uSun:{value:new THREE.Vector3(0,1,0)},uGlow:{value:1}};
+var sky=new THREE.Mesh(new THREE.SphereGeometry(1500,32,16),new THREE.ShaderMaterial({uniforms:skyU,side:THREE.BackSide,depthWrite:false,fog:false,
+ vertexShader:'varying vec3 vD;void main(){vD=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+ fragmentShader:'uniform vec3 uHor,uTop,uSun;uniform float uGlow;varying vec3 vD;void main(){vec3 d=normalize(vD);float hh=clamp(d.y,0.,1.);vec3 c=mix(uHor,uTop,pow(hh,.45));float s=max(dot(d,uSun),0.);c+=vec3(1.,.82,.62)*(pow(s,48.)*.5+pow(s,6.)*.14)*uGlow;gl_FragColor=vec4(c,1.);}'}));
+sky.renderOrder=-10;sky.frustumCulled=false;S.add(sky);
+var sun=new THREE.DirectionalLight(0xffe6cc,2.6);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0004;sun.shadow.normalBias=.04;var sc=sun.shadow.camera;sc.left=-26;sc.right=26;sc.top=26;sc.bottom=-26;sc.far=170;S.add(sun,sun.target);
+var hemi=new THREE.HemisphereLight(0xd9b898,0x4a3326,.7);S.add(hemi);
+var pm=new THREE.PMREMGenerator(R),es=new THREE.Scene(),eg=new THREE.SphereGeometry(60,32,16),ec=[],ep=eg.attributes.position;
+for(var i0=0;i0<ep.count;i0++){var yy=ep.getY(i0)/60;if(yy>0){var yq=Math.pow(yy,.6);ec.push(lp(.95,.5,yq),lp(.68,.38,yq),lp(.45,.3,yq))}else ec.push(.32,.17,.1)}
+eg.setAttribute('color',new THREE.Float32BufferAttribute(ec,3));es.add(new THREE.Mesh(eg,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+var sb=new THREE.Mesh(new THREE.SphereGeometry(8,16,12),new THREE.MeshBasicMaterial({color:0xfff2d8}));sb.position.set(-30,40,24);es.add(sb);
+S.environment=pm.fromScene(es,.04).texture;
+var EM=[];
+function M(c,m,r,map,env){var mm=new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r,map:map||null});EM.push([mm,env]);return mm}
+function mk(w,hh,fn,rep){var c=document.createElement('canvas');c.width=w;c.height=hh;var x=c.getContext('2d');fn(x,w,hh);var t=new THREE.CanvasTexture(c);t.anisotropy=8;if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep[0],rep[1])}return t}
+function dust(x,w,hh,n,al){for(var i=0;i<n;i++){x.fillStyle='rgba('+(170+Math.random()*50|0)+','+(105+Math.random()*40|0)+',65,'+Math.random()*al+')';x.beginPath();x.arc(Math.random()*w,Math.random()*hh,Math.random()*2+.4,0,6.283);x.fill()}}
+// ---------- terrain: cracked pavement, ripples, pebbles, normal map ----------
+var DS=512,dc=document.createElement('canvas');dc.width=dc.height=DS;var dcx=dc.getContext('2d'),di=dcx.createImageData(DS,DS),nc=document.createElement('canvas');nc.width=nc.height=DS;var ncx=nc.getContext('2d'),ni=ncx.createImageData(DS,DS),hts=new Float32Array(DS*DS);
+for(var j=0;j<DS;j++)for(var k=0;k<DS;k++){var u=k/DS,v=j/DS,warp=pf(u*4,v*4,3,4)*3,rip=.5+.5*Math.sin((u*20+v*6+warp)*6.2832),mask=sm(.35,.65,pf(u*3,v*3,2,3)),pe=sm(.64,.78,pv(u*48,v*48,48))*(.55+.45*pv(u*96,v*96,96)),gr=h(k*1.3,j*.7);
+ var WP=7,cx=Math.floor(u*WP),cy=Math.floor(v*WP),fx=u*WP-cx,fy=v*WP-cy,d1=9,d2=9,cid=0;
+ for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var nx=(cx+dx+WP)%WP,ny=(cy+dy+WP)%WP,px2=dx+h(nx*1.7,ny*2.3),py2=dy+h(nx*3.1,ny*.9),dd=Math.hypot(px2-fx,py2-fy);if(dd<d1){d2=d1;d1=dd;cid=h(nx*5.3,ny*7.1)}else if(dd<d2)d2=dd}
+ var crack=1-sm(0,.055,d2-d1),pav=sm(.45,.6,pf(u*2,v*2,2,2)),ht=.4*pf(u*8,v*8,5,8)+.2*rip*mask*(1-pav)+.42*pe*(1-.5*pav)+.1*gr+pav*(.1*cid-.3*crack);
+ ht=Math.min(1,Math.max(0,ht+.1));hts[j*DS+k]=ht;var g=.55+.9*ht,p=(j*DS+k)*4,pk=1-.35*pe-.55*crack*pav,sl=1+pav*(cid-.5)*.28;
+ di.data[p]=Math.min(255,g*184*pk*sl);di.data[p+1]=Math.min(255,g*170*pk*sl);di.data[p+2]=Math.min(255,g*158*pk*sl);di.data[p+3]=255}
+for(var j2=0;j2<DS;j2++)for(var k2=0;k2<DS;k2++){var l=hts[j2*DS+(k2+DS-1)%DS],r2=hts[j2*DS+(k2+1)%DS],up=hts[((j2+DS-1)%DS)*DS+k2],dn=hts[((j2+1)%DS)*DS+k2],nx2=-(r2-l)*7,ny2=(dn-up)*7,nl=Math.sqrt(nx2*nx2+ny2*ny2+1),p2=(j2*DS+k2)*4;
+ ni.data[p2]=(nx2/nl*.5+.5)*255;ni.data[p2+1]=(ny2/nl*.5+.5)*255;ni.data[p2+2]=(1/nl*.5+.5)*255;ni.data[p2+3]=255}
+dcx.putImageData(di,0,0);ncx.putImageData(ni,0,0);
+function tt(cv,rep){var t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.anisotropy=8;return t}
+var d2T=mk(256,256,function(x,w,hh){var im=x.createImageData(w,hh);for(var q=0;q<w*hh;q++){var vv=pf((q%w)/w*8,Math.floor(q/w)/hh*8,4,8)*255;im.data[q*4]=im.data[q*4+1]=im.data[q*4+2]=vv;im.data[q*4+3]=255}x.putImageData(im,0,0)},[1,1]);d2T.wrapS=d2T.wrapT=THREE.RepeatWrapping;
+var geo=new THREE.PlaneGeometry(SZ,SZ,400,400),pos=geo.attributes.position,vc=new Float32Array(pos.count*3);
+for(var m=0;m<pos.count;m++){var gx=pos.getX(m),gz=-pos.getY(m),gr2=Math.hypot(gx,gz);pos.setZ(m,H(gx,gz));var n1=fbm(gx*.05,gz*.05,4),n2=fbm(gx*.4,gz*.4,3),val=.5*n1+.5*n2,dk=(.85+.3*n2)*1.45,ed=sm(72,94,gr2);
+ vc[m*3]=lp(Math.min(1,lp(92,164,val)*dk/255),.73,ed);vc[m*3+1]=lp(Math.min(1,lp(72,130,val)*dk/255),.57,ed);vc[m*3+2]=lp(Math.min(1,lp(60,104,val)*dk/255),.47,ed)}
+geo.setAttribute('color',new THREE.BufferAttribute(vc,3));geo.computeVertexNormals();
+var gm=new THREE.MeshStandardMaterial({map:tt(dc,40),normalMap:tt(nc,40),normalScale:new THREE.Vector2(1.3,1.3),vertexColors:true,roughness:1});EM.push([gm,.3]);
+gm.onBeforeCompile=function(sh){sh.uniforms.uD2={value:d2T};sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uD2;').replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb*=(0.7+0.6*texture2D(uD2,vUv*0.17).r)*(0.8+0.4*texture2D(uD2,vUv*1.9).r)*(0.9+0.2*texture2D(uD2,vUv*7.3).r);')};
+var ground=new THREE.Mesh(geo,gm);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;S.add(ground);
+var oh=new THREE.Shape([new THREE.Vector2(-2000,-2000),new THREE.Vector2(2000,-2000),new THREE.Vector2(2000,2000),new THREE.Vector2(-2000,2000)]);oh.holes.push(new THREE.Path([new THREE.Vector2(-94.5,-94.5),new THREE.Vector2(-94.5,94.5),new THREE.Vector2(94.5,94.5),new THREE.Vector2(94.5,-94.5)]));
+var og=new THREE.Mesh(new THREE.ShapeGeometry(oh),new THREE.MeshStandardMaterial({color:0x805f48,roughness:1}));og.rotation.x=-Math.PI/2;og.position.y=-.02;og.receiveShadow=true;EM.push([og.material,.3]);S.add(og);
+// distant crater rim
+var hg2=new THREE.CylinderGeometry(330,330,1,256,8,true),hp2=hg2.attributes.position;
+for(var q0=0;q0<hp2.count;q0++){var a01=(Math.atan2(hp2.getZ(q0),hp2.getX(q0))+Math.PI)/6.2832,yv=hp2.getY(q0)+.5,top=14+60*Math.pow(pf(a01*4,2.3,4,4),1.5)+12*pf(a01*16,3.1,3,16);hp2.setY(q0,-10+yv*(top+10))}
+S.add(new THREE.Mesh(hg2,new THREE.MeshBasicMaterial({color:0x7a6354,side:THREE.DoubleSide})));
+// rocks: sculpted boulders, slabs, instanced pebbles
+var rm=new THREE.MeshStandardMaterial({color:0x8d7d72,map:tt(dc,2),normalMap:tt(nc,2),normalScale:new THREE.Vector2(1.6,1.6),roughness:.92,flatShading:true});EM.push([rm,.3]);
+var rv=[];for(var q=0;q<6;q++){var rg=new THREE.IcosahedronGeometry(1,4),rp=rg.attributes.position;for(var u2=0;u2<rp.count;u2++){var px=rp.getX(u2),py=rp.getY(u2),pz=rp.getZ(u2),s=.7+.6*vn(px*1.5+q*9,pz*1.5+py*1.5)+.25*vn(px*4+q,py*4+pz*4)+.08*vn(px*11,py*11+pz*11);rp.setXYZ(u2,px*s,py*s*.6,pz*s)}rg.computeVertexNormals();rv.push(rg)}
+var RI=[],rcnt=[0,0,0,0,0,0],rd=new THREE.Object3D();for(var q=0;q<6;q++)RI.push(new THREE.InstancedMesh(rv[q],rm,170));
+for(var r=0;r<1200;r++){var big=r<36,ra=h(r,1)*6.2832,rr=big?62+h(r,2)*30:Math.sqrt(h(r,2))*88,rx=Math.cos(ra)*rr,rz=Math.sin(ra)*rr,v=r%6;if(rr<5||Math.hypot(rx-58,rz+12)<5||rcnt[v]>=170)continue;
+ var sz=big?3+h(r,3)*6:.05+h(r,3)*h(r,4)*1.3;rd.position.set(rx,H(rx,rz)+sz*.12,rz);rd.scale.set(sz*(.8+h(r,7)*.6),sz*(big?1.3:.8),sz*(.8+h(r,8)*.6));rd.rotation.set((h(r,9)-.5)*.3,h(r,6)*6.28,(h(r,10)-.5)*.3);rd.updateMatrix();RI[v].setMatrixAt(rcnt[v]++,rd.matrix)}
+RI.forEach(function(m,i){m.count=rcnt[i];m.castShadow=m.receiveShadow=true;m.frustumCulled=false;S.add(m)});
+for(var sl2=0;sl2<170;sl2++){var sx2=(h(sl2,21)-.5)*170,sz3=(h(sl2,22)-.5)*170;if(Math.hypot(sx2,sz3)<5)continue;var slb=new THREE.Mesh(new THREE.CylinderGeometry(1,1.05,.12,6+(sl2%3)),rm),ss=.5+h(sl2,23)*1.6;slb.scale.set(ss,1,ss*(.7+h(sl2,24)*.5));slb.position.set(sx2,H(sx2,sz3)+.03,sz3);slb.rotation.set((h(sl2,25)-.5)*.1,h(sl2,26)*6.28,(h(sl2,27)-.5)*.1);slb.receiveShadow=true;S.add(slb)}
+var PN=14000,pbm=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),new THREE.MeshStandardMaterial({roughness:.95,flatShading:true}),PN),dmy=new THREE.Object3D(),pcol=new THREE.Color();
+for(var pi=0;pi<PN;pi++){var pr0=Math.sqrt(h(pi,31))*78,pa0=h(pi,32)*6.2832,pxx=Math.cos(pa0)*pr0,pzz=Math.sin(pa0)*pr0,ps=.025+Math.pow(h(pi,33),3)*.16;dmy.position.set(pxx,H(pxx,pzz)+ps*.2,pzz);dmy.scale.set(ps*(.8+h(pi,34)*.6),ps*.6,ps*(.8+h(pi,35)*.6));dmy.rotation.set(h(pi,36)*3,h(pi,37)*6,0);dmy.updateMatrix();pbm.setMatrixAt(pi,dmy.matrix);var tone=.32+h(pi,38)*.38;pcol.setRGB(tone*1.05,tone*.88,tone*.75);pbm.setColorAt(pi,pcol)}
+pbm.instanceColor.needsUpdate=true;pbm.receiveShadow=true;pbm.frustumCulled=false;S.add(pbm);
+// rover tracks
+var trT=mk(64,128,function(x,w,hh){x.clearRect(0,0,w,hh);x.fillStyle='rgba(35,24,18,.55)';for(var yy2=0;yy2<hh;yy2+=16){x.beginPath();x.moveTo(4,yy2+12);x.lineTo(w/2,yy2+2);x.lineTo(w-4,yy2+12);x.lineTo(w-4,yy2+16);x.lineTo(w/2,yy2+6);x.lineTo(4,yy2+16);x.fill()}x.fillStyle='rgba(35,24,18,.25)';x.fillRect(0,0,6,hh);x.fillRect(w-6,0,6,hh)});trT.wrapS=trT.wrapT=THREE.RepeatWrapping;
+function ribbon(pts,w,off){var P2=[],U=[],I=[],len=0,q2=[];for(var a0=0;a0<pts.length-1;a0++)for(var s0=0;s0<6;s0++)q2.push([lp(pts[a0][0],pts[a0+1][0],s0/6),lp(pts[a0][1],pts[a0+1][1],s0/6)]);q2.push(pts[pts.length-1]);pts=q2;for(var i=0;i<pts.length;i++){var a=pts[i],b=pts[Math.min(i+1,pts.length-1)],c=pts[Math.max(i-1,0)],dx=b[0]-c[0],dz=b[1]-c[1],dl=Math.hypot(dx,dz)||1,nx=-dz/dl,nz=dx/dl;if(i)len+=Math.hypot(a[0]-pts[i-1][0],a[1]-pts[i-1][1]);
+ [-1,1].forEach(function(sd,k){var x=a[0]+nx*(off+sd*w/2),z=a[1]+nz*(off+sd*w/2);P2.push(x,H(x,z)+.07,z);U.push(k,len/2.2)})}
+ for(var q=0;q<pts.length-1;q++){var o=q*2;I.push(o,o+1,o+2,o+1,o+3,o+2)}var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P2,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);g.computeVertexNormals();
+ var m2=new THREE.Mesh(g,new THREE.MeshStandardMaterial({map:trT,transparent:true,roughness:1,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));m2.receiveShadow=true;S.add(m2)}
+var tpath=[];for(var tq=0;tq<=24;tq++){var tf=tq/24,tx=lp(6,-24,tf)+Math.sin(tf*5)*.8,tz=lp(2,-8,tf)+Math.cos(tf*4)*.6;tpath.push([tx,tz])}
+ribbon(tpath,.8,-3.6);ribbon(tpath,.8,3.6);
+// stars
+var sg=new THREE.BufferGeometry(),spp=new Float32Array(2500*3);
+for(var s2=0;s2<2500;s2++){var th=Math.random()*6.283,ph=Math.acos(Math.random()*.95+.02),rr=1200;spp[s2*3]=rr*Math.sin(ph)*Math.cos(th);spp[s2*3+1]=rr*Math.cos(ph);spp[s2*3+2]=rr*Math.sin(ph)*Math.sin(th)}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));var sm2=new THREE.PointsMaterial({color:0xffffff,size:1.5,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false});S.add(new THREE.Points(sg,sm2));
+// ---------- model helpers ----------
+var rover=new THREE.Group(),hb=new THREE.Group();rover.add(hb);var TG=hb;
+function bxm(w,hh,d,mat,x,y,z){var o=new THREE.Mesh(new THREE.BoxGeometry(w,hh,d),mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+function tube(a,b,r,mat){var A=new THREE.Vector3(a[0],a[1],a[2]),B=new THREE.Vector3(b[0],b[1],b[2]),d=B.clone().sub(A),t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),10),mat);t.position.copy(A).add(B).multiplyScalar(.5);t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());t.castShadow=true;TG.add(t)}
+function cyl(r,l,mat,x,y,z,ax){var o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,24),mat);o.position.set(x,y,z);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;o.castShadow=true;TG.add(o);return o}
+function ball(r,mat,x,y,z){var o=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),mat);o.position.set(x,y,z);o.castShadow=true;TG.add(o)}
+function boxUV(g,sx,sy,sz){var p=g.attributes.position,n=g.attributes.normal,uv=new Float32Array(p.count*2);for(var i=0;i<p.count;i++){var ax=Math.abs(n.getX(i)),ay=Math.abs(n.getY(i)),az=Math.abs(n.getZ(i)),x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+ if(az>=ax&&az>=ay){uv[i*2]=x/sx+.5;uv[i*2+1]=y/sy+.5}else if(ax>=ay){uv[i*2]=z/sz+.5;uv[i*2+1]=y/sy+.5}else{uv[i*2]=x/sx+.5;uv[i*2+1]=z/sz+.5}}g.setAttribute('uv',new THREE.BufferAttribute(uv,2))}
+function rbox(w,hh,d,r,mat,x,y,z,flat){var sh=new THREE.Shape(),a=w/2,b=hh/2;sh.moveTo(-a+r,-b);sh.lineTo(a-r,-b);sh.quadraticCurveTo(a,-b,a,-b+r);sh.lineTo(a,b-r);sh.quadraticCurveTo(a,b,a-r,b);sh.lineTo(-a+r,b);sh.quadraticCurveTo(-a,b,-a,b-r);sh.lineTo(-a,-b+r);sh.quadraticCurveTo(-a,-b,-a+r,-b);
+ var bv=Math.min(r*.5,d*.22),g=new THREE.ExtrudeGeometry(sh,{depth:d-2*bv,bevelEnabled:true,bevelThickness:bv,bevelSize:bv*.9,bevelSegments:2,curveSegments:5});g.translate(0,0,-(d-2*bv)/2);if(flat)g.rotateX(-Math.PI/2);boxUV(g,flat?w:w,flat?d:hh,flat?hh:d);
+ var o=new THREE.Mesh(g,mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+// ---------- Ingenuity (modelled in metres) ----------
+var goldT=mk(512,512,function(x,w,hh){var g=x.createLinearGradient(0,0,w,hh);g.addColorStop(0,'#8f6a1f');g.addColorStop(.5,'#e8c05e');g.addColorStop(1,'#9a742a');x.fillStyle=g;x.fillRect(0,0,w,hh);for(var c=0;c<900;c++){x.strokeStyle=c%2?'rgba(255,238,170,.42)':'rgba(70,45,5,.5)';x.lineWidth=1+Math.random();var a=Math.random()*w,b=Math.random()*hh;x.beginPath();x.moveTo(a,b);x.lineTo(a+Math.random()*44-22,b+Math.random()*44-22);x.stroke()}
+ x.fillStyle='rgba(18,18,20,.9)';x.fillRect(0,hh*.2,w,hh*.06);x.fillRect(0,hh*.68,w,hh*.05);x.strokeStyle='rgba(30,30,30,.7)';x.lineWidth=2;x.strokeRect(hh*.1,hh*.32,w*.28,hh*.28);dust(x,w,hh,1500,.45)}),
+panT=mk(1024,720,function(x,w,hh){x.fillStyle='#090f20';x.fillRect(0,0,w,hh);var cw=(w-24)/10,ch=(hh-24)/7;for(var i=0;i<10;i++)for(var j=0;j<7;j++){var g=x.createLinearGradient(12+i*cw,12+j*ch,12+(i+1)*cw,12+(j+1)*ch);g.addColorStop(0,'#2a3f78');g.addColorStop(.5,'#18274f');g.addColorStop(1,'#0e1736');x.fillStyle=g;x.fillRect(15+i*cw,15+j*ch,cw-5,ch-5);
+  x.strokeStyle='rgba(200,206,216,.55)';x.lineWidth=1.2;for(var l=1;l<6;l++){x.beginPath();x.moveTo(15+i*cw,15+j*ch+l*(ch-5)/6);x.lineTo(10+(i+1)*cw,15+j*ch+l*(ch-5)/6);x.stroke()}x.lineWidth=3;x.beginPath();x.moveTo(15+i*cw+(cw-5)/2,15+j*ch);x.lineTo(15+i*cw+(cw-5)/2,10+(j+1)*ch);x.stroke()}
+ x.strokeStyle='#9aa0a8';x.lineWidth=8;x.strokeRect(4,4,w-8,hh-8);dust(x,w,hh,9000,.6)}),
+carbT=mk(256,256,function(x,w,hh){x.fillStyle='#15151a';x.fillRect(0,0,w,hh);for(var k=-w;k<w;k+=6){x.strokeStyle='rgba(120,122,134,.2)';x.lineWidth=2;x.beginPath();x.moveTo(k,0);x.lineTo(k+w,hh);x.stroke();x.strokeStyle='rgba(0,0,0,.35)';x.beginPath();x.moveTo(k+3,hh);x.lineTo(k+3+w,0);x.stroke()}},[2,3]),
+fabT=mk(128,128,function(x,w,hh){x.fillStyle='#e0d3b2';x.fillRect(0,0,w,hh);for(var i=0;i<w;i+=3){x.fillStyle='rgba(120,100,70,.25)';x.fillRect(i,0,1,hh);x.fillRect(0,i,w,1)}});
+var goM=M(0xffffff,.85,.38,goldT,1.2),cbM=M(0xffffff,.45,.35,carbT,1),alM=M(0xb8bcc0,.9,.3,null,1.2),pnM=M(0xffffff,.35,.4,panT,.8),dkM=M(0x16161a,.7,.5,null,.8),glM=M(0x08090c,.95,.06,null,1.8),tpM=M(0x101012,.2,.7,null,.4),fbM=M(0xffffff,0,.95,fabT,.3),fpM=M(0x2b2b2f,.6,.5,null,.8);
+// fuselage, thermal tape, panels, bolts
+var fu=rbox(.195,.16,.136,.014,goM,0,.28,0);boxUV(fu.geometry,.195,.16,.136);
+bxm(.199,.012,.14,tpM,0,.313,0);bxm(.199,.008,.14,tpM,0,.25,0);rbox(.186,.128,.006,.008,alM,0,.366,0,true);rbox(.18,.12,.006,.008,cbM,0,.199,0,true);
+bxm(.06,.04,.002,alM,-.03,.27,.0695);bxm(.06,.04,.002,alM,.03,.27,-.0695);
+for(var bb=0;bb<10;bb++){var bq=bb<8;cyl(.0028,.003,alM,bq?(bb%4<2?-.085:.085):0,.37,bq?(bb%2?.055:-.055):(bb===8?.04:-.04))}
+[-1,1].forEach(function(s){[-1,1].forEach(function(t){cyl(.0022,.003,dkM,s*.045-.03,.27+t*.015,.0715)})});
+// nav camera, laser altimeter, colour camera
+cyl(.018,.02,dkM,0,.19,0);cyl(.0155,.003,alM,0,.179,0);cyl(.012,.01,dkM,0,.175,0);cyl(.009,.002,glM,0,.169,0);
+bxm(.03,.02,.03,dkM,.05,.19,.04);cyl(.0055,.002,glM,.043,.178,.04);cyl(.0055,.002,glM,.057,.178,.04);
+bxm(.03,.03,.034,dkM,.11,.255,0);cyl(.014,.02,dkM,.13,.255,0,'x');cyl(.016,.004,alM,.14,.255,0,'x');cyl(.0095,.002,glM,.1425,.255,0,'x');
+// mast, swashplates, servos
+tube([0,.368,0],[0,.5,0],.011,cbM);cyl(.016,.006,alM,0,.372,0);cyl(.016,.006,alM,0,.496,0);
+[[.388,0],[.444,1]].forEach(function(sw){var tr=new THREE.Mesh(new THREE.TorusGeometry(.034,.0045,10,40),alM);tr.rotation.x=Math.PI/2;tr.position.y=sw[0];tr.castShadow=true;hb.add(tr);cyl(.03,.004,dkM,0,sw[0],0)});
+for(var sv=0;sv<6;sv++){var sa=sv*1.0472+.3,sx3=Math.cos(sa)*.058,sz4=Math.sin(sa)*.058,so=bxm(.018,.024,.016,dkM,sx3,.378,sz4);so.rotation.y=-sa;tube([sx3,.392,sz4],[Math.cos(sa)*.034,sv%2?.388:.444,Math.sin(sa)*.034],.0015,alM)}
+// rotor blades (twisted airfoil), hubs, grips, pitch links
+function bladeGeo(){var S2=14,pr=[[-.5,0],[-.25,.5],[0,.62],[.25,.5],[.5,0],[.25,-.28],[0,-.34],[-.25,-.28]],P3=[],UV=[],ID=[];
+ for(var i=0;i<=S2;i++){var t2=i/S2,x=.045+t2*.56,c=lp(.062,.048,t2),tw=lp(.21,.07,t2),th2=.0035*(1-.35*t2);pr.forEach(function(q,k){var cz=q[0]*c,cy=q[1]*th2*2;P3.push(x,cy*Math.cos(tw)+cz*Math.sin(tw),cz*Math.cos(tw)-cy*Math.sin(tw));UV.push(t2,k/8)})}
+ for(var i2=0;i2<S2;i2++)for(var p=0;p<8;p++){var a=i2*8+p,b=i2*8+(p+1)%8,c2=(i2+1)*8+p,d=(i2+1)*8+(p+1)%8;ID.push(a,c2,b,b,c2,d)}
+ var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P3,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(UV,2));g.setIndex(ID);g.computeVertexNormals();return g}
+var bgm=bladeGeo();cbM.side=THREE.DoubleSide;
+function rotor(y,sign,swY){var g=new THREE.Group();g.position.y=y;hb.add(g);TG=g;cyl(.022,.018,alM,0,0,0);cyl(.014,.024,dkM,0,.016,0);
+ for(var k=0;k<6;k++)cyl(.0028,.004,alM,Math.cos(k*1.047)*.017,.01,Math.sin(k*1.047)*.017);
+ [1,-1].forEach(function(s){var bl=new THREE.Mesh(bgm,cbM);if(s<0)bl.rotation.y=Math.PI;bl.castShadow=true;g.add(bl);cyl(.008,.05,alM,s*.04,0,0,'x');bxm(.008,.012,.012,alM,s*.05,.007,s*.015)});
+ if(sign<0)g.scale.z=-1;TG=hb;[1,-1].forEach(function(s){tube([s*.03,swY,.012],[s*.05,y+.007,s*.015*sign],.0015,alM)});return g}
+var ru=rotor(.468,1,.444),rl=rotor(.41,-1,.388);
+// solar panel, struts, antenna, cables, fabric
+var spn=rbox(.4,.28,.012,.012,pnM,0,.505,0,true);boxUV(spn.geometry,.4,.012,.28);rbox(.41,.29,.008,.012,alM,0,.497,0,true);
+[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(q){tube([q[0]*.07,.366,q[1]*.05],[q[0]*.15,.497,q[1]*.1],.0028,cbM)});
+cyl(.012,.008,alM,0,.515,0);tube([0,.511,0],[0,.64,0],.004,cbM);cyl(.0065,.04,dkM,0,.55,0);ball(.0085,alM,0,.645,0);
+function cable(pts,r){var cv=new THREE.CatmullRomCurve3(pts.map(function(p){return new THREE.Vector3(p[0],p[1],p[2])})),m=new THREE.Mesh(new THREE.TubeGeometry(cv,24,r,6,false),tpM);m.castShadow=true;TG.add(m)}
+cable([[0,.52,.01],[.02,.5,.04],[.1,.46,.08],[.09,.372,.05]],.0022);cable([[.17,.497,.12],[.16,.45,.11],[.1,.4,.075],[.08,.367,.05]],.0022);cable([[-.16,.497,-.1],[-.12,.45,-.08],[-.07,.4,-.05],[-.06,.367,-.04]],.0022);
+bxm(.025,.002,.02,fbM,-.14,.4915,0);bxm(.008,.003,.008,alM,-.14,.4895,0);
+// landing legs and footpads
+[-1,1].forEach(function(sx){[-1,1].forEach(function(sz){var root=[sx*.075,.205,sz*.05],knee=[sx*.17,.11,sz*.14],foot=[sx*.26,.008,sz*.2];bxm(.02,.012,.016,alM,root[0],root[1],root[2]);tube(root,knee,.0055,cbM);tube(knee,foot,.005,cbM);ball(.007,alM,knee[0],knee[1],knee[2]);tube([sx*.098,.262,sz*.06],knee,.0035,cbM);cyl(.022,.006,fpM,foot[0],.003,foot[2]);cyl(.012,.004,alM,foot[0],.009,foot[2])})});
+var blM=new THREE.MeshBasicMaterial({color:0x2a2420,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}),bld=new THREE.Mesh(new THREE.CircleGeometry(.6,64),blM);bld.rotation.x=-Math.PI/2;bld.position.y=.44;bld.raycast=function(){};hb.add(bld);
+rover.scale.setScalar(SC);S.add(rover);
+// ---------- Perseverance rover ----------
+var pr=new THREE.Group();TG=pr;var prW=M(0xe6e2da,.35,.55,null,.9),prD=M(0x2a2a2e,.6,.5,null,.8),prG=M(0x8d9196,.85,.35,null,1),
+whT=mk(256,64,function(x,w,hh){x.fillStyle='#8d9196';x.fillRect(0,0,w,hh);x.fillStyle='#34363a';for(var i=0;i<24;i++){x.beginPath();x.moveTo(i*10.7,0);x.lineTo(i*10.7+5,hh/2);x.lineTo(i*10.7,hh);x.lineTo(i*10.7+3,hh);x.lineTo(i*10.7+8,hh/2);x.lineTo(i*10.7+3,0);x.fill()}dust(x,w,hh,500,.5)}),
+whC=mk(128,128,function(x,w,hh){x.fillStyle='#9aa0a6';x.fillRect(0,0,w,hh);x.fillStyle='#2a2d32';for(var s=0;s<8;s++){x.save();x.translate(64,64);x.rotate(s*.785);x.fillRect(18,-7,36,14);x.restore()}x.fillStyle='#53575d';x.beginPath();x.arc(64,64,12,0,6.283);x.fill();dust(x,w,hh,200,.5)}),
+whM=[M(0xffffff,.8,.45,whT,.9),M(0xffffff,.8,.45,whC,.9),M(0xffffff,.8,.45,whC,.9)];
+var prT=mk(1024,512,function(x,w,hh){x.fillStyle='#e4e0d8';x.fillRect(0,0,w,hh);var g=x.createLinearGradient(0,0,0,hh);g.addColorStop(0,'rgba(255,255,255,.15)');g.addColorStop(1,'rgba(90,60,40,.35)');x.fillStyle=g;x.fillRect(0,0,w,hh);x.strokeStyle='rgba(60,60,64,.55)';x.lineWidth=2;for(var i=1;i<6;i++){x.beginPath();x.moveTo(i*w/6,0);x.lineTo(i*w/6,hh);x.stroke()}for(var j=1;j<3;j++){x.beginPath();x.moveTo(0,j*hh/3);x.lineTo(w,j*hh/3);x.stroke()}x.fillStyle='rgba(70,70,76,.8)';for(var i=0;i<6;i++)for(var k=0;k<=24;k++)[12,hh-12].forEach(function(yy){x.beginPath();x.arc(i*w/6+10+k*(w/6-20)/24,yy,2.2,0,6.283);x.fill()});for(var s=0;s<120;s++){x.fillStyle='rgba(150,95,60,'+Math.random()*.12+')';x.fillRect(Math.random()*w,Math.random()*hh,Math.random()*4+1,Math.random()*60+10)}dust(x,w,hh,5000,.5)}),prB=M(0xffffff,.35,.55,prT,.9);
+rbox(3.0,.9,1.7,.12,prB,0,1.0,0);bxm(2.5,.06,1.5,prG,-.15,1.5,0);bxm(.9,.35,.7,prD,.9,.68,0);bxm(.5,.3,.4,prW,-.8,1.6,.5);
+cyl(.22,.9,prD,-1.75,1.2,0,'x');bxm(.9,.5,.01,prG,-1.75,1.2,0);bxm(.9,.01,.5,prG,-1.75,1.2,0);
+[-1.1,0,1.1].forEach(function(x){[-1,1].forEach(function(z){var w=new THREE.Mesh(new THREE.CylinderGeometry(.26,.26,.2,36),whM);w.rotation.x=Math.PI/2;w.position.set(x,.26,z*1.2);w.castShadow=true;pr.add(w);cyl(.05,.12,prD,x,.26,z*1.34,'z')})});
+[-1,1].forEach(function(z){tube([-1.1,.28,z*1.2],[0,.62,z*.9],.045,prG);tube([0,.62,z*.9],[1.1,.28,z*1.2],.045,prG);tube([0,.28,z*1.2],[-.2,.65,z*.9],.04,prG);tube([0,.62,z*.9],[0,.9,z*.8],.05,prG);ball(.06,prG,0,.62,z*.9)});
+tube([1.1,1.5,.5],[1.1,2.15,.5],.045,prG);bxm(.35,.22,.75,prW,1.1,2.3,.5);[.3,.7].forEach(function(z){cyl(.07,.2,prD,1.32,2.3,z,'x');cyl(.05,.02,prG,1.43,2.3,z,'x')});cyl(.1,.28,prW,1.25,2.5,.5,'x');cyl(.045,.12,prD,1.37,2.5,.5,'x');
+var dsh2=new THREE.Mesh(new THREE.SphereGeometry(.3,24,12,0,6.2832,0,1.05),prG);dsh2.position.set(-.8,1.95,-.4);dsh2.rotation.set(Math.PI,0,.3);pr.add(dsh2);tube([-.8,1.55,-.4],[-.8,1.9,-.4],.03,prG);tube([-.5,1.53,.5],[-.5,2.1,.5],.015,prD);
+tube([1.5,.95,-.45],[1.95,.85,-.45],.07,prG);tube([1.95,.85,-.45],[2.0,.7,-.2],.06,prG);cyl(.24,.3,prD,2.1,.65,-.2,'x');[[.1,.1],[-.1,.1],[.1,-.1],[-.1,-.1]].forEach(function(o,j){cyl(.06,.2,j%2?prG:prW,2.3,.65+o[1],-.2+o[0],'x')});
+// rover detail pass: rivets, hazcams, wheel grousers, motors, RTG fins, flat HGA, navcams, arm joints, belly, cable
+[-1,1].forEach(function(z){for(var i=0;i<26;i++)cyl(.016,.02,prG,-1.35+i*.108,1.485,z*.78)});
+[-1,1].forEach(function(sx){[-.5,.5].forEach(function(zz){bxm(.06,.1,.22,prD,sx*1.52,.85,zz);cyl(.026,.012,glM,sx*1.555,.85,zz+.07,'x');cyl(.026,.012,glM,sx*1.555,.85,zz-.07,'x')})});
+var cgm=new THREE.BoxGeometry(.035,.03,.2);[-1.1,0,1.1].forEach(function(x){[-1,1].forEach(function(z){for(var k=0;k<18;k++){var a=k*.349,c=new THREE.Mesh(cgm,prG);c.position.set(x+Math.cos(a)*.27,.26+Math.sin(a)*.27,z*1.2);c.rotation.z=a;pr.add(c)}})});
+[-1.1,1.1].forEach(function(x){[-1,1].forEach(function(z){cyl(.08,.2,prD,x,.62,z*1.3)})});
+for(var k=0;k<4;k++){var fa=.785+k*1.571,fn=new THREE.Mesh(new THREE.BoxGeometry(.7,.012,.2),prG);fn.position.set(-1.75,1.2+Math.sin(fa)*.32,Math.cos(fa)*.32);fn.rotation.x=-fa;fn.castShadow=true;pr.add(fn)}
+var hga=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.03,6),prG);hga.position.set(.35,1.95,-.45);hga.rotation.set(.9,0,.3);hga.castShadow=true;pr.add(hga);tube([.35,1.53,-.45],[.35,1.92,-.45],.035,prG);
+cyl(.04,.12,prD,1.3,2.45,.28,'x');cyl(.04,.12,prD,1.3,2.45,.72,'x');cyl(.03,.01,glM,1.37,2.45,.28,'x');cyl(.03,.01,glM,1.37,2.45,.72,'x');
+ball(.09,prG,1.5,.95,-.45);ball(.09,prG,1.95,.85,-.45);ball(.08,prG,2.0,.7,-.2);tube([2.25,.65,-.2],[2.62,.65,-.2],.03,prG);
+bxm(1.1,.28,.8,prD,.1,.45,0);tube([0,.9,-.8],[0,.9,.8],.035,prD);cable([[.6,1.53,-.5],[.2,1.57,-.2],[-.2,1.56,.2],[-.6,1.53,.4]],.025);
+pr.scale.setScalar(SC);pr.position.set(-24,H(-24,-8),-8);pr.rotation.y=2.82;pr.visible=false;S.add(pr);
+// ---------- landing debris ----------
+var db=new THREE.Group();TG=db;var bsM=M(0xd9d3c8,.2,.7,null,.6),pcM=M(0xc8582c,0,.9,null,.4),pwM=M(0xeee9e0,0,.9,null,.4);bsM.side=THREE.DoubleSide;
+var bsh=new THREE.Mesh(new THREE.ConeGeometry(2.2,1.3,40,1,true),bsM);bsh.position.set(0,.65,0);bsh.rotation.z=.55;bsh.castShadow=true;db.add(bsh);tube([-1.2,.2,.3],[1.3,.9,-.2],.03,prD);
+for(var pc=0;pc<30;pc++){var pp=new THREE.Mesh(new THREE.BoxGeometry(1.2+h(pc,1)*1.8,.01,.8+h(pc,2)*1.4),pc%2?pcM:pwM);pp.position.set(-4-h(pc,3)*5,.08+h(pc,4)*.12,(h(pc,5)-.5)*8);pp.rotation.set((h(pc,6)-.5)*.3,h(pc,7)*6.28,(h(pc,8)-.5)*.3);pp.receiveShadow=true;db.add(pp)}
+for(var cd=0;cd<14;cd++){var ca=[-4-h(cd,11)*5,.1,(h(cd,12)-.5)*8],cb=[-4-h(cd,13)*5,.1,(h(cd,14)-.5)*8];tube(ca,cb,.012,pwM)}
+db.scale.setScalar(SC);db.position.set(20,H(20,-56),-56);db.visible=false;S.add(db);TG=hb;
+// dust: takeoff puff and a distant dust devil
+var bl=document.createElement('canvas');bl.width=bl.height=128;var bgx=bl.getContext('2d'),bgr=bgx.createRadialGradient(64,64,0,64,64,64);bgr.addColorStop(0,'rgba(255,255,255,.7)');bgr.addColorStop(1,'rgba(255,255,255,0)');bgx.fillStyle=bgr;bgx.fillRect(0,0,128,128);var blT=new THREE.CanvasTexture(bl);
+var DN2=160,pg=new THREE.BufferGeometry(),ppos=new Float32Array(DN2*3);pg.setAttribute('position',new THREE.BufferAttribute(ppos,3));
+var pmat=new THREE.PointsMaterial({color:0xc9a07c,size:1.6,map:blT,transparent:true,opacity:0,depthWrite:false}),puff=new THREE.Points(pg,pmat);puff.frustumCulled=false;S.add(puff);
+var DV=600,dvg=new THREE.BufferGeometry(),dvp=new Float32Array(DV*3);dvg.setAttribute('position',new THREE.BufferAttribute(dvp,3));
+var dvm=new THREE.PointsMaterial({color:0xb08a68,size:5,map:blT,transparent:true,opacity:.16,depthWrite:false}),dvl=new THREE.Points(dvg,dvm);dvl.frustumCulled=false;S.add(dvl);var DVX=64,DVZ=-72;
+var MN=500,mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(MN*3),3));var mts=new THREE.Points(mg,new THREE.PointsMaterial({color:0xe0b890,size:.5,map:blT,transparent:true,opacity:.35,depthWrite:false}));mts.frustumCulled=false;S.add(mts);
+function wr(v,c){return ((v-c)%40+60)%40-20+c}
+// ---------- parts for inspection ----------
+var P=[
+{g:'Rotors',n:'Upper rotor blades',f:[.34,.472,.02],d:4.6,p:.4,s:'Rotor about 1.2 m across, spinning at about 2,400 rpm',a:'Two long, thin carbon-fibre blades that twist slightly from root to tip.',b:'Thin Martian air gives little lift, so the blades spin very fast. Their tips move at a large fraction of the speed of sound in Mars’ air.',t:'The blades are light and stiff so the motors can spin them up quickly.'},
+{g:'Rotors',n:'Lower rotor blades',f:[0,.414,-.34],d:4.6,p:.3,a:'A second pair of blades just below, spinning the opposite way.',b:'Two rotors turning in opposite directions cancel each other’s twisting force, so no tail rotor is needed.',t:'This coaxial design is why it looks like two propellers on one pole.'},
+{g:'Rotors',n:'Rotor hubs and blade grips',f:[.035,.48,.02],d:2.2,p:.5,a:'Metal hubs with bolted blade grips and small pitch horns.',b:'They hold each blade, let its pitch angle change, and carry the lift into the mast.',t:'Small links connect the pitch horns to the swashplates below.'},
+{g:'Rotors',n:'Swashplates',f:[.05,.446,.03],d:2.2,a:'Two rings, one for each rotor, that tilt and slide on the mast.',b:'Tilting a swashplate changes the blade pitch as it spins, which leans the helicopter in any direction.',t:'It is the same control idea used in full-size helicopters.'},
+{g:'Rotors',n:'Servos and pushrods',f:[-.055,.382,0],d:2,p:.15,s:'Six servos, three per rotor',a:'Six small servo motors with thin pushrods to the swashplates.',b:'The flight computer moves the servos many times each second to keep the helicopter stable.',t:'Small and precise, they do the work of a pilot’s hands.'},
+{g:'Rotors',n:'Mast',f:[0,.486,0],d:1.8,p:.3,a:'A carbon-fibre tube that carries both rotors and the solar panel supports.',b:'It transfers the lift to the body and keeps the two rotors apart by a few centimetres.',t:'Everything in the flying system hangs from this one tube.'},
+{g:'Power and radio',n:'Solar panel',f:[.13,.512,.07],d:3,p:.6,a:'A flat solar panel above the rotors, mounted on thin struts.',b:'It charged the battery every day, and that energy ran the heaters that kept the electronics alive through the freezing nights.',t:'It sits high so the rotors cannot shade it.'},
+{g:'Power and radio',n:'Antenna',f:[0,.6,0],d:2.2,p:.4,a:'A thin radio antenna at the very top.',b:'It talked to the Perseverance rover, which relayed messages to and from Earth.',t:'Ingenuity could not call Earth directly. The rover was its go-between.'},
+{g:'Power and radio',n:'Wright Flyer fabric',f:[-.14,.491,0],d:1.3,p:-.45,a:'A postage-stamp-sized piece of cloth from the Wright brothers’ first airplane.',b:'It was tucked under the solar panel as a tribute, carried to another planet.',t:'It connects the first flight on Earth in 1903 to the first on Mars in 2021.'},
+{g:'Power and radio',n:'Cabling',f:[.1,.44,.08],d:2,a:'Thin black cables running from the panel and antenna down to the body.',b:'They carry power from the solar panel to the battery and signals to and from the antenna.',t:'They are kept short and tidy so they stay clear of the spinning blades.'},
+{g:'Body',n:'Fuselage',f:[.1,.28,.07],d:2.6,s:'About 13.6 × 19.5 × 16.3 cm; whole helicopter 1.8 kg',a:'A small box wrapped in gold thermal insulation, about the size of a tissue box.',b:'Inside are the battery cells, a computer comparable to one in a smartphone, and heaters that kept everything warm enough to work.',t:'The black strips are thermal tape. The foil keeps heat in at night.'},
+{g:'Eyes',n:'Navigation camera',f:[0,.188,0],d:1.6,p:-.2,s:'Black-and-white, looks straight down',a:'A small camera pointing at the ground under the helicopter.',b:'There is no GPS on Mars, so it tracked patterns on the ground to measure its own speed and position.',t:'It flew by following the ground beneath it.'},
+{g:'Eyes',n:'Colour camera',f:[.13,.255,0],d:1.5,s:'About 13 megapixels',a:'A color camera on the front, tilted slightly down.',b:'It took the photos of the terrain that scientists and rover planners used when Ingenuity became a scout.',t:'It saw things the rover’s cameras could not from the ground.'},
+{g:'Eyes',n:'Laser altimeter',f:[.05,.186,.04],d:1.4,p:-.2,a:'A small downward laser that measures distance to the ground.',b:'It told the helicopter exactly how high it was so it could hover and land gently.',t:'It is based on an off-the-shelf laser rangefinder.'},
+{g:'Landing',n:'Landing legs',f:[.17,.11,.13],d:3.4,s:'Four carbon-fibre legs',a:'Four thin, springy legs, each with a knee joint and a brace to the body.',b:'They absorbed the shock of touchdown and kept the body and rotors clear of the ground.',t:'The legs folded up to fit beneath the rover.'},
+{g:'Landing',n:'Footpads',f:[.26,.012,.2],d:1.6,p:.5,a:'Small flat feet at the end of each leg.',b:'They spread the weight on soft sand and loose rock so the helicopter did not sink or tip.',t:'Each foot touched down on Mars at the end of every one of its 72 flights.'}];
+P.forEach(function(o){o.w=[o.f[0]*SC,o.f[1]*SC,o.f[2]*SC];if(o.y===undefined)o.y=(Math.abs(o.f[0])+Math.abs(o.f[2])>.08)?Math.atan2(o.f[0],o.f[2]):.6;if(o.p===undefined)o.p=.3});
+var OV={n:'Ingenuity at a glance',a:'A 1.8 kg helicopter with two counter-rotating rotors, built by NASA’s Jet Propulsion Laboratory.',b:'Launched July 30, 2020; landed February 18, 2021 in Jezero Crater; first flight April 19, 2021.',t:'It made 72 flights across nearly three years.'};
+// ---------- story keyframes ----------
+var K=[
+{o:[-5.5,2.4,7.5],t:[0,1.1,0],fy:1,h:[0,0,0],arc:0,sky:0xc08a68,fog:.004,sun:2.2,sy:[-30,16,20],star:0},
+{o:[4.6,1.3,6.5],t:[0,.9,0],fy:1,h:[0,0,0],arc:0,sky:0xb89478,fog:.0038,sun:2.6,sy:[-26,20,22],star:0},
+{o:[9,2.6,11],t:[-9,1.4,-3],fy:1,h:[0,0,0],arc:0,sky:0xb89478,fog:.0038,sun:2.6,sy:[-26,20,22],star:0},
+{o:[5,1.1,5],t:[0,.8,0],fy:1,h:[0,0,0],arc:0,sky:0xb89478,fog:.0038,sun:2.6,sy:[-26,20,22],star:0},
+{o:[-8,2.2,9],t:[0,2.5,0],fy:0,h:[0,0,0],arc:0,sky:0xbd9a7c,fog:.0036,sun:2.7,sy:[-24,24,22],star:0},
+{o:[-12,5,14],t:[2,1.5,0],fy:.6,h:[0,0,0],arc:6,sky:0xb89478,fog:.0038,sun:2.6,sy:[-24,22,22],star:0},
+{o:[-10,4,12],t:[2,1.5,0],fy:.6,h:[58,0,-12],arc:10,sky:0xb89478,fog:.004,sun:2.5,sy:[-24,20,22],star:0},
+{o:[8,3,10],t:[-5,.5,-3],fy:.8,h:[30,0,-48],arc:6,sky:0xb28e72,fog:.004,sun:2.4,sy:[-22,20,22],star:0},
+{o:[-12,9,18],t:[3,3,0],fy:.8,h:[-30,0,-42],arc:24,sky:0xb08c70,fog:.003,sun:2.4,sy:[-22,22,20],star:0},
+{o:[-6,3,8],t:[0,2,0],fy:.5,h:[-8,0,26],arc:12,sky:0xa88566,fog:.0036,sun:2,sy:[-28,14,20],star:0},
+{o:[7,2,10],t:[0,1.2,0],fy:1,h:[-2,0,30],arc:0,sky:0x3b2a30,fog:.006,sun:.5,sy:[-34,5,18],star:.6}];
+function hop(f){return f<.15?0:f<.35?3*sm(.15,.35,f):f<.75?3:f<.95?3*(1-sm(.75,.95,f)):0}
+function hpos(c){var i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1],x=lp(a.h[0],b.h[0],e),z=lp(a.h[2],b.h[2],e),y=0;if(c>=4&&c<5)y=hop(c-4);else if(c>=5&&c<10)y=a.arc*Math.sin(Math.PI*e);return [x,H(x,z)+y*SC,z,y]}
+var TS=.02,TN=Math.floor(6/TS)+1,trl=new Float32Array(TN*3);for(var ti=0;ti<TN;ti++){var tq2=hpos(4+ti*TS);trl[ti*3]=tq2[0];trl[ti*3+1]=tq2[1]+.1;trl[ti*3+2]=tq2[2]}
+var tgm=new THREE.BufferGeometry();tgm.setAttribute('position',new THREE.BufferAttribute(trl,3));tgm.setDrawRange(0,0);
+var trail=new THREE.Line(tgm,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.55,fog:false}));trail.frustumCulled=false;S.add(trail);
+// ---------- inspect mode ----------
+var INS=true,sel=-1,yaw=.6,yT=.6,cp=.28,pitT=.28,dist=8,dT=8,drag=false,lx=0,ly0=0,tg=new THREE.Vector3(0,.8,0),tv=new THREE.Vector3(),lk=new THREE.Vector3(),first=true,th0=0,hyaw=0;
+var pl=$('#plist'),hots=[],occ=[],hc=0,rc=new THREE.Raycaster(),hv=new THREE.Vector3(),tpos=new THREE.Vector3(),tlook=new THREE.Vector3();
+function show(o){$('#pg').textContent=o.g||'';$('#pn').textContent=o.n;$('#pa').textContent=o.a;$('#pb').textContent=o.b;$('#pt').textContent=o.t;$('#ps').textContent=o.s||''}
+function pick(i){sel=i;if(i>=0){yT=P[i].y;dT=P[i].d;pitT=P[i].p}else{dT=8;pitT=.28}
+ pl.querySelectorAll('button').forEach(function(b,k){b.className=k-1===i?'on':''});hots.forEach(function(h2,k){h2.className=k===i?'hot on':'hot'});show(i<0?OV:P[i])}
+[{n:'Whole helicopter'}].concat(P).forEach(function(o,k){if(o.g&&(k<2||P[k-2].g!==o.g)){var gh=document.createElement('div');gh.className='gh';gh.textContent=o.g;pl.appendChild(gh)}var b=document.createElement('button');b.textContent=o.n;b.onclick=function(){pick(k-1)};pl.appendChild(b)});
+P.forEach(function(o,k){var b=document.createElement('button');b.className='hot';b.innerHTML=(k+1)+'<span>'+o.n+'</span>';b.setAttribute('aria-label',o.n);b.onclick=function(){pick(k)};$('#insp').appendChild(b);hots.push(b);occ.push(false)});
+pick(-1);
+function ang(a){while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a}
+var cvs=$('#c');
+cvs.addEventListener('pointerdown',function(e){if(INS){drag=true;lx=e.clientX;ly0=e.clientY;cvs.setPointerCapture(e.pointerId)}});
+cvs.addEventListener('pointermove',function(e){if(drag){yT-=(e.clientX-lx)*.006;yaw=yT;cp=Math.min(1.3,Math.max(-.3,cp+(e.clientY-ly0)*.005));pitT=cp;lx=e.clientX;ly0=e.clientY}});
+cvs.addEventListener('pointerup',function(){drag=false});cvs.addEventListener('pointercancel',function(){drag=false});
+cvs.addEventListener('wheel',function(e){if(INS){e.preventDefault();dT=Math.min(16,Math.max(1,dT+e.deltaY*.004))}},{passive:false});
+$('#go').onclick=function(){INS=false;document.body.className='story';scrollTo(0,0);sp=0;tp=0};
+$('#back').onclick=function(){INS=true;document.body.className='insp';pick(-1)};
+// ---------- loop ----------
+var sp=0,tp=0,mx=0,my=0,smx=0,smy=0,last=0;
+function resize(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+function prog(){var m=document.documentElement.scrollHeight-innerHeight;tp=m>0?scrollY/m:0}
+addEventListener('scroll',prog,{passive:true});prog();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count)}})},{threshold:.35});
+document.querySelectorAll('.card').forEach(function(c){io.observe(c)});
+function count(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/1800);el.textContent=Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('en');if(k<1)requestAnimationFrame(f)})(t0)}
+var sfx=$('#sfx'),dots=nav.children,c1=new THREE.Color(),c2=new THREE.Color(),tint=new THREE.Color(0x4a3f6a);
+function frame(t){requestAnimationFrame(frame);var dt=last?Math.min(.05,(t-last)/1000):.016;last=t;
+ sp+=(tp-sp)*(1-Math.exp(-dt*5));smx+=(mx-smx)*(1-Math.exp(-dt*3));smy+=(my-smy)*(1-Math.exp(-dt*3));
+ var c=INS?1:sp*(N-1),i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1];
+ for(var d=0;d<N;d++)dots[d].className=d===Math.round(c)?'on':'';
+ var hp=INS?[0,H(0,0),0,0]:hpos(c);rover.position.set(hp[0],hp[1],hp[2]);pr.visible=db.visible=!INS;
+ if(INS){th0+=(0-th0)*(1-Math.exp(-dt*8));ru.rotation.y+=ang(0-ru.rotation.y)*(1-Math.exp(-dt*6));rl.rotation.y+=ang(Math.PI/2-rl.rotation.y)*(1-Math.exp(-dt*6));hb.rotation.z=0;hyaw=0}
+ else{var hp2=hpos(Math.min(c+.03,N-1)),dx=hp2[0]-hp[0],dz=hp2[2]-hp[2],dd=Math.hypot(dx,dz);if(dd>.05)hyaw+=ang(-Math.atan2(dz,dx)-hyaw)*(1-Math.exp(-dt*6));
+  var spin=(c>4.05&&c<4.98)||hp[3]>.02;th0+=((spin?1:0)-th0)*(1-Math.exp(-dt*7));ru.rotation.y+=th0*dt*38;rl.rotation.y-=th0*dt*38;hb.rotation.z+=((-Math.min(.2,dd*.08)*th0)-hb.rotation.z)*(1-Math.exp(-dt*6))}
+ rover.rotation.y=hyaw;blM.opacity=th0*.13;
+ if(INS){var fo=sel<0?[0,.8,0]:P[sel].w;tv.set(fo[0],rover.position.y+fo[1],fo[2]);tg.lerp(tv,1-Math.exp(-dt*5));dist+=(dT-dist)*(1-Math.exp(-dt*5));cp+=(pitT-cp)*(1-Math.exp(-dt*4));
+  if(!drag){if(sel<0)yT+=dt*.11;yaw+=ang(yT-yaw)*(1-Math.exp(-dt*4))}
+  tpos.set(tg.x+dist*Math.cos(cp)*Math.sin(yaw),Math.max(.4,tg.y+dist*Math.sin(cp)),tg.z+dist*Math.cos(cp)*Math.cos(yaw));tlook.copy(tg)}
+ else{var g0=hp[1]-hp[3]*SC,fy=lp(a.fy,b.fy,e),cx=hp[0]+lp(a.o[0],b.o[0],e)+smx*1.6,cz=hp[2]+lp(a.o[2],b.o[2],e),cy=g0+lp(a.o[1],b.o[1],e)-smy*.8+hp[3]*SC*fy;
+  tpos.set(cx,Math.max(H(cx,cz)+.7,cy),cz);tlook.set(hp[0]+lp(a.t[0],b.t[0],e),g0+lp(a.t[1],b.t[1],e)+hp[3]*SC,hp[2]+lp(a.t[2],b.t[2],e))}
+ if(first){cam.position.copy(tpos);lk.copy(tlook);first=false}else{var kk=1-Math.exp(-dt*(INS?6:7));cam.position.lerp(tpos,kk);lk.lerp(tlook,kk)}
+ cam.lookAt(lk);sky.position.copy(cam.position);
+ tgm.setDrawRange(0,INS||c<4?0:Math.min(TN,Math.floor((Math.min(c,9.99)-4)/TS)+1));
+ // dust puff under the helicopter while it is low
+ var puffA=INS?0:th0*Math.max(0,1-hp[3]/2.4)*.45,gy=hp[1]-hp[3]*SC;pmat.opacity+=(puffA-pmat.opacity)*(1-Math.exp(-dt*6));
+ if(pmat.opacity>.01){var pa2=pg.attributes.position.array;for(var q=0;q<DN2;q++){var ph=((t*.0006)+h(q,41))%1,rr2=1.2+ph*8,an=h(q,42)*6.28+ph*.8;pa2[q*3]=hp[0]+Math.cos(an)*rr2;pa2[q*3+1]=gy+.15+ph*(1-ph)*3.2;pa2[q*3+2]=hp[2]+Math.sin(an)*rr2}pg.attributes.position.needsUpdate=true}
+ var ma=mg.attributes.position.array;for(var q4=0;q4<MN;q4++){ma[q4*3]=wr(h(q4,61)*40+t*.0012*(.4+h(q4,62)),cam.position.x);ma[q4*3+2]=wr(h(q4,64)*40+t*.0004,cam.position.z);ma[q4*3+1]=.2+h(q4,63)*7+Math.sin(t*.001+q4)*.25}mg.attributes.position.needsUpdate=true;
+ var dva=dvg.attributes.position.array;for(var q3=0;q3<DV;q3++){var yh=h(q3,51)*36,an3=h(q3,52)*6.28+t*.0025*(1+yh*.02),rd=.8+yh*.22+h(q3,53)*.8;dva[q3*3]=DVX+Math.cos(an3)*rd+Math.sin(yh*.12+t*.0004)*2;dva[q3*3+1]=H(DVX,DVZ)+yh;dva[q3*3+2]=DVZ+Math.sin(an3)*rd}dvg.attributes.position.needsUpdate=true;
+ if(INS){hc++;for(var hi=0;hi<P.length;hi++){hv.set(rover.position.x+P[hi].w[0],rover.position.y+P[hi].w[1],P[hi].w[2]);var pv2=hv.clone().project(cam),el=hots[hi];
+  if(pv2.z>1||Math.abs(pv2.x)>1.05||Math.abs(pv2.y)>1.05){el.style.display='none';continue}
+  el.style.display='block';el.style.left=((pv2.x*.5+.5)*innerWidth)+'px';el.style.top=((-pv2.y*.5+.5)*innerHeight)+'px';
+  if(hc%10===hi%10){var dv=hv.clone().sub(cam.position),dl=dv.length();rc.set(cam.position,dv.normalize());rc.far=dl-.12;occ[hi]=rc.intersectObject(rover,true).length>0}
+  el.style.opacity=occ[hi]?.22:1}}
+ c1.set(a.sky);c2.set(b.sky);c1.lerp(c2,e);S.background.copy(c1);S.fog.color.copy(c1);S.fog.density=lp(a.fog,b.fog,e);
+ var si=lp(a.sun,b.sun,e);sun.intensity=si;sfx.style.opacity=INS?0:(.55*(1-sm(.5,2.6,si))).toFixed(3);sun.position.set(lk.x+lp(a.sy[0],b.sy[0],e),lp(a.sy[1],b.sy[1],e),lk.z+lp(a.sy[2],b.sy[2],e));sun.target.position.set(lk.x,0,lk.z);hemi.intensity=.25+.45*sm(.3,2.4,si);
+ skyU.uHor.value.copy(c1);skyU.uTop.value.copy(c1).multiplyScalar(.6).lerp(tint,.12);skyU.uSun.value.copy(sun.position).sub(sun.target.position).normalize();skyU.uGlow.value=Math.min(1,si/2.6);
+ sm2.opacity=lp(a.star,b.star,e);var ei=Math.min(1,Math.max(.06,si/2.6));EM.forEach(function(p){p[0].envMapIntensity=p[1]*ei});
+ R.render(S,cam)}
+requestAnimationFrame(frame);
+})();
+</script>
+
+<script src="story-extras.js"></script>
+<script>
+StoryExtras.init({
+  "craftName": "Ingenuity Mars Helicopter",
+  "craftType": "helicopter",
+  "nssdcaId": "2020-052B",
+  "archiveName": "Mars 2020 Mission Archive, NASA/JPL",
+  "distanceAU": 1.52,
+  "juniorSteps": [
+    "I am Ingenuity, the first aircraft to fly on another planet. I proved that powered, controlled flight is possible in the ultra-thin air of Mars!",
+    "My name was chosen from high school student essays by Vaneeza Rupani of Alabama. I weighed only 1.8 kg on Earth\u2014about as light as a toaster!",
+    "I travelled to Mars tucked securely underneath the belly of the Perseverance rover. We launched on July 30, 2020, and landed in Jezero Crater on February 18, 2021.",
+    "In April 2021, Perseverance dropped me onto the cold surface of Mars. For the first time, I had to survive the freezing Martian night (-90\u00b0C) with my own solar battery heater.",
+    "On April 19, 2021, I made history! I spun my twin carbon-fiber blades at 2,400 RPM, climbed 3 metres into the Martian sky, hovered for 39 seconds, and landed gently.",
+    "My initial goal was just five test flights over 30 days. But I performed so well that NASA kept extending my mission for almost three years!",
+    "I became an aerial scout for Perseverance. I flew ahead to take aerial photos of rocky fields, sandy ridges, and river delta cliffs to plan safe driving routes.",
+    "I even flew over the discarded parachute and backshell that protected Perseverance during landing, taking engineering photos to help design future Mars landers.",
+    "With each flight, engineers tested my limits. I flew up to 24 metres high, reached speeds over 36 km/h, and travelled across distances greater than 700 metres in a single flight.",
+    "On Flight 72 in January 2024, during a landing in featureless sandy terrain, one of my rotor blades struck a dune and broke. I landed safely, but could no longer fly.",
+    "In total, I completed 72 flights, logged over 128 minutes aloft, and flew 17 kilometres. My mission opened the skies of other worlds forever!"
+  ],
+  "specialistSteps": [
+    "NSSDCA ID: 2020-052B. I am Ingenuity (Mars Helicopter Scout): 1.8 kg total mass, developed by NASA/JPL with AeroVironment. Autonomous coaxial rotorcraft for Martian atmospheric flight.",
+    "Aerodynamic Engineering: Two coaxial counter-rotating 1.2 m carbon-fiber rotor blades spinning at 2,400\u20132,700 RPM to generate lift in Mars atmospheric density (~1% of Earth sea-level, ~0.020 kg/m\u00b3).",
+    "Cruise & Deployment Integration: Transported inside Mars 2020 aeroshell attached via Mars Helicopter Delivery System (MHDS) to Perseverance rover's belly pan.",
+    "Autonomous Thermal Survival: Powered by six Sony Li-ion batteries (35\u201343 Wh usable capacity) recharged by mast-mounted 2.5 W solar panel. Electrical heaters prevent electronics from freezing below -90\u00b0C.",
+    "Historic Flight 01 Telemetry: Executed on April 19, 2021. Vertical climb to 3.0 m, 96-degree yaw rotation, 39.1-second hover, and touchdown at Wright Brothers Field (0.64 G Martian gravity).",
+    "Tech Demo Phase Transition: Completed nominal 30-sol/5-flight technology demonstration, validating visual-inertial odometry algorithms, Kalman filters, and tilt-rotor cyclic blade control.",
+    "Operational Scout Operations: Transitioned to operational partner for rover Perseverance. Acquired high-resolution color RTE (Return-To-Earth) imaging of Jezero delta outcrops.",
+    "Entry Debris Reconnaissance: On Flight 26 (April 19, 2022), captured 10 aerial images of Perseverance's backshell and supersonic parachute impact site from 8 m altitude.",
+    "Envelope Expansion Telemetry: Reached maximum altitude of 24.0 m on Flight 61, maximum groundspeed of 10.0 m/s (36 km/h) on Flight 62, and maximum single-flight distance of 708.9 m on Flight 25.",
+    "Flight 72 Terminal Incident: On 18 January 2024, visual odometry tracking degraded during descent over featureless sand ripples; nav camera shadows caused rotor-ground strike, damaging all four blade tips.",
+    "Final Telemetry Synthesis: Logged 72 flights, 128.8 minutes total cumulative flight duration, and 17.0 km total ground track distance. Established aerospace benchmarks for Dragonfly and future aerial explorers."
+  ],
+  "quiz": [
+    {
+      "q": "How fast do Ingenuity's rotor blades spin to generate lift in Mars' thin air?",
+      "options": [
+        "400 RPM",
+        "2,400\u20132,700 RPM",
+        "10,000 RPM",
+        "50 RPM"
+      ],
+      "answer": 1,
+      "explain": "Ingenuity spins its 1.2 m carbon-fiber blades at 2,400\u20132,700 RPM, about 5 times faster than Earth helicopters."
+    },
+    {
+      "q": "How many flights was Ingenuity originally designed to complete?",
+      "options": [
+        "1 flight",
+        "5 flights",
+        "72 flights",
+        "500 flights"
+      ],
+      "answer": 1,
+      "explain": "Ingenuity was built as a 30-day technology demonstration designed for only 5 flights, but achieved 72!"
+    },
+    {
+      "q": "What piece of aviation history did Ingenuity carry beneath its solar panel?",
+      "options": [
+        "A coin from Apollo 11",
+        "Fabric from the Wright Brothers' 1903 Flyer",
+        "A piece of Sputnik 1",
+        "A feather from a falcon"
+      ],
+      "answer": 1,
+      "explain": "Engineers taped a postage-stamp-sized piece of fabric from the Wright Brothers' 1903 Flyer wing to Ingenuity."
+    },
+    {
+      "q": "What caused the end of Ingenuity's flight operations on Flight 72?",
+      "options": [
+        "The solar panel was completely covered in dust",
+        "Rotor blade tips were damaged during landing in sand dunes",
+        "Batteries failed during winter",
+        "Computer memory was erased"
+      ],
+      "answer": 1,
+      "explain": "Navigational tracking over featureless sand dunes caused a hard touchdown that fractured the carbon-fiber blade tips."
+    }
+  ]
+});
+</script>
+
+</body>
+</html>

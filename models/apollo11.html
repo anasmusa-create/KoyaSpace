@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apollo 11 Lunar Module / EASEP (1969-059C)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--ink:#f6e9da;--dim:#d3bba6;--rust:#c2693c;--blue:#9db2c7;--night:#0a0506;--card:rgba(24,11,7,.52);--line:rgba(255,214,170,.2);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--night:#0a0506}}
+:root[data-theme="dark"]{--night:#0a0506}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,2,.7))}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 22px 14px;font-size:14px;color:var(--dim)}
+header b{font-weight:500;color:var(--ink)}
+nav{display:flex;gap:8px}
+nav i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);transition:.4s}
+nav i.on{background:var(--rust);border-color:var(--rust);box-shadow:0 0 12px var(--rust)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+section.r{justify-content:flex-end}
+.card{max-width:520px;padding:30px 32px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12);opacity:.001;transform:translateY(26px);transition:opacity 1s,transform 1s}
+.card.in{opacity:1;transform:none}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(64px,13vw,170px);font-weight:600;letter-spacing:-.035em;text-shadow:0 8px 60px rgba(0,0,0,.6)}
+h2{font-size:clamp(28px,3.8vw,42px)}
+p{margin:0 0 12px}
+a{color:#e08a5a;text-decoration:underline;text-underline-offset:3px}
+a:hover{color:var(--ink)}
+.hero{display:block;padding-top:20vh}
+.hero p{max-width:44ch;font-size:clamp(17px,1.9vw,22px);line-height:1.5;color:var(--ink);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.hero small{display:block;margin-top:18px;color:var(--dim);font-size:14px}
+.num{font-family:Fraunces,Georgia,serif;font-size:56px;font-weight:600;color:var(--ink);line-height:1}
+.stats{display:flex;gap:26px;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{display:block;font-size:13px;color:var(--dim);margin-top:4px}
+.note{font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;color:var(--blue)}
+.ref-box{font-size:13.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+.ref-box ul{margin:6px 0 10px 18px;padding:0}
+.ref-box li{margin-bottom:4px}
+.ptbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0 12px}
+.ptbl th,.ptbl td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+.ptbl th{color:var(--ink);font-weight:500}
+footer{font-size:13px;color:var(--dim);margin-top:14px}
+@media (max-width:760px){section,section.r{align-items:flex-end;justify-content:center;padding:0 16px 7vh}.card{padding:22px}.hero{align-items:flex-start;padding-top:16vh}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+header span{display:flex;align-items:center}
+body.insp{overflow:hidden}body.insp main,body.insp nav,body.insp #back{display:none}body.story #insp{display:none}
+#c{touch-action:none}body.story #c{touch-action:auto}
+#insp{position:fixed;inset:0;z-index:4;pointer-events:none}#insp>*{pointer-events:auto}
+.ip{position:absolute;left:22px;top:calc(env(safe-area-inset-top,0px) + 64px);width:290px}
+.ip h2{font-size:clamp(32px,4vw,46px)}.lead{color:var(--dim);font-size:15px;margin-bottom:14px}
+#plist{display:flex;flex-direction:column;gap:6px}
+#plist button,#back,#go{font:inherit;color:var(--ink);cursor:pointer}
+#plist button{text-align:left;padding:9px 14px;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px 4px 12px 4px;transition:.25s}
+#plist button:hover,#plist button.on{border-color:var(--rust);background:rgba(194,105,60,.3)}
+.pc{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:min(430px,40vw);padding:26px 28px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12)}
+.pc h3{font:300 30px/1.1 Fraunces,Georgia,serif;margin:0 0 10px}.pc p{font-size:15.5px}
+#go{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);transform:translateX(-50%);padding:14px 32px;border-radius:999px;border:1px solid var(--rust);background:linear-gradient(#d2784a,#a4512a);font-weight:500;box-shadow:0 10px 40px rgba(194,105,60,.45)}
+#back{padding:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;margin-right:14px;font-size:13px}
+@media (max-width:760px){.ip{width:auto;right:16px;left:16px}.lead{display:none}#plist{flex-direction:row;overflow-x:auto;padding-bottom:6px}#plist button{white-space:nowrap}.pc{top:auto;bottom:84px;right:16px;left:16px;width:auto;transform:none;max-height:34vh;overflow:auto;padding:18px}}
+#c{filter:saturate(.8) contrast(1.06)}#sfx{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;mix-blend-mode:multiply;background:radial-gradient(ellipse at 50% 40%,rgba(120,80,50,.2),rgba(55,32,20,.8))}
+.gk{font-size:13px;color:#e08a5a;margin:0 0 4px}.spec{font-size:13.5px;color:var(--blue);margin:8px 0 0}.pc{max-height:76vh;overflow:auto}
+#plist{max-height:calc(100vh - 250px);overflow:auto;padding-right:4px}.gh{font-size:12px;color:var(--dim);margin:10px 0 2px}
+.hot{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:1.5px solid #fff;background:rgba(194,105,60,.8);color:#fff;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:0;cursor:pointer;box-shadow:0 0 12px rgba(255,200,150,.7);display:none;z-index:1;transition:opacity .3s}
+.hot.on{background:#fff;color:#7a3a1c;box-shadow:0 0 20px #fff;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:2}
+.hot span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:6px;background:rgba(20,10,6,.85);color:var(--ink);font-size:12px;display:none}
+.hot:hover span,.hot.on span{display:block}.hot.lf span{left:auto;right:30px}
+@media (max-width:760px){.gh{display:none}#plist{max-height:none}.pc{max-height:30vh}}
+</style>
+</head>
+<body class="insp" style="background-color: #05070B; margin: 0;">
+<div id="se-loader" style="position:fixed;inset:0;background:#05070B;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9da;font-family:'IBM Plex Sans',system-ui,sans-serif;transition:opacity 0.6s ease, visibility 0.6s ease;">
+  <div style="width:48px;height:48px;border:3px solid rgba(255,214,170,0.18);border-top:3px solid #c2693c;border-radius:50%;animation:se-spin 1s linear infinite;margin-bottom:18px;"></div>
+  <div style="font-family:Fraunces,Georgia,serif;font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;">Apollo 11 Lunar Module (Eagle)</div>
+  <div style="font-size:12px;color:#9db2c7;letter-spacing:0.08em;text-transform:uppercase;">Establishing NSSDCA Telemetry Link...</div>
+</div>
+<style>
+@keyframes se-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+<canvas id="c"></canvas><div class="vig"></div><div id="sfx"></div><div class="grain"></div>
+<header><b>Space Apps Challenge, Sulaymaniyah 2026 · <a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank" rel="noopener noreferrer">NSSDCA 1969-059C</a></b><span><button id="back">Inspect the lunar module</button><nav id="nav"></nav></span></header>
+<div id="insp"><div class="ip"><h2>Apollo 11 LM / EASEP</h2><p class="lead">NSSDCA/COSPAR ID: 1969-059C · Drag to rotate, scroll to zoom, or select a subsystem.</p><div id="plist"></div></div>
+<div class="pc"><p class="gk" id="pg"></p><h3 id="pn"></h3><p id="pa"></p><p id="pb"></p><p class="note" id="pt"></p><p class="spec" id="ps"></p><p class="note" style="margin-top:10px;padding-top:10px;font-size:13px">Reference: <a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank" rel="noopener noreferrer">NASA NSSDCA — Apollo 11 Lunar Module / EASEP (1969-059C)</a></p></div>
+<button id="go">Start the journey</button></div>
+
+<main>
+<section class="hero"><div class="card in" style="background:none;border:0;box-shadow:none;backdrop-filter:none;padding:0 0 0 2vw;max-width:none">
+<h1>Eagle</h1>
+<p><strong>Apollo 11 Lunar Module / EASEP · NSSDCA/COSPAR ID: 1969-059C</strong><br>The Apollo 11 Lunar Module (LM) "Eagle" was the first crewed vehicle to land on the Moon. It carried two astronauts, Commander Neil A. Armstrong and LM pilot Edwin E. "Buzz" Aldrin, Jr., the first men to walk on the Moon. Also included on the LM was the Early Apollo Scientific Experiment Package (EASEP), which consisted of several self-contained experiments to be deployed and left on the lunar surface, and other scientific and sample collection apparatus.</p>
+<small>Launch Date: 1969-07-16 · Launch Vehicle: Saturn 5 · Launch Site: Cape Canaveral, United States · Mass: 15103 kg · <a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank" rel="noopener noreferrer">NSSDCA Reference (1969-059C)</a></small></div></section>
+<section><div class="card"><p class="gk">Lunar Module Spacecraft and Subsystems</p><h2>Two-Stage Vehicle &amp; Descent Stage</h2>
+<p>The lunar module was a two-stage vehicle designed for space operations near and on the Moon. The spacecraft mass of 15103 kg was the total mass of the LM ascent and descent stages including propellants (fuel and oxidizer). The dry mass of the ascent stage was 2445 kg and it held 2376 kg of propellant. The descent stage dry mass (including stowed surface equipment) was 2034 kg and 8248 kg of propellant were onboard initially. The ascent and descent stages of the LM operated as a unit until staging, when the ascent stage functioned as a single spacecraft for rendezvous and docking with the command and service module (CSM).</p>
+<p>The descent stage comprised the lower part of the spacecraft and was an octagonal prism 4.2 meters across and 1.7 m thick. Four landing legs with round footpads were mounted on the sides of the descent stage and held the bottom of the stage 1.5 m above the surface. The distance between the ends of the footpads on opposite landing legs was 9.4 m. One of the legs had a small astronaut egress platform and ladder. A one meter long conical descent engine skirt protruded from the bottom of the stage. The descent stage contained the landing rocket, two tanks of aerozine 50 fuel, two tanks of nitrogen tetroxide oxidizer, water, oxygen and helium tanks and storage space for the lunar equipment and experiments, and in the case of Apollo 15, 16, and 17, the lunar rover. The descent stage served as a platform for launching the ascent stage and was left behind on the Moon.</p></div></section>
+<section class="r"><div class="card"><p class="gk">Mission Profile &amp; Subsystems</p><h2>Undocking, Descent &amp; Avionics</h2>
+<p>The LM undocked from the Command/Service Module (CSM) at 17:44:00 UT. After a visual inspection by Collins, a separation maneuver was commenced at 18:11:53 UT. The LM descent engine fired for 30 seconds at 19:08 UT, putting the craft into a descent orbit with a closest approach 14.5 km above the Moon's surface. At 20:05 the LM descent engine fired for 756.3 seconds and descent to the lunar surface began.</p>
+<p>The descent engine was a deep-throttling ablative rocket with a maximum thrust of about 45,000 N mounted on a gimbal ring in the center of the descent stage. The ascent engine was a fixed, constant-thrust rocket with a thrust of about 15,000 N. Maneuvering was achieved via the reaction control system, which consisted of the four thrust modules, each one composed of four 450 N thrust chambers and nozzles pointing in different directions. Telemetry, TV, voice, and range communications with Earth were all via the S-band antenna. VHF was used for communications between the astronauts and the LM, and the LM and orbiting CSM. There were redundant tranceivers and equipment for both S-band and VHF. An environmental control system recycled oxygen and maintained temperature in the electronics and cabin. Power was provided by 6 silver-zinc batteries. Guidance and navigation control were provided by a radar ranging system, an inertial measurement unit consisting of gyroscopes and accelerometers, and the Apollo guidance computer.</p>
+<div class="stats"><div><div class="num" data-to="756">0</div><span>seconds of powered descent (756.3 s)</span></div></div></div></section>
+<section><div class="card"><p class="gk">Mission Profile</p><h2>The Eagle Has Landed</h2>
+<p>The LM landed at 20:17:40 UT (4:17:40 p.m. EDT) on 20 July 1969 in the region known as Mare Tranquilitatis (the Sea of Tranquility) at 0.67416 degrees N latitude, 23.47314 degrees E longitude (as determined from Lunar Reconnaissance Orbiter images, DE 421 mean Earth/polar rotation axis reference frame), Armstrong reporting, "Houston, Tranquility Base here - the Eagle has landed".</p>
+<p class="note">Four landing legs with round footpads held the bottom of the descent stage 1.5 m above the surface, with 9.4 m between the ends of the footpads on opposite landing legs.</p></div></section>
+<section class="r"><div class="card"><p class="gk">Mission Profile</p><h2>One Small Step</h2>
+<p>Armstrong stepped onto the lunar surface at 02:56:15 UT on 21 July (10:56:15 p.m. July 20 EDT), stating, "That's one small step for man, one giant leap for mankind". He then collected a small contingency sample of lunar material.</p>
+<p>Aldrin followed 19 minutes later, calling the lunar surface "Magnificent desolation".</p></div></section>
+<section><div class="card"><p class="gk">Mission Profile</p><h2>A Plaque and a Flag</h2>
+<p>The astronauts then unveiled the plaque mounted on a strut behind the ladder and read the inscription aloud: "Here men from the planet Earth first set foot on the Moon July 1969, A.D. We came in peace for all mankind."</p>
+<p>They put up an American flag and talked to President Nixon by radiotelephone.</p></div></section>
+<section class="r"><div class="card"><p class="gk">Early Apollo Surface Experiments Package (EASEP)</p><h2>Science Emplaced on the Moon</h2>
+<p>The Early Apollo Surface Experiments Package (EASEP) consisted of a set of scientific instruments emplaced at the Apollo 11 landing site by the astronauts. This package was the forerunner of the ALSEP experiment packages used on the later Apollo missions. It consisted of two solar panels to provide power (the EASEP could only operate during lunar day), an antenna and communications system to send data to Earth ground stations and receive commands, a passive seismometer, designed to measure seismic activity and physical properties of the lunar crust and interior, and a lunar dust detector, to measure dust accumulation and radiation damage to solar cells.</p>
+<p>The EASEP consisted of a square base on which was mounted the seismometer and dust detector, along with an isotope heater and cylindrical antenna mast with an antenna positioning mechanism. Two brackets protruded from opposite sides of the base and held the canted rectangular solar panels, positioned to face towards the east and west. The unit had a total mass of 48 kg. The EASEP received uplink commands at 2119 MHz and transmitted telemetry data back to Earth at 2276.5 MHz. The laser ranging retroreflector (LRRR) was also considered part of the EASEP although it was not attached to the unit and required no power. It was deployed about 5 meters NNW of the EASEP.</p></div></section>
+<section><div class="card"><p class="gk">Mission Profile</p><h2>Surface Traverse &amp; Sample Collection</h2>
+<p>The astronauts deployed the EASEP and other instruments, took photographs, and collected 21.55 kg of lunar rock and soil. The astronauts traversed a total distance of about 250 meters, both ranging up to about 100 meters from the LM. They took two core tube samples of lunar soil and packed these along with the lunar samples and the solar wind experiment into the sample boxes.</p>
+<p>Aldrin returned to the LM first, after 1 hour 41 minutes on the lunar surface, Armstrong followed about 12 minutes later, at 05:09:32 UT, after transferring the sample boxes up to Aldrin and placing a packet of memorial items on the ground. The EVA ended at 5:11:13 UT when the LM hatch was closed. Armstrong and Aldrin spent the next 7 hours resting and checking out systems.</p>
+<div class="stats"><div><div class="num" data-to="250">0</div><span>meters traversed in total</span></div><div><div class="num" data-to="100">0</div><span>meters, max range from the LM</span></div></div></div></section>
+<section class="r"><div class="card"><p class="gk">Ascent Stage &amp; Liftoff</p><h2>Launch from the Moon</h2>
+<p>The ascent stage was an irregularly shaped unit approximately 2.8 m high and 4.0 by 4.3 meters in width mounted on top of the descent stage. The ascent stage housed the astronauts in a pressurized crew compartment with a volume of 6.65 cubic meters which functioned as the base of operations for lunar operations. There was an ingress-egress hatch in one side and a docking hatch for connecting to the CSM on top. Also mounted along the top were a parabolic rendezvous radar antenna, a steerable parabolic S-band antenna, and 2 in-flight VHF antennas. Two triangular windows were above and to either side of the egress hatch and four thrust chamber assemblies were mounted around the sides. At the base of the assembly was the ascent engine. The stage also contained an aerozine 50 fuel and an oxidizer tank, and helium, liquid oxygen, gaseous oxygen, and reaction control fuel tanks. There were no seats in the LM. A control console was mounted in the front of the crew compartment above the ingress-egress hatch and between the windows and two more control panels mounted on the side walls. The ascent stage was launched from the Moon at the end of lunar surface operations and returned the astronauts to the CSM.</p>
+<p>The LM lifted off from the Moon at 17:54:01 UT on 21 July after 21 hours, 36 minutes on the lunar surface.</p>
+<div class="stats"><div><div class="num" data-to="21">0</div><span>hours on the lunar surface</span></div><div><div class="num" data-to="36">0</div><span>minutes</span></div></div></div></section>
+<section><div class="card"><p class="gk">Mission Profile</p><h2>Docking &amp; Lunar Orbit Jettison</h2>
+<p>After docking with the CSM, piloted by Michael Collins, at 21:34:00 UT, the LM was jettisoned into lunar orbit at 00:01:01 UT on 22 July.</p>
+<p>The fate of the LM is not known, but it is assumed that it crashed into the lunar surface sometime within the following 1 to 4 months.</p></div></section>
+<section class="r"><div class="card"><p class="gk">EASEP Operations, Facts &amp; References</p><h2>Surface Operations &amp; NSSDCA Catalog</h2>
+<p>The EASEP was deployed approximately 17 m south of the LM, at 0.6735 N latitude, 23.4730 E longitude and was turned on by ground command at 04:40:39 UT on 21 July 1969 while the astronauts were still on the surface. About 5 hours before local lunar sunset at 10:58:46 UT on 3 August 1969 transmission was stopped by ground command when the power began to drop as predicted. Despite operating temperatures which exceeded the planned maximum by 30 C the EASEP functioned normally. The instrument was turned on again on the next lunar day but on 27 August 1969, near noon of this second lunar day, the EASEP no longer accepted commands from Earth stations and the experiment was terminated.</p>
+<div class="chips"><span>Apollo 11 LM/EASEP</span><span>LM-5</span><span>04041</span><span>Eagle</span><span>Apollo11EASEP</span><span>urn:nasa:pds:context:instrument_host:spacecraft.a11e</span></div>
+<div class="ref-box">
+<strong>Facts in Brief, Funding &amp; Disciplines</strong><br>
+Launch Date: 1969-07-16 · Launch Vehicle: Saturn 5 · Launch Site: Cape Canaveral, United States · Mass: 15103 kg · Funding Agency: NASA-Office of Manned Space Flight (United States) · Disciplines: Planetary Science, Human Crew
+<table class="ptbl">
+<thead><tr><th>Name</th><th>Role</th><th>Original Affiliation</th></tr></thead>
+<tbody>
+<tr><td>Mr. Floyd I. Roberson</td><td>Program Manager</td><td>NASA Headquarters</td></tr>
+<tr><td>Dr. John B. Hanley</td><td>Program Scientist</td><td>NASA Headquarters</td></tr>
+<tr><td>Mr. Wilbert F. Eichelman</td><td>Project Manager</td><td>NASA Johnson Space Center</td></tr>
+</tbody>
+</table>
+<strong>Selected References &amp; NSSDCA Resources</strong>
+<ul>
+<li><em>Apollo 11 preliminary science report</em>, NASA, SP-214, Wash, DC, 1969.</li>
+<li>Davies, M. E., and T. R. Colvin, Lunar coordinates in the regions of the Apollo landers, <em>J. Geophys. Res.</em>, 105, No. E8, 20277-20280, Aug. 2000.</li>
+<li>Diagram of the Apollo Lunar Module. (Courtesy of NASA History Office.)</li>
+<li>Additional Information: Launch/Orbital, Telecommunications, Experiments, and Data collections from <a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank" rel="noopener noreferrer">Apollo 11 Lunar Module / EASEP (NSSDCA/COSPAR ID: 1969-059C)</a>.</li>
+<li>Other Sources at NSSDCA: Apollo 11 Command Module, Apollo 11 Mission (images, audio, and a brief history), Apollo landing sites and ALSEP and LRRR locations (modified DMA/603 control network), Apollo Page, Lunar Science Page, Moon Page, and NSSDCA Master Catalog Search (Spacecraft, Experiments, Data Collections, Personnel, Publications, Maps, New/Updated Data, Lunar/Planetary Events). Questions and comments can be directed to: Coordinated Request and User Support Office.</li>
+</ul>
+</div>
+<footer>Source: <a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C" target="_blank" rel="noopener noreferrer">https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059C</a></footer></div></section>
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+if(!window.THREE){document.body.className='story';return}
+var N=11,$=function(s){return document.querySelector(s)};
+var nav=$('#nav');for(var i=0;i<N;i++)nav.appendChild(document.createElement('i'));
+function h(x,y){var v=Math.sin(x*127.1+y*311.7)*43758.5453;return v-Math.floor(v)}
+function lp(a,b,t){return a+(b-a)*t}
+function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);return lp(lp(h(xi,yi),h(xi+1,yi),u),lp(h(xi,yi+1),h(xi+1,yi+1),u),v)}
+function fbm(x,y,o){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*vn(x,y);x*=2.03;y*=2.03;a*=.5}return s}
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+function pv(x,y,P){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=((xi%P)+P)%P,b=(a+1)%P,c=((yi%P)+P)%P,d=(c+1)%P;return lp(lp(h(a,c),h(b,c),u),lp(h(a,d),h(b,d),u),v)}
+function pf(x,y,o,P){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*pv(x,y,P);x*=2;y*=2;P*=2;a*=.5}return s}
+var SZ=190,SC=1;
+var CRL=[];for(var ci=0;ci<46;ci++){var cA=h(ci,71)*6.2832,cD=14+Math.sqrt(h(ci,72))*76;CRL.push([Math.cos(cA)*cD,Math.sin(cA)*cD,2+h(ci,73)*h(ci,74)*12])}
+function CR(x,z){var s=0;for(var i=0;i<CRL.length;i++){var c=CRL[i],d=Math.hypot(x-c[0],z-c[1])/c[2];if(d<2)s+=c[2]*(d<1?-.22*(1-d*d):0)+c[2]*.07*Math.exp(-Math.pow((d-1.08)*5,2))}return s}
+function H(x,z){var r=Math.hypot(x,z),e=(fbm(x*.03+7,z*.03+3,5)-.5)*10*sm(60,95,r)+(fbm(x*.07+11,z*.07+2,4)-.5)*1.4+Math.sin(x*.45+fbm(x*.08,z*.08,2)*6)*.09+(fbm(x*.3,z*.3,3)-.5)*.25;e+=CR(x,z);return e*Math.min(sm(6.5,14,r),sm(1,5,Math.hypot(x,z-17)))*(1-sm(80,95,r))}
+// ---------- renderer, sky, lights ----------
+var R;try{R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true,powerPreference:'high-performance'})}catch(err){document.body.className='story';return}
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.1;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+var S=new THREE.Scene();S.fog=new THREE.FogExp2(0xb89478,.0035);S.background=new THREE.Color(0xb89478);
+var cam=new THREE.PerspectiveCamera(52,1,.15,2500);S.add(cam);
+var skyU={uHor:{value:new THREE.Color()},uTop:{value:new THREE.Color()},uSun:{value:new THREE.Vector3(0,1,0)},uGlow:{value:1}};
+var sky=new THREE.Mesh(new THREE.SphereGeometry(1500,32,16),new THREE.ShaderMaterial({uniforms:skyU,side:THREE.BackSide,depthWrite:false,fog:false,
+ vertexShader:'varying vec3 vD;void main(){vD=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+ fragmentShader:'uniform vec3 uHor,uTop,uSun;uniform float uGlow;varying vec3 vD;void main(){vec3 d=normalize(vD);float hh=clamp(d.y,0.,1.);vec3 c=mix(uHor,uTop,pow(hh,.45));float s=max(dot(d,uSun),0.);c+=vec3(1.,.82,.62)*(pow(s,48.)*.5+pow(s,6.)*.14)*uGlow;gl_FragColor=vec4(c,1.);}'}));
+sky.renderOrder=-10;sky.frustumCulled=false;S.add(sky);
+var sun=new THREE.DirectionalLight(0xffe6cc,2.6);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0004;sun.shadow.normalBias=.04;var sc=sun.shadow.camera;sc.left=-26;sc.right=26;sc.top=26;sc.bottom=-26;sc.far=170;S.add(sun,sun.target);
+var hemi=new THREE.HemisphereLight(0x8a8a90,0x555555,.7);S.add(hemi);
+var pm=new THREE.PMREMGenerator(R),es=new THREE.Scene(),eg=new THREE.SphereGeometry(60,32,16),ec=[],ep=eg.attributes.position;
+for(var i0=0;i0<ep.count;i0++){var yy=ep.getY(i0)/60;if(yy>0){var yq=Math.pow(yy,.6);ec.push(lp(.5,.04,yq),lp(.5,.04,yq),lp(.5,.05,yq))}else ec.push(.3,.3,.3)}
+eg.setAttribute('color',new THREE.Float32BufferAttribute(ec,3));es.add(new THREE.Mesh(eg,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+var sb=new THREE.Mesh(new THREE.SphereGeometry(8,16,12),new THREE.MeshBasicMaterial({color:0xfff2d8}));sb.position.set(-30,40,24);es.add(sb);
+S.environment=pm.fromScene(es,.04).texture;
+var EM=[];
+function M(c,m,r,map,env){var mm=new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r,map:map||null});EM.push([mm,env]);return mm}
+function mk(w,hh,fn,rep){var c=document.createElement('canvas');c.width=w;c.height=hh;var x=c.getContext('2d');fn(x,w,hh);var t=new THREE.CanvasTexture(c);t.anisotropy=8;if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep[0],rep[1])}return t}
+function dust(x,w,hh,n,al){for(var i=0;i<n;i++){x.fillStyle='rgba('+(170+Math.random()*50|0)+','+(105+Math.random()*40|0)+',65,'+Math.random()*al+')';x.beginPath();x.arc(Math.random()*w,Math.random()*hh,Math.random()*2+.4,0,6.283);x.fill()}}
+// ---------- terrain: cracked pavement, ripples, pebbles, normal map ----------
+var DS=512,dc=document.createElement('canvas');dc.width=dc.height=DS;var dcx=dc.getContext('2d'),di=dcx.createImageData(DS,DS),nc=document.createElement('canvas');nc.width=nc.height=DS;var ncx=nc.getContext('2d'),ni=ncx.createImageData(DS,DS),hts=new Float32Array(DS*DS);
+for(var j=0;j<DS;j++)for(var k=0;k<DS;k++){var u=k/DS,v=j/DS,warp=pf(u*4,v*4,3,4)*3,rip=.5+.5*Math.sin((u*20+v*6+warp)*6.2832),mask=sm(.35,.65,pf(u*3,v*3,2,3)),pe=sm(.64,.78,pv(u*48,v*48,48))*(.55+.45*pv(u*96,v*96,96)),gr=h(k*1.3,j*.7);
+ var WP=7,cx=Math.floor(u*WP),cy=Math.floor(v*WP),fx=u*WP-cx,fy=v*WP-cy,d1=9,d2=9,cid=0;
+ for(var dy=-1;dy<=1;dy++)for(var dx=-1;dx<=1;dx++){var nx=(cx+dx+WP)%WP,ny=(cy+dy+WP)%WP,px2=dx+h(nx*1.7,ny*2.3),py2=dy+h(nx*3.1,ny*.9),dd=Math.hypot(px2-fx,py2-fy);if(dd<d1){d2=d1;d1=dd;cid=h(nx*5.3,ny*7.1)}else if(dd<d2)d2=dd}
+ var crack=1-sm(0,.055,d2-d1),pav=sm(.45,.6,pf(u*2,v*2,2,2)),ht=.4*pf(u*8,v*8,5,8)+.2*rip*mask*(1-pav)+.42*pe*(1-.5*pav)+.1*gr+pav*(.1*cid-.3*crack);
+ ht=Math.min(1,Math.max(0,ht+.1));hts[j*DS+k]=ht;var g=.55+.9*ht,p=(j*DS+k)*4,pk=1-.35*pe-.55*crack*pav,sl=1+pav*(cid-.5)*.28;
+ di.data[p]=Math.min(255,g*172*pk*sl);di.data[p+1]=Math.min(255,g*171*pk*sl);di.data[p+2]=Math.min(255,g*168*pk*sl);di.data[p+3]=255}
+for(var j2=0;j2<DS;j2++)for(var k2=0;k2<DS;k2++){var l=hts[j2*DS+(k2+DS-1)%DS],r2=hts[j2*DS+(k2+1)%DS],up=hts[((j2+DS-1)%DS)*DS+k2],dn=hts[((j2+1)%DS)*DS+k2],nx2=-(r2-l)*7,ny2=(dn-up)*7,nl=Math.sqrt(nx2*nx2+ny2*ny2+1),p2=(j2*DS+k2)*4;
+ ni.data[p2]=(nx2/nl*.5+.5)*255;ni.data[p2+1]=(ny2/nl*.5+.5)*255;ni.data[p2+2]=(1/nl*.5+.5)*255;ni.data[p2+3]=255}
+dcx.putImageData(di,0,0);ncx.putImageData(ni,0,0);
+function tt(cv,rep){var t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.anisotropy=8;return t}
+var d2T=mk(256,256,function(x,w,hh){var im=x.createImageData(w,hh);for(var q=0;q<w*hh;q++){var vv=pf((q%w)/w*8,Math.floor(q/w)/hh*8,4,8)*255;im.data[q*4]=im.data[q*4+1]=im.data[q*4+2]=vv;im.data[q*4+3]=255}x.putImageData(im,0,0)},[1,1]);d2T.wrapS=d2T.wrapT=THREE.RepeatWrapping;
+var geo=new THREE.PlaneGeometry(SZ,SZ,400,400),pos=geo.attributes.position,vc=new Float32Array(pos.count*3);
+for(var m=0;m<pos.count;m++){var gx=pos.getX(m),gz=-pos.getY(m),gr2=Math.hypot(gx,gz);pos.setZ(m,H(gx,gz));var n1=fbm(gx*.05,gz*.05,4),n2=fbm(gx*.4,gz*.4,3),val=.5*n1+.5*n2,dk=(.85+.3*n2)*1.45,ed=sm(72,94,gr2);
+ var gg=Math.min(1,lp(95,150,val)*dk/255);vc[m*3]=lp(gg,.6,ed);vc[m*3+1]=lp(gg*.98,.59,ed);vc[m*3+2]=lp(gg*.95,.57,ed)}
+geo.setAttribute('color',new THREE.BufferAttribute(vc,3));geo.computeVertexNormals();
+var gm=new THREE.MeshStandardMaterial({map:tt(dc,40),normalMap:tt(nc,40),normalScale:new THREE.Vector2(1.3,1.3),vertexColors:true,roughness:1});EM.push([gm,.3]);
+gm.onBeforeCompile=function(sh){sh.uniforms.uD2={value:d2T};sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D uD2;').replace('#include <map_fragment>','#include <map_fragment>\n diffuseColor.rgb*=(0.7+0.6*texture2D(uD2,vUv*0.17).r)*(0.8+0.4*texture2D(uD2,vUv*1.9).r)*(0.9+0.2*texture2D(uD2,vUv*7.3).r);')};
+var ground=new THREE.Mesh(geo,gm);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;S.add(ground);
+var oh=new THREE.Shape([new THREE.Vector2(-2000,-2000),new THREE.Vector2(2000,-2000),new THREE.Vector2(2000,2000),new THREE.Vector2(-2000,2000)]);oh.holes.push(new THREE.Path([new THREE.Vector2(-94.5,-94.5),new THREE.Vector2(-94.5,94.5),new THREE.Vector2(94.5,94.5),new THREE.Vector2(94.5,-94.5)]));
+var og=new THREE.Mesh(new THREE.ShapeGeometry(oh),new THREE.MeshStandardMaterial({color:0x6b6b6a,roughness:1}));og.rotation.x=-Math.PI/2;og.position.y=-.02;og.receiveShadow=true;EM.push([og.material,.3]);S.add(og);
+// distant crater rim
+var hg2=new THREE.CylinderGeometry(330,330,1,256,8,true),hp2=hg2.attributes.position;
+for(var q0=0;q0<hp2.count;q0++){var a01=(Math.atan2(hp2.getZ(q0),hp2.getX(q0))+Math.PI)/6.2832,yv=hp2.getY(q0)+.5,top=14+60*Math.pow(pf(a01*4,2.3,4,4),1.5)+12*pf(a01*16,3.1,3,16);hp2.setY(q0,-10+yv*(top+10))}
+S.add(new THREE.Mesh(hg2,new THREE.MeshBasicMaterial({color:0x686868,side:THREE.DoubleSide})));
+// rocks: sculpted boulders, slabs, instanced pebbles
+var rm=new THREE.MeshStandardMaterial({color:0x8a8a88,map:tt(dc,2),normalMap:tt(nc,2),normalScale:new THREE.Vector2(1.6,1.6),roughness:.92,flatShading:true});EM.push([rm,.3]);
+var rv=[];for(var q=0;q<6;q++){var rg=new THREE.IcosahedronGeometry(1,4),rp=rg.attributes.position;for(var u2=0;u2<rp.count;u2++){var px=rp.getX(u2),py=rp.getY(u2),pz=rp.getZ(u2),s=.7+.6*vn(px*1.5+q*9,pz*1.5+py*1.5)+.25*vn(px*4+q,py*4+pz*4)+.08*vn(px*11,py*11+pz*11);rp.setXYZ(u2,px*s,py*s*.6,pz*s)}rg.computeVertexNormals();rv.push(rg)}
+var RI=[],rcnt=[0,0,0,0,0,0],rd=new THREE.Object3D();for(var q=0;q<6;q++)RI.push(new THREE.InstancedMesh(rv[q],rm,170));
+for(var r=0;r<1200;r++){var big=r<36,ra=h(r,1)*6.2832,rr=big?62+h(r,2)*30:Math.sqrt(h(r,2))*88,rx=Math.cos(ra)*rr,rz=Math.sin(ra)*rr,v=r%6;if(rr<8||Math.hypot(rx,rz-17)<3||rcnt[v]>=170)continue;
+ var sz=big?3+h(r,3)*6:.05+h(r,3)*h(r,4)*1.3;rd.position.set(rx,H(rx,rz)+sz*.12,rz);rd.scale.set(sz*(.8+h(r,7)*.6),sz*(big?1.3:.8),sz*(.8+h(r,8)*.6));rd.rotation.set((h(r,9)-.5)*.3,h(r,6)*6.28,(h(r,10)-.5)*.3);rd.updateMatrix();RI[v].setMatrixAt(rcnt[v]++,rd.matrix)}
+RI.forEach(function(m,i){m.count=rcnt[i];m.castShadow=m.receiveShadow=true;m.frustumCulled=false;S.add(m)});
+for(var sl2=0;sl2<170;sl2++){var sx2=(h(sl2,21)-.5)*170,sz3=(h(sl2,22)-.5)*170;if(Math.hypot(sx2,sz3)<5)continue;var slb=new THREE.Mesh(new THREE.CylinderGeometry(1,1.05,.12,6+(sl2%3)),rm),ss=.5+h(sl2,23)*1.6;slb.scale.set(ss,1,ss*(.7+h(sl2,24)*.5));slb.position.set(sx2,H(sx2,sz3)+.03,sz3);slb.rotation.set((h(sl2,25)-.5)*.1,h(sl2,26)*6.28,(h(sl2,27)-.5)*.1);slb.receiveShadow=true;S.add(slb)}
+var PN=14000,pbm=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),new THREE.MeshStandardMaterial({roughness:.95,flatShading:true}),PN),dmy=new THREE.Object3D(),pcol=new THREE.Color();
+for(var pi=0;pi<PN;pi++){var pr0=Math.sqrt(h(pi,31))*78,pa0=h(pi,32)*6.2832,pxx=Math.cos(pa0)*pr0,pzz=Math.sin(pa0)*pr0,ps=.025+Math.pow(h(pi,33),3)*.16;dmy.position.set(pxx,H(pxx,pzz)+ps*.2,pzz);dmy.scale.set(ps*(.8+h(pi,34)*.6),ps*.6,ps*(.8+h(pi,35)*.6));dmy.rotation.set(h(pi,36)*3,h(pi,37)*6,0);dmy.updateMatrix();pbm.setMatrixAt(pi,dmy.matrix);var tone=.32+h(pi,38)*.38;pcol.setRGB(tone,tone*.99,tone*.97);pbm.setColorAt(pi,pcol)}
+pbm.instanceColor.needsUpdate=true;pbm.receiveShadow=true;pbm.frustumCulled=false;S.add(pbm);
+// rover tracks
+var trT=mk(64,128,function(x,w,hh){x.clearRect(0,0,w,hh);x.fillStyle='rgba(35,24,18,.55)';for(var yy2=0;yy2<hh;yy2+=16){x.beginPath();x.moveTo(4,yy2+12);x.lineTo(w/2,yy2+2);x.lineTo(w-4,yy2+12);x.lineTo(w-4,yy2+16);x.lineTo(w/2,yy2+6);x.lineTo(4,yy2+16);x.fill()}x.fillStyle='rgba(35,24,18,.25)';x.fillRect(0,0,6,hh);x.fillRect(w-6,0,6,hh)});trT.wrapS=trT.wrapT=THREE.RepeatWrapping;
+function ribbon(pts,w,off){var P2=[],U=[],I=[],len=0,q2=[];for(var a0=0;a0<pts.length-1;a0++)for(var s0=0;s0<6;s0++)q2.push([lp(pts[a0][0],pts[a0+1][0],s0/6),lp(pts[a0][1],pts[a0+1][1],s0/6)]);q2.push(pts[pts.length-1]);pts=q2;for(var i=0;i<pts.length;i++){var a=pts[i],b=pts[Math.min(i+1,pts.length-1)],c=pts[Math.max(i-1,0)],dx=b[0]-c[0],dz=b[1]-c[1],dl=Math.hypot(dx,dz)||1,nx=-dz/dl,nz=dx/dl;if(i)len+=Math.hypot(a[0]-pts[i-1][0],a[1]-pts[i-1][1]);
+ [-1,1].forEach(function(sd,k){var x=a[0]+nx*(off+sd*w/2),z=a[1]+nz*(off+sd*w/2);P2.push(x,H(x,z)+.07,z);U.push(k,len/2.2)})}
+ for(var q=0;q<pts.length-1;q++){var o=q*2;I.push(o,o+1,o+2,o+1,o+3,o+2)}var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P2,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);g.computeVertexNormals();
+ var m2=new THREE.Mesh(g,new THREE.MeshStandardMaterial({map:trT,transparent:true,roughness:1,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));m2.receiveShadow=true;S.add(m2)}
+var tpath=[];for(var tq=0;tq<=24;tq++){var tf=tq/24,tx=lp(6,-24,tf)+Math.sin(tf*5)*.8,tz=lp(2,-8,tf)+Math.cos(tf*4)*.6;tpath.push([tx,tz])}
+
+// stars
+var sg=new THREE.BufferGeometry(),spp=new Float32Array(2500*3);
+for(var s2=0;s2<2500;s2++){var th=Math.random()*6.283,ph=Math.acos(Math.random()*.95+.02),rr=1200;spp[s2*3]=rr*Math.sin(ph)*Math.cos(th);spp[s2*3+1]=rr*Math.cos(ph);spp[s2*3+2]=rr*Math.sin(ph)*Math.sin(th)}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));var sm2=new THREE.PointsMaterial({color:0xffffff,size:1.5,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false});S.add(new THREE.Points(sg,sm2));
+// ---------- model helpers ----------
+var rover=new THREE.Group(),hb=new THREE.Group();rover.add(hb);var TG=hb;
+function bxm(w,hh,d,mat,x,y,z){var o=new THREE.Mesh(new THREE.BoxGeometry(w,hh,d),mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+function tube(a,b,r,mat){var A=new THREE.Vector3(a[0],a[1],a[2]),B=new THREE.Vector3(b[0],b[1],b[2]),d=B.clone().sub(A),t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),10),mat);t.position.copy(A).add(B).multiplyScalar(.5);t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());t.castShadow=true;TG.add(t)}
+function cyl(r,l,mat,x,y,z,ax){var o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,24),mat);o.position.set(x,y,z);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;o.castShadow=true;TG.add(o);return o}
+function ball(r,mat,x,y,z){var o=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),mat);o.position.set(x,y,z);o.castShadow=true;TG.add(o)}
+function boxUV(g,sx,sy,sz){var p=g.attributes.position,n=g.attributes.normal,uv=new Float32Array(p.count*2);for(var i=0;i<p.count;i++){var ax=Math.abs(n.getX(i)),ay=Math.abs(n.getY(i)),az=Math.abs(n.getZ(i)),x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+ if(az>=ax&&az>=ay){uv[i*2]=x/sx+.5;uv[i*2+1]=y/sy+.5}else if(ax>=ay){uv[i*2]=z/sz+.5;uv[i*2+1]=y/sy+.5}else{uv[i*2]=x/sx+.5;uv[i*2+1]=z/sz+.5}}g.setAttribute('uv',new THREE.BufferAttribute(uv,2))}
+function rbox(w,hh,d,r,mat,x,y,z,flat){var sh=new THREE.Shape(),a=w/2,b=hh/2;sh.moveTo(-a+r,-b);sh.lineTo(a-r,-b);sh.quadraticCurveTo(a,-b,a,-b+r);sh.lineTo(a,b-r);sh.quadraticCurveTo(a,b,a-r,b);sh.lineTo(-a+r,b);sh.quadraticCurveTo(-a,b,-a,b-r);sh.lineTo(-a,-b+r);sh.quadraticCurveTo(-a,-b,-a+r,-b);
+ var bv=Math.min(r*.5,d*.22),g=new THREE.ExtrudeGeometry(sh,{depth:d-2*bv,bevelEnabled:true,bevelThickness:bv,bevelSize:bv*.9,bevelSegments:2,curveSegments:5});g.translate(0,0,-(d-2*bv)/2);if(flat)g.rotateX(-Math.PI/2);boxUV(g,flat?w:w,flat?d:hh,flat?hh:d);
+ var o=new THREE.Mesh(g,mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+// ---------- Apollo 11 Lunar Module (metres) ----------
+var gT=mk(512,512,function(x,w,hh){var g=x.createLinearGradient(0,0,w,hh);g.addColorStop(0,'#8c6a22');g.addColorStop(.5,'#e3b94d');g.addColorStop(1,'#99722a');x.fillStyle=g;x.fillRect(0,0,w,hh);for(var c=0;c<1400;c++){x.strokeStyle=c%2?'rgba(255,236,160,.4)':'rgba(70,45,5,.5)';x.lineWidth=1+Math.random()*1.5;var a=Math.random()*w,b=Math.random()*hh;x.beginPath();x.moveTo(a,b);x.lineTo(a+Math.random()*50-25,b+Math.random()*50-25);x.stroke()}x.strokeStyle='rgba(20,20,20,.7)';x.lineWidth=3;for(var i=1;i<4;i++){x.beginPath();x.moveTo(i*w/4,0);x.lineTo(i*w/4,hh);x.stroke()}x.fillStyle='rgba(25,25,28,.85)';x.fillRect(0,hh*.46,w,hh*.07);dust(x,w,hh,1400,.5)}),
+aT=mk(512,512,function(x,w,hh){x.fillStyle='#cfd1d3';x.fillRect(0,0,w,hh);x.strokeStyle='rgba(60,62,66,.6)';x.lineWidth=2;for(var i=1;i<6;i++){x.beginPath();x.moveTo(i*w/6,0);x.lineTo(i*w/6,hh);x.stroke();x.beginPath();x.moveTo(0,i*hh/6);x.lineTo(w,i*hh/6);x.stroke()}x.fillStyle='rgba(50,52,56,.7)';for(var i=0;i<24;i++)for(var j=0;j<24;j++){if(i%4&&j%4)continue;x.fillRect(i*w/24+3,j*hh/24+3,2.5,2.5)}x.fillStyle='rgba(20,20,22,.18)';for(var s=0;s<40;s++)x.fillRect(Math.random()*w,Math.random()*hh,Math.random()*60+10,Math.random()*5+1);dust(x,w,hh,2500,.45)}),
+flT=mk(960,505,function(x,w,hh){var sh=hh/13;for(var i=0;i<13;i++){x.fillStyle=i%2?'#ffffff':'#b31942';x.fillRect(0,i*sh,w,sh+1)}x.fillStyle='#0a3161';x.fillRect(0,0,w*.4,sh*7);x.fillStyle='#fff';var cw=w*.4,ch=sh*7;for(var r=0;r<9;r++){var n=r%2?5:6;for(var c=0;c<n;c++){var cx=(r%2?2+c*2:1+c*2)*cw/12,cy=ch*(.0956+.1*r),R0=ch*.055,pth=new Path2D();for(var k=0;k<10;k++){var an=-Math.PI/2+k*Math.PI/5,rr=k%2?R0*.382:R0;pth.lineTo(cx+Math.cos(an)*rr,cy+Math.sin(an)*rr)}pth.closePath();x.fill(pth)}}dust(x,w,hh,200,.15)});
+var goM=M(0xffffff,.85,.38,gT,.9),asM=M(0xffffff,.55,.45,aT,.8),alM=M(0xb8bcc0,.9,.3,null,1),dkM=M(0x16161a,.7,.5,null,.8),glM=M(0x08090c,.95,.06,null,1.8),skM=M(0x1b1b1f,.8,.45,null,.8),dsM=M(0xd0d0d0,.9,.35,null,1),wtM=M(0xe8e8ea,.2,.6,null,.5),suM=M(0xe8e6e0,.1,.8,null,.5),vsM=M(0xd9a83a,.95,.12,null,2),spM=M(0x1a2a5a,.4,.35,null,.8);skM.side=dsM.side=THREE.DoubleSide;
+var ru={rotation:{y:0}},rl={rotation:{y:0}},blM={opacity:0};
+function ms(g,m,x,y,z,rx,ry,rz){var o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.rotation.set(rx||0,ry||0,rz||0);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+function Lp(a,b,t){return [lp(a[0],b[0],t),lp(a[1],b[1],t),lp(a[2],b[2],t)]}
+var asc=new THREE.Group();hb.add(asc);TG=hb;
+// descent stage: octagonal foil-wrapped body, engine skirt
+ms(new THREE.CylinderGeometry(2.273,2.273,1.7,8),goM,0,2.35,0,0,Math.PI/8,0);ms(new THREE.CylinderGeometry(2.3,2.3,.08,8),dkM,0,3.22,0,0,Math.PI/8,0);ms(new THREE.CylinderGeometry(2.3,2.3,.08,8),dkM,0,1.5,0,0,Math.PI/8,0);
+ms(new THREE.CylinderGeometry(.4,.95,1,28,1,true),skM,0,1,0);
+// stowage bay door, RTG fuel cask
+ms(new THREE.BoxGeometry(1.7,1.15,.05),alM,1.55,2.35,1.55,0,Math.PI/4,0);ms(new THREE.BoxGeometry(1.5,.95,.04),dkM,1.51,2.35,1.51,0,Math.PI/4,0);
+ms(new THREE.CylinderGeometry(.16,.16,1.3,16),alM,2.0,2.4,-1.7);ms(new THREE.CylinderGeometry(.19,.19,.08,16),dkM,2.0,3.05,-1.7);
+// legs, braces, footpads, probes
+var mid=[];
+for(var k=0;k<4;k++){var ka=k*Math.PI/2,kx=Math.sin(ka),kz=Math.cos(ka),top=[kx*2.15,3,kz*2.15],pad=[kx*4.4,.28,kz*4.4],mp=Lp(top,pad,.5);mid.push(mp);
+ tube(top,pad,.06,alM);tube(Lp(top,pad,.15),Lp(top,pad,.62),.088,goM);
+ [-.95,.95].forEach(function(s){tube([kx*2.15+kz*s,1.75,kz*2.15-kx*s],mp,.035,alM)});
+ ms(new THREE.CylinderGeometry(.46,.5,.05,24),alM,pad[0],.025,pad[2]);ms(new THREE.TorusGeometry(.48,.03,8,28),alM,pad[0],.07,pad[2],Math.PI/2);ms(new THREE.CylinderGeometry(.18,.34,.12,20),goM,pad[0],.1,pad[2]);
+ if(k)tube([pad[0],.12,pad[2]],[pad[0]+kx*1.7,.06,pad[2]+kz*1.7],.014,alM)}
+for(var k2=0;k2<4;k2++)tube(mid[k2],mid[(k2+1)%4],.03,alM);
+// ladder, egress platform, plaque
+ms(new THREE.BoxGeometry(1,.05,1.8),alM,0,3.28,2.45);tube([.45,3.26,3.3],[.1,2.0,3.5],.02,alM);tube([-.45,3.26,3.3],[-.1,2.0,3.5],.02,alM);
+[-.24,.24].forEach(function(x){tube([x,3.25,2.55],[x,.55,4.3],.025,alM)});
+for(var l=0;l<9;l++){var lt=(l+.5)/9,lq=Lp([0,3.25,2.55],[0,.55,4.3],lt);cyl(.012,.5,alM,0,lq[1],lq[2],'x')}
+ms(new THREE.BoxGeometry(.34,.24,.02),alM,0,2.62,2.45,-.55,0,0);
+// ascent stage: faceted cabin, gold bays, hatch, windows, tunnel
+TG=asc;
+ms(new THREE.CylinderGeometry(1.35,1.6,2.4,10),asM,0,4.4,0,0,Math.PI/10,0);ms(new THREE.CylinderGeometry(1,1.35,.3,10),asM,0,5.75,0,0,Math.PI/10,0);
+ms(new THREE.CylinderGeometry(1.72,1.72,.12,10),dkM,0,3.24,0,0,Math.PI/10,0);
+ms(new THREE.CylinderGeometry(.58,.7,.45,20),alM,0,6.1,0);ms(new THREE.TorusGeometry(.5,.05,8,24),alM,0,6.33,0,Math.PI/2);cyl(.44,.02,dkM,0,6.34,0);
+[-1,1].forEach(function(s){ms(new THREE.BoxGeometry(1,1.5,2),goM,s*1.55,4.3,-.25)});ms(new THREE.BoxGeometry(1.8,1.3,.9),goM,0,4.2,-1.55);
+ms(new THREE.BoxGeometry(1,1.35,.08),dkM,0,4.1,1.46);ms(new THREE.BoxGeometry(.9,1.25,.05),alM,0,4.1,1.5);
+var wsh=new THREE.Shape();wsh.moveTo(-.3,-.2);wsh.lineTo(.3,-.2);wsh.lineTo(.3,.2);wsh.closePath();[-1,1].forEach(function(s){ms(new THREE.ShapeGeometry(wsh),glM,s*.7,5.1,1.4).scale.x=-s});
+// antennas
+var dsh=new THREE.SphereGeometry(1,24,10,0,6.2832,0,1.1);
+ms(dsh,dsM,-.95,6.05,-.4,.9,0,.5).scale.set(.42,.42,.42);tube([-.4,5.7,-.2],[-.9,6.0,-.4],.025,alM);
+ms(dsh,dsM,-.95,5.75,.75,1.2,0,.8).scale.set(.26,.26,.26);tube([-.5,5.6,.6],[-.9,5.72,.75],.02,alM);
+tube([.5,6.25,.4],[.5,6.95,.5],.012,alM);tube([.3,6.9,.5],[.7,6.9,.5],.01,alM);tube([-.3,6.25,-.5],[-.3,6.8,-.55],.012,alM);tube([-.45,6.75,-.55],[-.15,6.75,-.55],.01,alM);
+tube([.95,5.8,0],[.95,7.1,0],.008,alM);ms(new THREE.ConeGeometry(.09,.22,12),wtM,.95,7.2,0);
+// RCS thrust chamber clusters
+[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(q){var cx=q[0]*1.75,cz=q[1]*1.45;ms(new THREE.BoxGeometry(.34,.34,.34),alM,cx,4,cz);tube([cx*.7,4,cz*.7],[cx,4,cz],.03,alM);
+ [[0,1,0],[0,-1,0],[q[0],0,0],[0,0,q[1]]].forEach(function(d){var n=ms(new THREE.CylinderGeometry(.015,.07,.22,10),skM,cx+d[0]*.27,4+d[1]*.27,cz+d[2]*.27);n.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),new THREE.Vector3(d[0],d[1],d[2]))})});
+rover.scale.setScalar(SC);S.add(rover);
+var flM=new THREE.MeshBasicMaterial({color:0xffb978,transparent:true,opacity:.75,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}),fcM=new THREE.MeshBasicMaterial({color:0xfff4dc,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false,fog:false});
+function mkFlame(par,y,len,r){var g=new THREE.Group();g.position.y=y;var o1=new THREE.Mesh(new THREE.CylinderGeometry(r,r*.15,len,20,1,true),flM),o2=new THREE.Mesh(new THREE.CylinderGeometry(r*.5,.02,len*.7,16,1,true),fcM);o1.position.y=-len/2;o2.position.y=-len*.35;g.add(o1,o2);g.visible=false;par.add(g);return g}
+var fD=mkFlame(hb,.5,5.5,.55),fA=mkFlame(asc,3.2,3.2,.4);
+// surface props: astronauts, flag, EASEP, laser reflector
+var pr=new THREE.Group();pr.visible=false;S.add(pr);TG=pr;
+function astro(x,z,ry){var g=new THREE.Group();g.position.set(x,H(x,z),z);g.rotation.y=ry;pr.add(g);TG=g;cyl(.12,.75,suM,-.1,.5,0);cyl(.12,.75,suM,.1,.5,0);bxm(.16,.1,.3,wtM,-.1,.07,.05);bxm(.16,.1,.3,wtM,.1,.07,.05);bxm(.45,.55,.3,suM,0,1.15,0);bxm(.4,.55,.22,wtM,0,1.2,-.25);cyl(.06,.5,suM,-.3,1.15,0);cyl(.06,.5,suM,.3,1.15,0);ball(.2,suM,0,1.6,0);ball(.17,vsM,0,1.6,.06);TG=pr;return g}
+var AS=[[astro(1.7,5.6,Math.PI),1.7,5.6,Math.PI,.35],[astro(-3.4,6.4,-.6),-3.4,6.4,-.6,-.35]];
+var fy0=H(6.5,7.5);cyl(.02,2.4,alM,6.5,fy0+1.2,7.5);var flg=new THREE.Mesh(new THREE.PlaneGeometry(1.5,.789,24,8),new THREE.MeshStandardMaterial({map:flT,side:THREE.DoubleSide,roughness:1}));flg.position.set(7.25,fy0+1.98,7.5);flg.castShadow=true;pr.add(flg);var fq=flg.geometry.attributes.position;for(var fi=0;fi<fq.count;fi++){var fx=fq.getX(fi),fyy=fq.getY(fi);fq.setZ(fi,.035*Math.sin(fx*7+fyy*3)*(.5+(fx+.75)/1.5))}flg.geometry.computeVertexNormals();cyl(.015,1.5,alM,7.25,fy0+2.38,7.5,'x');
+var ey=H(0,17);bxm(.55,.12,.55,alM,0,ey+.09,17);cyl(.17,.22,dsM,.1,ey+.26,16.9);cyl(.09,.14,dkM,-.15,ey+.22,17.15);tube([.2,ey+.15,17.2],[.2,ey+.95,17.2],.018,alM);ms(dsh,dsM,.2,ey+.97,17.2,.3,0,0).scale.set(.12,.12,.12);
+[-1,1].forEach(function(s){tube([s*.28,ey+.1,17],[s*.45,ey+.35,17],.015,alM);var sp=bxm(.6,.02,.42,spM,s*.72,ey+.45,17);sp.rotation.z=-s*.45});
+var lg=new THREE.Group();lg.position.set(-1.9,H(-1.9,12.4)+.38,12.4);lg.rotation.x=-.9;pr.add(lg);TG=lg;bxm(.62,.48,.03,alM,0,0,0);for(var li=0;li<8;li++)for(var lj=0;lj<6;lj++)bxm(.05,.05,.03,glM,-.27+li*.077,-.2+lj*.077,.02);TG=pr;
+var ry2=H(-1.9,12.4);bxm(.8,.04,.6,alM,-1.9,ry2+.02,12.4);tube([-2.18,ry2+.04,12.7],[-2.16,ry2+.24,12.58],.02,alM);tube([-1.62,ry2+.04,12.7],[-1.64,ry2+.24,12.58],.02,alM);tube([-2.1,ry2+.04,12.1],[-2.06,ry2+.52,12.22],.02,alM);tube([-1.7,ry2+.04,12.1],[-1.74,ry2+.52,12.22],.02,alM);
+// moonlight earth in the sky
+var eT=mk(256,128,function(x,w,hh){var im=x.createImageData(w,hh);for(var q=0;q<w*hh;q++){var u=(q%w)/w*6,v=Math.floor(q/w)/hh*3,l=fbm(u+3,v+1,5),cl=Math.min(1,Math.max(0,(fbm(u*1.7+9,v*2+4,5)-.5)*3.2)),r=20,g=70,b=160;if(l>.55){r=60+l*60;g=110+l*50;b=50}im.data[q*4]=lp(r,245,cl);im.data[q*4+1]=lp(g,248,cl);im.data[q*4+2]=lp(b,252,cl);im.data[q*4+3]=255}x.putImageData(im,0,0)});
+var earth=new THREE.Mesh(new THREE.SphereGeometry(55,48,32),new THREE.MeshStandardMaterial({map:eT,roughness:1,fog:false})),EV=new THREE.Vector3(300,560,-500).setLength(1000);S.add(earth);TG=hb;
+// dust: takeoff puff and a distant dust devil
+var bl=document.createElement('canvas');bl.width=bl.height=128;var bgx=bl.getContext('2d'),bgr=bgx.createRadialGradient(64,64,0,64,64,64);bgr.addColorStop(0,'rgba(255,255,255,.7)');bgr.addColorStop(1,'rgba(255,255,255,0)');bgx.fillStyle=bgr;bgx.fillRect(0,0,128,128);var blT=new THREE.CanvasTexture(bl);
+var DN2=160,pg=new THREE.BufferGeometry(),ppos=new Float32Array(DN2*3);pg.setAttribute('position',new THREE.BufferAttribute(ppos,3));
+var pmat=new THREE.PointsMaterial({color:0xc9a07c,size:1.6,map:blT,transparent:true,opacity:0,depthWrite:false}),puff=new THREE.Points(pg,pmat);puff.frustumCulled=false;S.add(puff);
+var DV=600,dvg=new THREE.BufferGeometry(),dvp=new Float32Array(DV*3);dvg.setAttribute('position',new THREE.BufferAttribute(dvp,3));
+var dvm=new THREE.PointsMaterial({color:0xb08a68,size:5,map:blT,transparent:true,opacity:.16,depthWrite:false}),dvl=new THREE.Points(dvg,dvm);dvl.frustumCulled=false;S.add(dvl);var DVX=64,DVZ=-72;
+var MN=500,mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(MN*3),3));var mts=new THREE.Points(mg,new THREE.PointsMaterial({color:0xe0b890,size:.5,map:blT,transparent:true,opacity:.35,depthWrite:false}));mts.frustumCulled=false;S.add(mts);
+function wr(v,c){return ((v-c)%40+60)%40-20+c}
+mts.visible=false;dvl.visible=false;
+var P=[
+{g:'Ascent stage',n:'Crew cabin',f:[1.2,4.3,.9],d:6,s:'2.8 m high · 4.0 × 4.3 m wide · 6.65 m³ volume · Dry mass 2445 kg · Propellant 2376 kg',a:'The ascent stage was an irregularly shaped unit approximately 2.8 m high and 4.0 by 4.3 meters in width mounted on top of the descent stage, housing the astronauts in a pressurized crew compartment with a volume of 6.65 cubic meters.',b:'There were no seats in the LM. A control console was mounted in the front of the crew compartment above the ingress-egress hatch and between the windows and two more control panels mounted on the side walls. The stage also contained an aerozine 50 fuel and an oxidizer tank, and helium, liquid oxygen, gaseous oxygen, and reaction control fuel tanks.',t:'The dry mass of the ascent stage was 2445 kg and it held 2376 kg of propellant. Its fixed, constant-thrust ascent engine had a thrust of about 15,000 N and launched the stage from the Moon at 17:54:01 UT on 21 July.'},
+{g:'Ascent stage',n:'Forward hatch',f:[0,4.1,1.55],d:4,p:.1,s:'Ingress-egress hatch · EVA ended at 05:11:13 UT on 21 July 1969',a:'An ingress-egress hatch was mounted in one side of the pressurized crew compartment for lunar surface operations.',b:'Armstrong stepped onto the lunar surface at 02:56:15 UT on 21 July (10:56:15 p.m. July 20 EDT), followed by Aldrin 19 minutes later. Aldrin returned to the LM first after 1 hour 41 minutes on the surface, and Armstrong followed about 12 minutes later at 05:09:32 UT after transferring the sample boxes.',t:'The EVA ended at 5:11:13 UT when the LM hatch was closed, and Armstrong and Aldrin spent the next 7 hours resting and checking out systems.'},
+{g:'Ascent stage',n:'Triangular windows',f:[.7,5.1,1.4],d:3.5,s:'Two triangular windows above and to either side of the egress hatch',a:'Two triangular windows were positioned above and to either side of the ingress-egress hatch on the front of the ascent stage.',b:'A control console was mounted in the front of the crew compartment above the ingress-egress hatch and between the windows, with two more control panels mounted on the side walls.',t:'Guidance and navigation control were provided by a radar ranging system, an inertial measurement unit consisting of gyroscopes and accelerometers, and the Apollo guidance computer.'},
+{g:'Ascent stage',n:'Docking hatch and tunnel',f:[0,6.1,0],d:4,p:.5,s:'Docked with CSM at 21:34:00 UT on 21 July · Jettisoned at 00:01:01 UT on 22 July',a:'A docking hatch on top of the ascent stage connected the Lunar Module to the Command and Service Module (CSM).',b:'The LM undocked from the CSM at 17:44:00 UT on 20 July 1969. After lunar surface operations and liftoff at 17:54:01 UT on 21 July, the ascent stage functioned as a single spacecraft for rendezvous and docking with the CSM piloted by Michael Collins at 21:34:00 UT.',t:'The LM was jettisoned into lunar orbit at 00:01:01 UT on 22 July. Its fate is not known, but it is assumed that it crashed into the lunar surface within the following 1 to 4 months.'},
+{g:'Ascent stage',n:'Thrust chamber clusters',f:[1.7,4.1,1.5],d:3,s:'Four thrust modules · Four 450 N thrust chambers and nozzles per module',a:'Four thrust chamber assemblies were mounted around the sides of the ascent stage.',b:'Maneuvering was achieved via the reaction control system, which consisted of the four thrust modules, each one composed of four 450 N thrust chambers and nozzles pointing in different directions.',t:'The ascent stage contained dedicated reaction control fuel tanks along with aerozine 50 fuel, oxidizer, helium, liquid oxygen, and gaseous oxygen tanks.'},
+{g:'Antennas',n:'S-band antenna',f:[-.95,6.05,-.4],d:4,s:'Steerable parabolic S-band antenna · Redundant transceivers',a:'A steerable parabolic S-band antenna was mounted along the top of the ascent stage.',b:'Telemetry, TV, voice, and range communications with Earth were all via the S-band antenna.',t:'There were redundant tranceivers and equipment for both S-band and VHF communications.'},
+{g:'Antennas',n:'Rendezvous radar antenna',f:[-.95,5.75,.75],d:3.5,s:'Parabolic rendezvous radar antenna · Guidance and navigation system',a:'A parabolic rendezvous radar antenna was mounted along the top of the ascent stage next to the S-band dish.',b:'Guidance and navigation control were provided by a radar ranging system, an inertial measurement unit consisting of gyroscopes and accelerometers, and the Apollo guidance computer.',t:'It supported rendezvous and docking with the orbiting CSM after liftoff from the Moon.'},
+{g:'Antennas',n:'VHF and EVA antennas',f:[.95,6.7,0],d:4,p:.3,s:'2 in-flight VHF antennas · Redundant VHF transceivers',a:'Two in-flight VHF antennas were mounted along the top of the ascent stage.',b:'VHF was used for communications between the astronauts and the LM, and between the LM and the orbiting CSM.',t:'Redundant tranceivers and equipment were carried onboard for both S-band and VHF.'},
+{g:'Descent stage',n:'Octagonal descent stage',f:[-1.5,2.5,1.5],d:6,s:'Octagonal prism 4.2 m across × 1.7 m thick · Dry mass 2034 kg · Propellant 8248 kg',a:'The descent stage comprised the lower part of the spacecraft and was an octagonal prism 4.2 meters across and 1.7 m thick.',b:'The descent stage dry mass (including stowed surface equipment) was 2034 kg and 8248 kg of propellant were onboard initially. It contained the landing rocket, two tanks of aerozine 50 fuel, two tanks of nitrogen tetroxide oxidizer, water, oxygen and helium tanks, and storage space for lunar equipment and experiments.',t:'The descent stage served as a platform for launching the ascent stage and was left behind on the Moon.'},
+{g:'Descent stage',n:'Stowage bay',f:[1.55,2.35,1.55],d:4,s:'Stowed EASEP (48 kg) and sample boxes (21.55 kg of lunar rock and soil collected)',a:'Storage space in the descent stage held the Early Apollo Scientific Experiment Package (EASEP) and other scientific and sample collection apparatus.',b:'In the case of Apollo 15, 16, and 17, the descent stage also carried the lunar rover. On Apollo 11, the astronauts collected 21.55 kg of lunar rock and soil, including two core tube samples and the solar wind experiment packed into sample boxes.',t:'An environmental control system recycled oxygen and maintained temperature in the electronics and cabin, with power provided by 6 silver-zinc batteries.'},
+{g:'Descent stage',n:'RTG fuel cask',f:[2,2.4,-1.7],d:3.5,s:'External thermal housing · EASEP included an isotope heater',a:'An external cylindrical cask was mounted on the side of the descent stage.',b:'The EASEP square base included an isotope heater to keep its scientific instruments warm on the lunar surface, serving as the forerunner of the radioisotope-powered ALSEP packages used on later Apollo missions.',t:'Despite operating temperatures which exceeded the planned maximum by 30 C during the lunar day, the EASEP functioned normally.'},
+{g:'Descent stage',n:'Descent engine skirt',f:[.5,1,.7],d:4,p:-.1,s:'1 m conical skirt · ~45,000 N max thrust · 30 s & 756.3 s burns',a:'A one meter long conical descent engine skirt protruded from the bottom of the descent stage.',b:'The descent engine was a deep-throttling ablative rocket with a maximum thrust of about 45,000 N mounted on a gimbal ring in the center of the descent stage.',t:'The LM descent engine fired for 30 seconds at 19:08 UT (descent orbit to 14.5 km) and for 756.3 seconds starting at 20:05 UT until landing at 20:17:40 UT on 20 July 1969.'},
+{g:'Landing',n:'Landing legs',f:[-3,1.97,0],d:4.5,s:'Four landing legs · Held descent stage bottom 1.5 m above the surface',a:'Four landing legs with round footpads were mounted on the sides of the descent stage and held the bottom of the stage 1.5 m above the surface.',b:'The distance between the ends of the footpads on opposite landing legs was 9.4 m.',t:'The LM landed at 20:17:40 UT (4:17:40 p.m. EDT) on 20 July 1969 in Mare Tranquilitatis at 0.67416 degrees N latitude, 23.47314 degrees E longitude.'},
+{g:'Landing',n:'Footpad',f:[4.4,.1,0],d:3,s:'Round footpads · 9.4 m span between opposite footpad ends',a:'Round footpads at the base of the four landing legs supported the Lunar Module on the lunar regolith.',b:'The distance between the ends of the footpads on opposite landing legs was 9.4 m, holding the bottom of the descent stage 1.5 m above the surface.',t:'Landing coordinates of 0.67416° N, 23.47314° E were determined from Lunar Reconnaissance Orbiter images in the DE 421 mean Earth/polar rotation axis reference frame.'},
+{g:'Landing',n:'Contact probe',f:[5.2,.07,0],d:3,p:.4,s:'Lunar surface sensing probe mounted to footpads',a:'Thin surface-sensing probes extended below the round footpads to indicate lunar contact at the end of the 756.3-second powered descent.',b:'Touchdown in Mare Tranquilitatis (the Sea of Tranquility) occurred at 20:17:40 UT (4:17:40 p.m. EDT) on 20 July 1969.',t:'Upon landing, Commander Neil A. Armstrong reported: "Houston, Tranquility Base here - the Eagle has landed".'},
+{g:'Landing',n:'Ladder',f:[0,1.9,3.43],d:3.5,s:'Mounted on the forward landing leg below the egress platform',a:'One of the four landing legs had a small astronaut egress platform and ladder.',b:'Armstrong stepped onto the lunar surface at 02:56:15 UT on 21 July (10:56:15 p.m. July 20 EDT), stating, "That\'s one small step for man, one giant leap for mankind". Aldrin followed 19 minutes later.',t:'The astronauts traversed a total distance of about 250 meters, both ranging up to about 100 meters from the LM.'},
+{g:'Landing',n:'Egress platform',f:[0,3.28,2.6],d:3.5,p:.4,s:'Astronaut egress porch linking the forward hatch and ladder',a:'A small astronaut egress platform was mounted at the top of the forward landing leg outside the ingress-egress hatch.',b:'During surface operations, Armstrong transferred the packed sample boxes up to Aldrin before climbing the ladder back into the LM at 05:09:32 UT.',t:'Before ascending the ladder, Armstrong placed a packet of memorial items on the lunar ground.'},
+{g:'Landing',n:'Plaque',f:[0,2.62,2.45],d:1.6,p:.1,s:'Mounted on a strut behind the ladder · July 1969, A.D.',a:'A commemorative plaque was mounted on a strut behind the ladder on the forward landing leg.',b:'The astronauts unveiled the plaque and read the inscription aloud: "Here men from the planet Earth first set foot on the Moon July 1969, A.D. We came in peace for all mankind."',t:'It remains on the descent stage at Tranquility Base on the Moon.'},
+{g:'Surface science',n:'EASEP seismometer',f:[0,.5,17],d:3.5,s:'48 kg · 17 m south of LM (0.6735° N, 23.4730° E) · 2119 MHz uplink / 2276.5 MHz downlink',a:'The Early Apollo Surface Experiments Package (EASEP) consisted of a square base holding a passive seismometer, lunar dust detector, isotope heater, cylindrical antenna mast, and two canted east-west solar panels.',b:'Deployed approximately 17 m south of the LM at 0.6735 N latitude, 23.4730 E longitude, it was turned on by ground command at 04:40:39 UT on 21 July 1969. Transmission was stopped by ground command at 10:58:46 UT on 3 August 1969 (about 5 hours before lunar sunset).',t:'Despite operating temperatures exceeding the planned maximum by 30 C, the EASEP functioned normally and was turned on again on the next lunar day until 27 August 1969, when it no longer accepted commands and the experiment was terminated.'},
+{g:'Surface science',n:'Laser reflector',f:[-1.9,.45,12.4],d:3,s:'Laser Ranging Retroreflector (LRRR) · Deployed ~5 m NNW of EASEP · Passive (no power required)',a:'The laser ranging retroreflector (LRRR) was considered part of the EASEP although it was not attached to the unit and required no power.',b:'It was deployed by the astronauts about 5 meters NNW of the EASEP main package during their lunar surface EVA.',t:'Together with the passive seismometer and lunar dust detector, it formed the Apollo 11 surface experiment suite.'},
+{g:'Surface science',n:'American flag',f:[7.25,2,7.5],d:4,s:'Emplaced at Tranquility Base on 21 July 1969',a:'After unveiling the commemorative plaque on the ladder strut, Armstrong and Aldrin put up an American flag on the lunar surface.',b:'Following the flag deployment, the astronauts talked to President Nixon by radiotelephone.',t:'They also took photographs, deployed the EASEP and solar wind experiment, and collected 21.55 kg of lunar rock and soil.'}];
+P.forEach(function(o){o.w=[o.f[0]*SC,o.f[1]*SC,o.f[2]*SC];if(o.y===undefined)o.y=(Math.abs(o.f[0])+Math.abs(o.f[2])>.08)?Math.atan2(o.f[0],o.f[2]):.6;if(o.p===undefined)o.p=.3});
+var OV={g:'NSSDCA/COSPAR ID: 1969-059C',n:'Apollo 11 Lunar Module / EASEP',s:'Launch: 1969-07-16 · Saturn 5 · Cape Canaveral · Total Mass: 15103 kg',a:'The Apollo 11 Lunar Module (LM) "Eagle" was the first crewed vehicle to land on the Moon, carrying Commander Neil A. Armstrong and LM pilot Edwin E. "Buzz" Aldrin, Jr.',b:'Also included on the LM was the Early Apollo Scientific Experiment Package (EASEP), consisting of self-contained experiments deployed and left on the lunar surface, and sample collection apparatus.',t:'Alternate Names: Apollo 11 LM/EASEP, LM-5, 04041, Eagle, Apollo11EASEP, urn:nasa:pds:context:instrument_host:spacecraft.a11e.'};
+function kf(o,t,sun,sy){return {o:o,t:t,fy:1,h:[0,0,0],arc:0,sky:0,fog:.0004,sun:sun,sy:sy,star:1}}
+var K=[kf([-10,3.4,17],[0,3.6,0],2.6,[-30,9,24]),kf([9,5.2,12],[0,3.4,0],2.6,[-28,10,22]),kf([12,3,16],[0,3.4,0],2.6,[-28,10,22]),kf([8,1.6,12],[0,1.6,0],2.6,[-28,10,22]),kf([5,1.5,9.5],[0,2.4,3.4],2.6,[-26,11,22]),kf([-1,2,13],[4,1.8,6],2.6,[-26,11,22]),kf([5,2.2,24],[0,.8,17],2.6,[-26,12,22]),kf([-9,2.2,12],[0,1.5,4],2.6,[-24,12,22]),kf([8,2.5,12],[0,6,0],2.6,[-24,12,22]),kf([14,6,16],[0,2,0],2.6,[-24,14,22]),kf([-6,2.4,16],[2,1.2,8],1.6,[-30,5,20])];
+function AO(c){return c<8.05?0:160*Math.pow(sm(8.05,9.6,c),1.6)}
+K[1].fy=0;K[2].fy=0;
+function hpos(c){var y=c<1.28?0:c<2.05?70*sm(1.28,1.36,c):c<3?70*Math.pow(1-sm(2.05,2.98,c),1.8):0;return [0,H(0,0)+y*SC,0,y]}
+var TS=.02,TN=Math.floor(6/TS)+1,trl=new Float32Array(TN*3);for(var ti=0;ti<TN;ti++){var tq2=hpos(4+ti*TS);trl[ti*3]=tq2[0];trl[ti*3+1]=tq2[1]+.1;trl[ti*3+2]=tq2[2]}
+var tgm=new THREE.BufferGeometry();tgm.setAttribute('position',new THREE.BufferAttribute(trl,3));tgm.setDrawRange(0,0);
+var trail=new THREE.Line(tgm,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.55,fog:false}));trail.frustumCulled=false;S.add(trail);
+// ---------- inspect mode ----------
+var INS=true,sel=-1,yaw=.6,yT=.6,cp=.28,pitT=.28,dist=17,dT=17,drag=false,lx=0,ly0=0,tg=new THREE.Vector3(0,.8,0),tv=new THREE.Vector3(),lk=new THREE.Vector3(),first=true,th0=0,hyaw=0;
+var pl=$('#plist'),hots=[],occ=[],hc=0,rc=new THREE.Raycaster(),hv=new THREE.Vector3(),tpos=new THREE.Vector3(),tlook=new THREE.Vector3();
+function show(o){$('#pg').textContent=o.g||'';$('#pn').textContent=o.n;$('#pa').textContent=o.a;$('#pb').textContent=o.b;$('#pt').textContent=o.t;$('#ps').textContent=o.s||''}
+function pick(i){sel=i;if(i>=0){yT=P[i].y;dT=P[i].d;pitT=P[i].p}else{dT=17;pitT=.28}
+ pl.querySelectorAll('button').forEach(function(b,k){b.className=k-1===i?'on':''});hots.forEach(function(h2,k){h2.className=k===i?'hot on':'hot'});show(i<0?OV:P[i])}
+[{n:'Whole lunar module'}].concat(P).forEach(function(o,k){if(o.g&&(k<2||P[k-2].g!==o.g)){var gh=document.createElement('div');gh.className='gh';gh.textContent=o.g;pl.appendChild(gh)}var b=document.createElement('button');b.textContent=o.n;b.onclick=function(){pick(k-1)};pl.appendChild(b)});
+P.forEach(function(o,k){var b=document.createElement('button');b.className='hot';b.innerHTML=(k+1)+'<span>'+o.n+'</span>';b.setAttribute('aria-label',o.n);b.onclick=function(){pick(k)};$('#insp').appendChild(b);hots.push(b);occ.push(false)});
+pick(-1);
+function ang(a){while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a}
+var cvs=$('#c');
+cvs.addEventListener('pointerdown',function(e){if(INS){drag=true;lx=e.clientX;ly0=e.clientY;cvs.setPointerCapture(e.pointerId)}});
+cvs.addEventListener('pointermove',function(e){if(drag){yT-=(e.clientX-lx)*.006;yaw=yT;cp=Math.min(1.3,Math.max(-.3,cp+(e.clientY-ly0)*.005));pitT=cp;lx=e.clientX;ly0=e.clientY}});
+cvs.addEventListener('pointerup',function(){drag=false});cvs.addEventListener('pointercancel',function(){drag=false});
+cvs.addEventListener('wheel',function(e){if(INS){e.preventDefault();dT=Math.min(34,Math.max(1.5,dT+e.deltaY*.012))}},{passive:false});
+$('#go').onclick=function(){INS=false;document.body.className='story';scrollTo(0,0);sp=0;tp=0};
+$('#back').onclick=function(){INS=true;document.body.className='insp';pick(-1)};
+// ---------- loop ----------
+var sp=0,tp=0,mx=0,my=0,smx=0,smy=0,last=0;
+function resize(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+function prog(){var m=document.documentElement.scrollHeight-innerHeight;tp=m>0?scrollY/m:0}
+addEventListener('scroll',prog,{passive:true});prog();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count)}})},{threshold:.35});
+document.querySelectorAll('.card').forEach(function(c){io.observe(c)});
+function count(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/1800);el.textContent=Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('en');if(k<1)requestAnimationFrame(f)})(t0)}
+var sfx=$('#sfx'),dots=nav.children,c1=new THREE.Color(),c2=new THREE.Color(),tint=new THREE.Color(0x4a3f6a);
+function frame(t){requestAnimationFrame(frame);var dt=last?Math.min(.05,(t-last)/1000):.016;last=t;
+ sp+=(tp-sp)*(1-Math.exp(-dt*5));smx+=(mx-smx)*(1-Math.exp(-dt*3));smy+=(my-smy)*(1-Math.exp(-dt*3));
+ var c=INS?1:sp*(N-1),i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1];
+ for(var d=0;d<N;d++)dots[d].className=d===Math.round(c)?'on':'';
+ var hp=INS?[0,H(0,0),0,0]:hpos(c);rover.position.set(hp[0],hp[1],hp[2]);rover.visible=INS||!(c>1.34&&c<2.05);pr.visible=INS||c>3.5;
+ var wk=INS?0:sm(7.15,7.9,c);AS.forEach(function(q,k){var g=q[0],tx=q[4],tz=5.3,x=lp(q[1],tx,wk),z=lp(q[2],tz,wk);g.visible=INS||c<7.93;g.position.set(x,H(x,z)+(wk>0&&wk<1?Math.abs(Math.sin(t*.008+k*2))*.05:0),z);g.rotation.y=wk>=1?Math.PI:wk>.02?Math.atan2(tx-x,tz-z):q[3]});
+ if(INS){th0+=(0-th0)*(1-Math.exp(-dt*8));ru.rotation.y+=ang(0-ru.rotation.y)*(1-Math.exp(-dt*6));rl.rotation.y+=ang(Math.PI/2-rl.rotation.y)*(1-Math.exp(-dt*6));hb.rotation.z=0;hyaw=0}
+ else{var hp2=hpos(Math.min(c+.03,N-1)),dx=hp2[0]-hp[0],dz=hp2[2]-hp[2],dd=Math.hypot(dx,dz);if(dd>.05)hyaw+=ang(-Math.atan2(dz,dx)-hyaw)*(1-Math.exp(-dt*6));
+  var spin=(c>4.05&&c<4.98)||hp[3]>.02;th0+=((spin?1:0)-th0)*(1-Math.exp(-dt*7));ru.rotation.y+=th0*dt*38;rl.rotation.y-=th0*dt*38;hb.rotation.z+=((-Math.min(.2,dd*.08)*th0)-hb.rotation.z)*(1-Math.exp(-dt*6))}
+ rover.rotation.y=hyaw;asc.position.y=AO(c);blM.opacity=th0*.13;
+ var aoV=AO(c),fire=!INS&&c>1.95&&c<3.02&&hp[3]>.2,burn=!INS&&c>8.04&&c<9.5&&aoV>.05,fl=.85+.3*Math.sin(t*.05)+Math.random()*.2;fD.visible=fire;fD.scale.set(1,fl*Math.min(1,hp[3]/4),1);fA.visible=burn;fA.scale.set(1,fl,1);
+ if(INS){var fo=sel<0?[0,3.4,0]:P[sel].w;tv.set(fo[0],rover.position.y+fo[1],fo[2]);tg.lerp(tv,1-Math.exp(-dt*5));dist+=(dT-dist)*(1-Math.exp(-dt*5));cp+=(pitT-cp)*(1-Math.exp(-dt*4));
+  if(!drag){if(sel<0)yT+=dt*.11;yaw+=ang(yT-yaw)*(1-Math.exp(-dt*4))}
+  tpos.set(tg.x+dist*Math.cos(cp)*Math.sin(yaw),Math.max(.4,tg.y+dist*Math.sin(cp)),tg.z+dist*Math.cos(cp)*Math.cos(yaw));tlook.copy(tg)}
+ else{var g0=hp[1]-hp[3]*SC,fy=lp(a.fy,b.fy,e),cx=hp[0]+lp(a.o[0],b.o[0],e)+smx*1.6,cz=hp[2]+lp(a.o[2],b.o[2],e),rf=AO(c)*(1-sm(9.05,9.8,c)),lf=sm(2.3,2.9,c),w=sm(1.1,1.35,c)*(1-sm(1.85,2.1,c)),cy=g0+lp(a.o[1],b.o[1],e)-smy*.8+hp[3]*SC*fy+Math.min(rf,32);
+  tpos.set(cx,Math.max(H(cx,cz)+.7,cy),cz);tlook.set(hp[0]+lp(a.t[0],b.t[0],e),g0+lp(a.t[1],b.t[1],e)+hp[3]*SC*lf+rf,hp[2]+lp(a.t[2],b.t[2],e));tlook.y=lp(tlook.y,170,w)}
+ if(first){cam.position.copy(tpos);lk.copy(tlook);first=false}else{var kk=1-Math.exp(-dt*(INS?6:7));cam.position.lerp(tpos,kk);lk.lerp(tlook,kk)}
+ cam.lookAt(lk);sky.position.copy(cam.position);earth.position.copy(cam.position).add(EV);
+ tgm.setDrawRange(0,0);
+ // dust puff under the helicopter while it is low
+ var dl=(c>2&&c<3.4)?Math.max(0,1-hp[3]/16)*(1-sm(3,3.4,c)):0,ul=(c>8&&c<9.7)?Math.max(0,1-aoV/40):0,puffA=INS?0:.45*Math.max(dl,ul),gy=hp[1]-hp[3]*SC;pmat.opacity+=(puffA-pmat.opacity)*(1-Math.exp(-dt*6));
+ if(pmat.opacity>.01){var pa2=pg.attributes.position.array;for(var q=0;q<DN2;q++){var ph=((t*.0006)+h(q,41))%1,rr2=1.2+ph*8,an=h(q,42)*6.28+ph*.8;pa2[q*3]=hp[0]+Math.cos(an)*rr2;pa2[q*3+1]=gy+.15+ph*(1-ph)*3.2;pa2[q*3+2]=hp[2]+Math.sin(an)*rr2}pg.attributes.position.needsUpdate=true}
+ var ma=mg.attributes.position.array;for(var q4=0;q4<MN;q4++){ma[q4*3]=wr(h(q4,61)*40+t*.0012*(.4+h(q4,62)),cam.position.x);ma[q4*3+2]=wr(h(q4,64)*40+t*.0004,cam.position.z);ma[q4*3+1]=.2+h(q4,63)*7+Math.sin(t*.001+q4)*.25}mg.attributes.position.needsUpdate=true;
+ var dva=dvg.attributes.position.array;for(var q3=0;q3<DV;q3++){var yh=h(q3,51)*36,an3=h(q3,52)*6.28+t*.0025*(1+yh*.02),rd=.8+yh*.22+h(q3,53)*.8;dva[q3*3]=DVX+Math.cos(an3)*rd+Math.sin(yh*.12+t*.0004)*2;dva[q3*3+1]=H(DVX,DVZ)+yh;dva[q3*3+2]=DVZ+Math.sin(an3)*rd}dvg.attributes.position.needsUpdate=true;
+ if(INS){hc++;for(var hi=0;hi<P.length;hi++){hv.set(rover.position.x+P[hi].w[0],rover.position.y+P[hi].w[1],P[hi].w[2]);var pv2=hv.clone().project(cam),el=hots[hi];
+  if(pv2.z>1||Math.abs(pv2.x)>1.05||Math.abs(pv2.y)>1.05){el.style.display='none';continue}
+  el.classList.toggle('lf',pv2.x>.35);el.style.display='block';el.style.left=((pv2.x*.5+.5)*innerWidth)+'px';el.style.top=((-pv2.y*.5+.5)*innerHeight)+'px';
+  if(hc%10===hi%10){var dv=hv.clone().sub(cam.position),dl=dv.length();rc.set(cam.position,dv.normalize());rc.far=dl-.12;occ[hi]=rc.intersectObject(rover,true).length>0}
+  el.style.opacity=occ[hi]?.22:1}}
+ c1.set(a.sky);c2.set(b.sky);c1.lerp(c2,e);S.background.copy(c1);S.fog.color.copy(c1);S.fog.density=lp(a.fog,b.fog,e);
+ var si=lp(a.sun,b.sun,e);sun.intensity=si;sfx.style.opacity=INS?0:(.55*(1-sm(.5,2.6,si))).toFixed(3);sun.position.set(lk.x+lp(a.sy[0],b.sy[0],e),lp(a.sy[1],b.sy[1],e),lk.z+lp(a.sy[2],b.sy[2],e));sun.target.position.set(lk.x,0,lk.z);hemi.intensity=.05+.12*sm(.3,2.4,si);
+ skyU.uHor.value.copy(c1);skyU.uTop.value.copy(c1).multiplyScalar(.6).lerp(tint,.12);skyU.uSun.value.copy(sun.position).sub(sun.target.position).normalize();skyU.uGlow.value=Math.min(1,si/2.6);
+ sm2.opacity=lp(a.star,b.star,e);var ei=Math.min(1,Math.max(.06,si/2.6));EM.forEach(function(p){p[0].envMapIntensity=p[1]*ei});
+ R.render(S,cam)}
+requestAnimationFrame(frame);
+})();
+</script>
+
+<script src="story-extras.js"></script>
+<script>
+StoryExtras.init({
+  "craftName": "Apollo 11 Lunar Module (Eagle)",
+  "craftType": "lander",
+  "nssdcaId": "1969-059C",
+  "archiveName": "Apollo 11 Mission Archive, NASA NSSDCA",
+  "distanceAU": 0.00257,
+  "juniorSteps": [
+    "I am Eagle, the Apollo 11 Lunar Module. On July 20, 1969, I carried Neil Armstrong and Buzz Aldrin down to the surface of the Moon for humanity's first lunar landing.",
+    "I was built in two separate parts: a golden descent stage that functioned as my landing legs and rocket brake, and a top ascent cabin where the astronauts lived and piloted.",
+    "After separating from the Command Module Columbia in lunar orbit, I fired my descent engine to slow down and begin my historic descent to Tranquility Base.",
+    "As we descended, my guidance computer triggered alarms because it was receiving too much radar information at once! Armstrong took manual control and steered past a boulder crater to land safely.",
+    "With less than 30 seconds of fuel remaining, my footpad probes touched the lunar dust: 'Contact light! Houston, Tranquility Base here. The Eagle has landed.'",
+    "Six hours after touchdown, Neil Armstrong stepped down my ladder onto the lunar surface, declaring: 'That's one small step for man, one giant leap for mankind.'",
+    "We planted an American flag supported by a metal crossbar, and left a stainless steel plaque that reads: 'Here men from the planet Earth first set foot upon the Moon. We came in peace for all mankind.'",
+    "The crew deployed the Early Apollo Scientific Experiments Package (EASEP) on the surface, including a seismometer to listen for moonquakes and a laser reflector mirror.",
+    "After 21 hours and 36 minutes on the lunar surface, Armstrong and Aldrin fired my ascent engine. My top half lifted off, using my gold descent stage as its launch pad.",
+    "My ascent stage climbed smoothly back into lunar orbit and docked with Michael Collins aboard Columbia. After transferring moon rocks and crew, I was jettisoned.",
+    "My gold descent stage and laser retroreflector still sit at Tranquility Base today. Scientists still shoot lasers at my mirror from Earth to measure the Moon's distance down to the millimetre!"
+  ],
+  "specialistSteps": [
+    "NSSDCA ID: 1969-059C. I am LM-5 Eagle: 15,103 kg fuelled launch mass, manufactured by Grumman Aerospace. Two-stage crewed vehicle designed specifically for vacuum lunar descent and ascent.",
+    "Descent Subsystems: 2,034 kg dry descent stage structure with four foldable legs and crushed aluminium honeycomb shock absorbers. Propelled by a 45 kN throttleable hypergolic Descent Propulsion System (DPS).",
+    "Guidance & Powered Descent Initiation: At 15 km altitude, powered descent initiated using Apollo Guidance Computer (AGC) Block II with 2,048 words of RAM and 36,864 words of ROM.",
+    "Overload Alarms & Touchdown Margin: At 1,800 m altitude, 1201 and 1202 executive overflow alarms occurred as rendezvous radar stole CPU cycles. Armstrong initiated P66 semi-manual steering, touching down with ~25 s fuel margin.",
+    "Tranquility Base Emplacement: Touchdown confirmed at 20:17:40 UT on 20 July 1969 at 0.67416\u00b0 N, 23.47314\u00b0 E. 1.7 m long contact sensing probes on three footpads initiated engine shutdown.",
+    "EVA Surface Protocol: At 02:56:15 UT on July 21, Armstrong stepped onto regolith. Over 2 hours and 31 minutes of EVA, the crew gathered 21.55 kg of pristine lunar core, bulk, and contingency samples.",
+    "Commemorative Engineering: Deployed nylon American flag with horizontal telescoping rod, and affixed Apollo 11 commemorative plaque to descent ladder leg strut #1.",
+    "EASEP Deployment: Deployed PSEP (Passive Seismic Experiment Package) powered by 34 W solar array, logging moonquakes until August 1969, and LRRR (Laser Ranging Retroreflector) with 100 quartz corner cubes.",
+    "Ascent Propulsion System (APS): At 17:54 UT on July 21, the 16 kN constant-thrust hypergolic ascent engine fired with 100% reliability, consuming Aerozine-50 and nitrogen tetroxide propellant.",
+    "Lunar Orbit Rendezvous & Disposal: Docked with CSM Columbia at 21:24 UT. Following crew and sample transfer, Eagle's ascent stage was jettisoned at 00:15 UT on July 22, eventually impacting the lunar surface.",
+    "Ongoing Science Telemetry: Eagle's passive LRRR retroreflector array requires no electrical power and continues to bounce pulsed ruby and Nd:YAG lasers from observatories on Earth, verifying General Relativity."
+  ],
+  "quiz": [
+    {
+      "q": "What computer alarms sounded during Eagle's lunar descent?",
+      "options": [
+        "404 and 500 errors",
+        "1201 and 1202 overload alarms",
+        "Engine fire alarms",
+        "Low oxygen alarms"
+      ],
+      "answer": 1,
+      "explain": "1201 and 1202 alarms indicated AGC CPU overload from the rendezvous radar radar interface."
+    },
+    {
+      "q": "How much fuel margin was left when Eagle touched down?",
+      "options": [
+        "Under 30 seconds",
+        "Over 10 minutes",
+        "Empty \u2014 engine stalled",
+        "Two hours"
+      ],
+      "answer": 0,
+      "explain": "Neil Armstrong landed Eagle with less than 30 seconds of propellant remaining in the descent tanks."
+    },
+    {
+      "q": "What experiment left by Apollo 11 is still operational today?",
+      "options": [
+        "Solar wind collector",
+        "Laser Ranging Retroreflector (LRRR)",
+        "Television broadcast unit",
+        "Passive seismometer"
+      ],
+      "answer": 1,
+      "explain": "The Laser Ranging Retroreflector uses passive quartz mirrors and still reflects Earth lasers today."
+    },
+    {
+      "q": "What was the name of the Apollo 11 Command Module?",
+      "options": [
+        "Intrepid",
+        "Columbia",
+        "Endeavour",
+        "Discovery"
+      ],
+      "answer": 1,
+      "explain": "The Command Module piloted in lunar orbit by Michael Collins was named Columbia."
+    }
+  ]
+});
+</script>
+
+</body>
+</html>

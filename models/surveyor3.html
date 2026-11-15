@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #05070B; color: #f5f5f7;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Surveyor 3: the robot that tested the Moon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--ink:#f6e9da;--dim:#d3bba6;--rust:#c2693c;--blue:#9db2c7;--night:#0a0506;--card:rgba(24,11,7,.52);--line:rgba(255,214,170,.2);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--night:#0a0506}}
+:root[data-theme="dark"]{--night:#0a0506}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(5,2,2,.7))}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 14px) 22px 14px;font-size:14px;color:var(--dim)}
+header b{font-weight:500;color:var(--ink)}
+nav{display:flex;gap:8px}
+nav i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dim);transition:.4s}
+nav i.on{background:var(--rust);border-color:var(--rust);box-shadow:0 0 12px var(--rust)}
+main{position:relative;z-index:2}
+section{min-height:100vh;display:flex;align-items:center;padding:0 6vw}
+section.r{justify-content:flex-end}
+.card{max-width:460px;padding:30px 32px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12);opacity:.001;transform:translateY(26px);transition:opacity 1s,transform 1s}
+.card.in{opacity:1;transform:none}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.04;margin:0 0 14px;letter-spacing:-.01em}
+h1{font-size:clamp(64px,13vw,170px);font-weight:600;letter-spacing:-.035em;text-shadow:0 8px 60px rgba(0,0,0,.6)}
+h2{font-size:clamp(30px,4vw,44px)}
+p{margin:0 0 12px}
+.hero{display:block;padding-top:24vh}
+.hero p{max-width:30ch;font-size:clamp(19px,2.2vw,26px);line-height:1.4;color:var(--ink);text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.hero small{display:block;margin-top:22px;color:var(--dim);font-size:14px}
+.num{font-family:Fraunces,Georgia,serif;font-size:56px;font-weight:600;color:var(--ink);line-height:1}
+.stats{display:flex;gap:26px;margin:18px 0 6px;flex-wrap:wrap}
+.stats span{display:block;font-size:13px;color:var(--dim);margin-top:4px}
+.note{font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chips span{padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;color:var(--blue)}
+footer{font-size:13px;color:var(--dim);margin-top:18px}
+@media (max-width:760px){section,section.r{align-items:flex-end;justify-content:center;padding:0 16px 7vh}.card{padding:22px}.hero{align-items:flex-start;padding-top:20vh}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+header span{display:flex;align-items:center}
+body.insp{overflow:hidden}body.insp main,body.insp nav,body.insp #back{display:none}body.story #insp{display:none}
+#c{touch-action:none}body.story #c{touch-action:auto}
+#insp{position:fixed;inset:0;z-index:4;pointer-events:none}#insp>*{pointer-events:auto}
+.ip{position:absolute;left:22px;top:calc(env(safe-area-inset-top,0px) + 64px);width:290px}
+.ip h2{font-size:clamp(32px,4vw,46px)}.lead{color:var(--dim);font-size:15px;margin-bottom:14px}
+#plist{display:flex;flex-direction:column;gap:6px}
+#plist button,#back,#go{font:inherit;color:var(--ink);cursor:pointer}
+#plist button{text-align:left;padding:9px 14px;background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:12px 4px 12px 4px;transition:.25s}
+#plist button:hover,#plist button.on{border-color:var(--rust);background:rgba(194,105,60,.3)}
+.pc{position:absolute;right:22px;top:50%;transform:translateY(-50%);width:min(400px,38vw);padding:26px 28px;background:var(--card);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid var(--line);border-radius:24px 6px 24px 6px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,230,200,.12)}
+.pc h3{font:300 30px/1.1 Fraunces,Georgia,serif;margin:0 0 10px}.pc p{font-size:15.5px}
+#go{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);transform:translateX(-50%);padding:14px 32px;border-radius:999px;border:1px solid var(--rust);background:linear-gradient(#d2784a,#a4512a);font-weight:500;box-shadow:0 10px 40px rgba(194,105,60,.45)}
+#back{padding:6px 14px;background:var(--card);border:1px solid var(--line);border-radius:999px;margin-right:14px;font-size:13px}
+#pin{position:absolute;width:38px;height:38px;margin:-19px 0 0 -19px;border:2px solid #fff;border-radius:50%;pointer-events:none!important;display:none;box-shadow:0 0 18px rgba(255,200,150,.8);animation:pl 1.6s infinite}
+@keyframes pl{50%{transform:scale(1.25);opacity:.5}}
+@media (max-width:760px){.ip{width:auto;right:16px;left:16px}.lead{display:none}#plist{flex-direction:row;overflow-x:auto;padding-bottom:6px}#plist button{white-space:nowrap}.pc{top:auto;bottom:84px;right:16px;left:16px;width:auto;transform:none;max-height:34vh;overflow:auto;padding:18px}}
+#c{filter:saturate(.95) contrast(1.1)}#sfx{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;mix-blend-mode:multiply;background:radial-gradient(ellipse at 50% 40%,rgba(120,80,50,.2),rgba(55,32,20,.8))}
+.gk{font-size:13px;color:#e08a5a;margin:0 0 4px}.spec{font-size:13.5px;color:var(--blue);margin:8px 0 0}.pc{max-height:76vh;overflow:auto}
+#plist{max-height:calc(100vh - 250px);overflow:auto;padding-right:4px}.gh{font-size:12px;color:var(--dim);margin:10px 0 2px}
+.hot{position:absolute;left:0;top:0;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;border:1.5px solid #fff;background:rgba(194,105,60,.8);color:#fff;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:0;cursor:pointer;box-shadow:0 0 12px rgba(255,200,150,.7);display:none;z-index:1;transition:opacity .3s}
+.hot.on{background:#fff;color:#7a3a1c;box-shadow:0 0 20px #fff;width:30px;height:30px;margin:-15px 0 0 -15px;z-index:2}
+.hot span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:6px;background:rgba(20,10,6,.85);color:var(--ink);font-size:12px;display:none}
+.hot:hover span,.hot.on span{display:block}
+@media (max-width:760px){.gh{display:none}#plist{max-height:none}.pc{max-height:30vh}}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:6px 0 4px;font-size:15px}.kv dt{color:var(--dim)}.kv dd{margin:0}
+.chips b{font-weight:500;color:var(--ink)}
+</style>
+</head>
+<body class="insp" style="background-color: #05070B; margin: 0;">
+<div id="se-loader" style="position:fixed;inset:0;background:#05070B;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9da;font-family:'IBM Plex Sans',system-ui,sans-serif;transition:opacity 0.6s ease, visibility 0.6s ease;">
+  <div style="width:48px;height:48px;border:3px solid rgba(255,214,170,0.18);border-top:3px solid #c2693c;border-radius:50%;animation:se-spin 1s linear infinite;margin-bottom:18px;"></div>
+  <div style="font-family:Fraunces,Georgia,serif;font-size:26px;letter-spacing:-0.02em;margin-bottom:6px;">Surveyor 3</div>
+  <div style="font-size:12px;color:#9db2c7;letter-spacing:0.08em;text-transform:uppercase;">Establishing NSSDCA Telemetry Link...</div>
+</div>
+<style>
+@keyframes se-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+<canvas id="c"></canvas><div class="vig"></div><div id="sfx"></div><div class="grain"></div>
+<header><b>Space Apps Challenge, Sulaymaniyah 2026</b><span><button id="back">Inspect the lander</button><nav id="nav"></nav></span></header>
+<div id="insp"><div class="ip"><h2>Meet the lander</h2><p class="lead">Drag to turn it. Scroll to zoom. Pick a part to learn what it did.</p><div id="plist"></div></div>
+<div class="pc"><p class="gk" id="pg"></p><h3 id="pn"></h3><p id="pa"></p><p id="pb"></p><p class="note" id="pt"></p><p class="spec" id="ps"></p></div>
+<button id="go">Start the journey</button><i id="pin"></i></div>
+
+<main>
+<section class="hero"><div class="card in" style="background:none;border:0;box-shadow:none;backdrop-filter:none;padding:0 0 0 2vw;max-width:none">
+<h1>Surveyor 3</h1><p>A robot that tested the Moon’s ground before astronauts dared to land on it.</p>
+<small>Abandoned but Not Forgotten: scroll to follow its story</small></div></section>
+
+<section><div class="card"><h2>Is the Moon solid?</h2>
+<p>In the 1960s NASA planned to land astronauts on the Moon, but nobody was sure a heavy lander would stay on top of the surface. The Surveyor series was built to scout the ground first.</p>
+<p>Surveyor 3 was the third engineering flight and the second in the series to make a soft landing. It carried a TV camera and, for the first time, a sampler that could reach out and dig.</p></div></section>
+
+<section class="r"><div class="card"><h2>Launch: April 17, 1967</h2>
+<p>An Atlas-Centaur rocket lifted off from Cape Canaveral at 07:05:01 UT. Earlier Surveyors flew straight to the Moon. This one first waited in a parking orbit around Earth, then the Centaur upper stage fired a second time to send it on its way.</p>
+<p>The spacecraft weighed 997.9 kg (2,200 lb). Three days later it was falling toward Oceanus Procellarum.</p></div></section>
+
+<section><div class="card"><h2>Two bounces</h2>
+<p>On the way down, highly reflective rocks confused the lander’s radar. The engine failed to cut off at the right moment, about 4.3 m above the surface. Surveyor 3 hit the ground, bounced up, came down, bounced again, and settled at 00:04:17 UT on April 20, 1967.</p>
+<div class="stats"><div><div class="num" data-to="10">0</div><span>metres, first bounce</span></div><div><div class="num" data-to="3">0</div><span>metres, second bounce</span></div></div>
+<p class="note">Landing site: 3° south, 23.41° west, in the southeastern Oceanus Procellarum.</p></div></section>
+
+<section class="r"><div class="card"><h2>Its first look around</h2>
+<p>Less than an hour after landing, the TV camera began sending the first of thousands of pictures. Two lenses, 25 mm and 100 mm, sat under a mirror that could be turned horizontally and vertically. One 200-line picture took about 20 seconds to send. It could also make sharper 600-line images sent digitally.</p>
+<div class="stats"><div><div class="num" data-to="6326">0</div><span>TV pictures in total</span></div></div></div></section>
+
+<section><div class="card"><h2>The scoop</h2>
+<p>The most exciting experiments used the surface sampler, a scoop on an arm that reached up to 1.5 m from the lander and dug up to 18 cm deep. Following commands from Earth, it dug trenches, pressed on the ground, struck it, and moved lunar material in view of the camera.</p>
+<div class="stats"><div><div class="num" data-to="4">0</div><span>trenches</span></div><div><div class="num" data-to="4">0</div><span>bearing tests</span></div><div><div class="num" data-to="13">0</div><span>impact tests</span></div></div></div></section>
+
+<section class="r"><div class="card"><h2>The verdict</h2>
+<p>Scientists studied the trenches and the pictures and concluded the lunar soil had a consistency like wet sand. Its bearing strength was about 10 pounds per square inch (0.7 kg per square centimetre, or 98 kilopascals).</p>
+<p>That was solid enough to support an Apollo Lunar Module.</p></div></section>
+
+<section><div class="card"><h2>The long night</h2>
+<p>The last contact with Surveyor 3 was on May 4, 1967, two days after the lunar night began. In the long, freezing dark it fell silent, with its job done.</p></div></section>
+
+<section class="r"><div class="card"><h2>A neighbour arrives</h2>
+<p>More than three years later, on November 18, 1969, Apollo 12 astronauts Charles Conrad, Jr. and Alan L. Bean landed the Intrepid Lunar Module about 180 m (197 yards) from the inactive Surveyor 3.</p>
+<div class="stats"><div><div class="num" data-to="180">0</div><span>metres from Surveyor 3</span></div></div></div></section>
+
+<section><div class="card"><h2>The visit</h2>
+<p>During their second moonwalk, on November 19, 1969, the astronauts walked over to Surveyor 3. They recovered parts, including the soil scoop and the camera system, so scientists could study what nearly two and a half years on the Moon’s surface had done to them.</p></div></section>
+
+<section class="r"><div class="card"><h2>Why it still matters</h2>
+<p>Surveyor 3 told Apollo the ground would hold. Then, thanks to the astronauts, pieces of it came home to show what long exposure on the Moon does to a machine. The rest of the lander still sits where it stopped.</p></div></section>
+
+<section><div class="card"><h2>Mission file</h2>
+<dl class="kv"><dt>Nation</dt><dd>United States</dd><dt>Objective</dt><dd>Lunar soft landing</dd><dt>Spacecraft</dt><dd>Surveyor-C</dd><dt>Mass</dt><dd>997.9 kg (2,200 lb)</dd><dt>Managed by</dt><dd>NASA / JPL</dd><dt>Rocket</dt><dd>Atlas Centaur (AC-12)</dd><dt>Launch site</dt><dd>Cape Canaveral, Launch Complex 36B</dd><dt>Instruments</dt><dd>TV camera, surface sampler</dd></dl>
+<div class="chips"><span><b>Apr 17, 1967</b> launch</span><span><b>Apr 20, 1967</b> landed</span><span><b>May 4, 1967</b> last contact</span></div>
+<p class="note">Photo credit for the famous picture of Surveyor 3 beside the Apollo 12 module: NASA.</p>
+<footer>Facts from NASA’s Surveyor 3 mission page; key source: Siddiqi, Beyond Earth, NASA History Program Office, 2018. The terrain and models are procedural 3D art, and the distance to Intrepid is shortened in this scene.</footer></div></section>
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+var N=12,$=function(s){return document.querySelector(s)};
+var nav=$('#nav');for(var i=0;i<N;i++)nav.appendChild(document.createElement('i'));
+function h(x,y){var v=Math.sin(x*127.1+y*311.7)*43758.5453;return v-Math.floor(v)}
+function lp(a,b,t){return a+(b-a)*t}
+function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);return lp(lp(h(xi,yi),h(xi+1,yi),u),lp(h(xi,yi+1),h(xi+1,yi+1),u),v)}
+function fbm(x,y,o){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*vn(x,y);x*=2.03;y*=2.03;a*=.5}return s}
+function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
+function pv(x,y,P){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=((xi%P)+P)%P,b=(a+1)%P,c=((yi%P)+P)%P,d=(c+1)%P;return lp(lp(h(a,c),h(b,c),u),lp(h(a,d),h(b,d),u),v)}
+function pf(x,y,o,P){var s=0,a=.5;for(var i=0;i<o;i++){s+=a*pv(x,y,P);x*=2;y*=2;P*=2;a*=.5}return s}
+var SZ=170,SC=1.4,CR=[];
+for(var ci=0;ci<60;ci++){var cx0=(h(ci,11)-.5)*160,cz0=(h(ci,12)-.5)*160,cr0=2.5+Math.pow(h(ci,13),2.2)*20;if(Math.hypot(cx0,cz0)<cr0+8||Math.hypot(cx0+58,cz0+14)<cr0+8)continue;CR.push([cx0,cz0,cr0,cr0*(.12+.08*h(ci,14))])}
+function H(x,z){var e=(fbm(x*.03+5,z*.03+9,4)-.5)*3+(fbm(x*.2,z*.2,3)-.5)*.35;
+ for(var k=0;k<CR.length;k++){var c=CR[k],dx=x-c[0],dz=z-c[1],d=Math.sqrt(dx*dx+dz*dz)/c[2];if(d<1.4){if(d<1)e-=c[3]*(1-d*d);e+=c[3]*.25*Math.exp(-Math.pow((d-1.03)/.2,2))}}
+ return e*Math.min(sm(3,13,Math.hypot(x,z)),sm(4,13,Math.hypot(x+58,z+14)))}
+// ---------- renderer, lights ----------
+var R=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1;R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+var S=new THREE.Scene();S.background=new THREE.Color(0x000000);
+var cam=new THREE.PerspectiveCamera(50,1,.1,2000);S.add(cam);
+var sun=new THREE.DirectionalLight(0xfff3e4,3.2);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);var sc=sun.shadow.camera;sc.left=-28;sc.right=28;sc.top=28;sc.bottom=-28;sc.far=160;S.add(sun,sun.target);
+var hemi=new THREE.HemisphereLight(0x8a97b4,0x2a2a2a,.14);S.add(hemi);
+var pm=new THREE.PMREMGenerator(R),es=new THREE.Scene(),eg=new THREE.SphereGeometry(60,32,16),ec=[],ep=eg.attributes.position;
+for(var i0=0;i0<ep.count;i0++){var yy=ep.getY(i0)/60;if(yy>0)ec.push(.01,.01,.012);else ec.push(.28,.27,.26)}
+eg.setAttribute('color',new THREE.Float32BufferAttribute(ec,3));es.add(new THREE.Mesh(eg,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+var sb=new THREE.Mesh(new THREE.SphereGeometry(7,16,12),new THREE.MeshBasicMaterial({color:0xfff6ea}));sb.position.set(-30,22,34);es.add(sb);
+S.environment=pm.fromScene(es,.04).texture;
+var EM=[],LMT=[],tan=new THREE.Color(0xb39a78);
+function M(c,m,r,map,env,lt){var mm=new THREE.MeshStandardMaterial({color:c,metalness:m,roughness:r,map:map||null});EM.push([mm,env]);if(lt)LMT.push([mm,new THREE.Color(c)]);return mm}
+function mk(w,hh,fn){var c=document.createElement('canvas');c.width=w;c.height=hh;var x=c.getContext('2d');fn(x,w,hh);var t=new THREE.CanvasTexture(c);t.anisotropy=8;return t}
+function dust(x,w,hh,n,al){for(var i=0;i<n;i++){x.fillStyle='rgba('+(120+Math.random()*50|0)+','+(112+Math.random()*40|0)+',100,'+Math.random()*al+')';x.beginPath();x.arc(Math.random()*w,Math.random()*hh,Math.random()*2+.4,0,6.283);x.fill()}}
+// ---------- terrain ----------
+var DS=512,dc=document.createElement('canvas');dc.width=dc.height=DS;var dcx=dc.getContext('2d'),di=dcx.createImageData(DS,DS),bc=document.createElement('canvas');bc.width=bc.height=DS;var bcx=bc.getContext('2d'),bi=bcx.createImageData(DS,DS);
+for(var j=0;j<DS;j++)for(var k=0;k<DS;k++){var u=k/DS,v=j/DS,pe=sm(.62,.78,pv(u*48,v*48,48))*(.5+.5*pv(u*96,v*96,96)),gr=h(k*1.3,j*.7),
+ ht=Math.min(1,Math.max(0,.38*pf(u*8,v*8,5,8)+.18*pf(u*32,v*32,3,32)+.42*pe+.12*gr)),g=.5+.9*ht,p=(j*DS+k)*4,pk=1-.3*pe;
+ di.data[p]=Math.min(255,g*176*pk);di.data[p+1]=Math.min(255,g*173*pk);di.data[p+2]=Math.min(255,g*168*pk);di.data[p+3]=255;bi.data[p]=bi.data[p+1]=bi.data[p+2]=ht*255;bi.data[p+3]=255}
+dcx.putImageData(di,0,0);bcx.putImageData(bi,0,0);
+for(var mc=0;mc<260;mc++){var mx0=h(mc,21)*DS,my0=h(mc,22)*DS,mr0=3+Math.pow(h(mc,23),2.5)*30,g1=dcx.createRadialGradient(mx0,my0,mr0*.2,mx0,my0,mr0*1.25);g1.addColorStop(0,'rgba(60,58,55,.45)');g1.addColorStop(.72,'rgba(150,146,140,.1)');g1.addColorStop(.9,'rgba(235,230,220,.5)');g1.addColorStop(1,'rgba(235,230,220,0)');dcx.fillStyle=g1;dcx.fillRect(mx0-mr0*1.3,my0-mr0*1.3,mr0*2.6,mr0*2.6);
+ var g2=bcx.createRadialGradient(mx0,my0,0,mx0,my0,mr0*1.25);g2.addColorStop(0,'rgba(0,0,0,.8)');g2.addColorStop(.7,'rgba(0,0,0,.35)');g2.addColorStop(.88,'rgba(255,255,255,.9)');g2.addColorStop(1,'rgba(255,255,255,0)');bcx.fillStyle=g2;bcx.fillRect(mx0-mr0*1.3,my0-mr0*1.3,mr0*2.6,mr0*2.6)}
+function tt(cv,rep){var t=new THREE.CanvasTexture(cv);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep,rep);t.anisotropy=8;return t}
+var geo=new THREE.PlaneGeometry(SZ,SZ,256,256),pos=geo.attributes.position,vc=new Float32Array(pos.count*3);
+for(var m=0;m<pos.count;m++){var gx=pos.getX(m),gz=-pos.getY(m);pos.setZ(m,H(gx,gz));var n1=fbm(gx*.05,gz*.05,4),n2=fbm(gx*.6,gz*.6,3),val=Math.min(1,(.42+.2*n1+.12*n2)*1.5);var wm=(fbm(gx*.015+40,gz*.015,3)-.5)*.5;vc[m*3]=val*(1+wm*.3);vc[m*3+1]=val*(.985+wm*.1);vc[m*3+2]=val*(.96-wm*.25)}
+geo.setAttribute('color',new THREE.BufferAttribute(vc,3));geo.computeVertexNormals();
+var gm=new THREE.MeshStandardMaterial({map:tt(dc,40),bumpMap:tt(bc,40),bumpScale:2.2,vertexColors:true,roughness:1});EM.push([gm,.1]);
+var ground=new THREE.Mesh(geo,gm);ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;S.add(ground);
+var rm=new THREE.MeshStandardMaterial({color:0x8e8c8a,map:tt(dc,2),bumpMap:tt(bc,2),bumpScale:2.5,roughness:.95,flatShading:true}),rm2=new THREE.MeshStandardMaterial({color:0xd0cdc6,map:tt(dc,2),bumpMap:tt(bc,2),bumpScale:2,roughness:.6,flatShading:true});EM.push([rm,.1],[rm2,.3]);var rm3=new THREE.MeshStandardMaterial({color:0x6c6762,map:tt(dc,2),bumpMap:tt(bc,2),bumpScale:2.4,roughness:1,flatShading:true});EM.push([rm3,.08]);
+var rv=[];for(var q=0;q<6;q++){var rg=new THREE.IcosahedronGeometry(1,2),rp=rg.attributes.position;for(var u2=0;u2<rp.count;u2++){var px=rp.getX(u2),py=rp.getY(u2),pz=rp.getZ(u2),s=.7+.6*vn(px*1.5+q*9,pz*1.5+py*1.5)+.2*vn(px*4+q,py*4+pz*4);rp.setXYZ(u2,px*s,py*s*.65,pz*s)}rg.computeVertexNormals();rv.push(rg)}
+for(var r=0;r<240;r++){var rx=(h(r,1)-.5)*150,rz=(h(r,2)-.5)*150;if(Math.hypot(rx,rz)<4.5)continue;var rock=new THREE.Mesh(rv[r%6],r%9===0?rm2:(r%3===0?rm3:rm)),sz=.05+h(r,3)*h(r,4)*1.1;
+ rock.scale.set(sz*(.8+h(r,7)*.6),sz*.8,sz*(.8+h(r,8)*.6));rock.position.set(rx,H(rx,rz)+sz*.1,rz);rock.rotation.set(h(r,5)*.4,h(r,6)*6.28,h(r,9)*.4);rock.castShadow=rock.receiveShadow=true;S.add(rock)}
+// trench marks left by the scoop
+var trM=new THREE.MeshBasicMaterial({color:0x1c1a18,transparent:true,opacity:.92,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
+var trG=new THREE.Group();trG.position.set(2.4,0,1.4);S.add(trG);
+for(var tr=0;tr<4;tr++){var tz=(tr-1.5)*.4,tx=(tr-1.5)*.1,tg2=new THREE.Group();tg2.position.set(tx,H(2.4+tx,1.4+tz)+.03,tz);tg2.rotation.y=.35;
+ var tm=new THREE.Mesh(new THREE.PlaneGeometry(.62,.24),trM);tm.rotation.x=-Math.PI/2;tg2.add(tm);
+ [-1,1].forEach(function(sd2){var bm=new THREE.Mesh(new THREE.IcosahedronGeometry(.13,1),rm2);bm.scale.set(2.3,.32,.55);bm.position.set(0,.02,sd2*.2);bm.castShadow=bm.receiveShadow=true;tg2.add(bm)});trG.add(tg2)}
+// ---------- Earth and stars ----------
+var eT=mk(256,256,function(x,w,hh){var g=x.createLinearGradient(0,0,0,hh);g.addColorStop(0,'#1c5fb0');g.addColorStop(.5,'#2d7bd0');g.addColorStop(1,'#1c5fb0');x.fillStyle=g;x.fillRect(0,0,w,hh);
+ for(var i=0;i<46;i++){x.fillStyle='rgba(78,112,60,.85)';x.beginPath();x.ellipse(Math.random()*w,40+Math.random()*(hh-80),6+Math.random()*26,4+Math.random()*14,Math.random()*3,0,6.283);x.fill()}
+ for(var c=0;c<190;c++){x.fillStyle='rgba(255,255,255,'+(.18+Math.random()*.3)+')';x.beginPath();x.ellipse(Math.random()*w,Math.random()*hh,8+Math.random()*30,2+Math.random()*7,Math.random()*3,0,6.283);x.fill()}});
+var earth=new THREE.Mesh(new THREE.SphereGeometry(7,48,32),new THREE.MeshStandardMaterial({map:eT,emissive:0xffffff,emissiveMap:eT,emissiveIntensity:.3,roughness:1}));earth.position.set(70,100,-310);S.add(earth);
+var sg=new THREE.BufferGeometry(),spp=new Float32Array(3000*3);
+for(var s2=0;s2<3000;s2++){var th=Math.random()*6.283,ph=Math.acos(Math.random()*.95+.02),rr=900;spp[s2*3]=rr*Math.sin(ph)*Math.cos(th);spp[s2*3+1]=rr*Math.cos(ph);spp[s2*3+2]=rr*Math.sin(ph)*Math.sin(th)}
+sg.setAttribute('position',new THREE.BufferAttribute(spp,3));S.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xffffff,size:1.5,sizeAttenuation:false,transparent:true,opacity:.9,depthWrite:false})));
+// ---------- model helpers ----------
+var rover=new THREE.Group(),TG=rover;
+function bxm(w,hh,d,mat,x,y,z){var o=new THREE.Mesh(new THREE.BoxGeometry(w,hh,d),mat);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;TG.add(o);return o}
+function tube(a,b,r,mat){var A=new THREE.Vector3(a[0],a[1],a[2]),B=new THREE.Vector3(b[0],b[1],b[2]),d=B.clone().sub(A),t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),12),mat);t.position.copy(A).add(B).multiplyScalar(.5);t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());t.castShadow=true;TG.add(t)}
+function cyl(r,l,mat,x,y,z,ax){var o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,l,24),mat);o.position.set(x,y,z);if(ax==='x')o.rotation.z=Math.PI/2;if(ax==='z')o.rotation.x=Math.PI/2;o.castShadow=true;TG.add(o);return o}
+function ball(r,mat,x,y,z){var o=new THREE.Mesh(new THREE.SphereGeometry(r,14,10),mat);o.position.set(x,y,z);o.castShadow=true;TG.add(o)}
+// ---------- Surveyor 3 ----------
+var cpT=mk(256,256,function(x,w,hh){x.fillStyle='#d5d7d9';x.fillRect(0,0,w,hh);x.fillStyle='#17171a';for(var i=0;i<8;i++)x.fillRect(0,i*32+4,w,10);x.strokeStyle='rgba(60,60,64,.7)';x.lineWidth=2;x.strokeRect(6,6,w-12,hh-12);x.fillStyle='rgba(70,70,74,.9)';for(var a=14;a<w;a+=34){x.beginPath();x.arc(a,14,2.2,0,6.283);x.fill();x.beginPath();x.arc(a,hh-14,2.2,0,6.283);x.fill()}dust(x,w,hh,900,.5)}),
+panT=mk(512,384,function(x,w,hh){x.fillStyle='#0d1428';x.fillRect(0,0,w,hh);var cw=(w-24)/8,ch=(hh-24)/6;for(var i=0;i<8;i++)for(var j=0;j<6;j++){var g=x.createLinearGradient(12+i*cw,12+j*ch,12+(i+1)*cw,12+(j+1)*ch);g.addColorStop(0,'#26386a');g.addColorStop(1,'#10193a');x.fillStyle=g;x.fillRect(14+i*cw,14+j*ch,cw-4,ch-4)}x.strokeStyle='#9aa0a8';x.lineWidth=5;x.strokeRect(3,3,w-6,hh-6);dust(x,w,hh,2500,.5)}),
+antT=mk(256,160,function(x,w,hh){x.fillStyle='#9a9da1';x.fillRect(0,0,w,hh);x.fillStyle='#2a2b2e';for(var i=0;i<10;i++)for(var j=0;j<6;j++)x.fillRect(12+i*24,10+j*24,16,5);dust(x,w,hh,500,.4)});
+var alM=M(0xbfc3c7,.95,.3,null,1.3,1),dkM=M(0x1d1d20,.7,.5,null,.8,1),fpM=M(0x9ea1a4,.8,.45,null,1,1),cpM=M(0xffffff,.6,.35,cpT,1,1),pnM=M(0xffffff,.3,.45,panT,.8,1),anM=M(0xffffff,.6,.4,antT,.9,1),mrM=M(0xe6e9ed,1,.04,null,1.8,0),nzM=M(0x2c2a28,.7,.45,null,.8,1),gdM=M(0xc9a03e,.9,.35,null,1,1);
+var AN=[90,210,330].map(function(d){return d*Math.PI/180}),NODE=AN.map(function(a){return[Math.cos(a)*.8,1.25,Math.sin(a)*.8]}),PAD=AN.map(function(a){return[Math.cos(a)*2.1,.05,Math.sin(a)*2.1]});
+cyl(.5,.05,alM,0,.95,0);
+for(var k2=0;k2<3;k2++){var nd=NODE[k2],pd=PAD[k2],md=[lp(nd[0],pd[0],.55),lp(nd[1],pd[1],.55),lp(nd[2],pd[2],.55)];
+ tube(nd,NODE[(k2+1)%3],.03,alM);tube(nd,[0,.95,0],.025,alM);tube(nd,pd,.032,alM);tube(md,[0,.62,0],.02,alM);tube(nd,[0,1.9,0],.02,alM);
+ cyl(.24,.05,fpM,pd[0],.03,pd[2]);cyl(.08,.14,gdM,pd[0],.12,pd[2]);
+ tube([nd[0],1.1,nd[2]],[nd[0]*1.08,.98,nd[2]*1.08],.02,alM);var nz=new THREE.Mesh(new THREE.CylinderGeometry(.03,.1,.32,18),nzM);nz.position.set(nd[0]*1.08,.9,nd[2]*1.08);nz.castShadow=true;TG.add(nz)}
+[150,270].forEach(function(dg){var a=dg*Math.PI/180,bb=bxm(.62,.5,.42,cpM,Math.cos(a)*.62,1.0,Math.sin(a)*.62);bb.rotation.y=-(a+Math.PI/2);var gb=bxm(.64,.05,.44,gdM,Math.cos(a)*.62,1.27,Math.sin(a)*.62);gb.rotation.y=bb.rotation.y;var gc=bxm(.62,.04,.4,gdM,Math.cos(a)*.62,.74,Math.sin(a)*.62);gc.rotation.y=bb.rotation.y});
+tube([0,.95,0],[0,2.4,0],.045,alM);bxm(.3,.08,.3,dkM,0,.55,0);cyl(.2,.03,dkM,0,.5,0);
+var ai=bxm(.75,.04,.45,[alM,alM,anM,alM,alM,alM],-.35,2.38,.2);ai.rotation.z=.3;tube([0,2.3,0],[-.3,2.36,.15],.015,alM);
+var sp0=bxm(1.0,.03,.8,[alM,alM,pnM,alM,alM,alM],.1,2.68,0);sp0.rotation.z=-.3;tube([0,2.4,0],[0,2.65,0],.02,alM);
+tube(NODE[1],[-1.25,2.0,-.9],.012,alM);ball(.02,alM,-1.25,2.0,-.9);tube(NODE[2],[1.25,2.1,-.9],.012,alM);ball(.02,alM,1.25,2.1,-.9);
+// TV camera and mirror
+var tvg=new THREE.Group();rover.add(tvg);TG=tvg;
+cyl(.08,.3,dkM,0,2.0,0);cyl(.03,.09,dkM,.1,1.99,.04,'x');cyl(.022,.13,dkM,.11,2.04,-.04,'x');cyl(.012,.01,mrM,.16,1.99,.04,'x');
+var mr=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,.012,36),mrM);mr.position.set(0,2.24,0);mr.rotation.z=.8;mr.castShadow=true;tvg.add(mr);tube([0,2.15,0],[0,2.22,0],.02,alM);
+// surface sampler
+var smp=new THREE.Group();smp.position.set(.48,1.05,.28);smp.rotation.y=-.5236;rover.add(smp);TG=smp;
+var armG=new THREE.Group();smp.add(armG);bxm(.16,.16,.16,dkM,0,0,0);
+function bar(r){var g=new THREE.CylinderGeometry(r,r,1,10);g.rotateZ(-Math.PI/2);g.translate(.5,0,0);return g}
+var b1=new THREE.Mesh(bar(.018),alM),b2=new THREE.Mesh(bar(.018),alM);b1.position.y=.04;b2.position.y=-.04;b1.castShadow=b2.castShadow=true;armG.add(b1,b2);
+var scp=new THREE.Group();armG.add(scp);var sb1=new THREE.Mesh(new THREE.BoxGeometry(.2,.06,.12),dkM);sb1.castShadow=true;scp.add(sb1);var sb2=new THREE.Mesh(new THREE.BoxGeometry(.05,.1,.12),alM);sb2.position.x=.1;sb2.castShadow=true;scp.add(sb2);
+TG=rover;
+var flM=new THREE.MeshBasicMaterial({color:0xffa850,transparent:true,opacity:.7,blending:THREE.AdditiveBlending,depthWrite:false}),fcM=new THREE.MeshBasicMaterial({color:0xfff0cc,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false}),fls=[];
+NODE.forEach(function(n0){var g=new THREE.Group(),a1=new THREE.Mesh(new THREE.CylinderGeometry(.1,.02,1.2,14,1,true),flM),a2=new THREE.Mesh(new THREE.CylinderGeometry(.05,.01,.7,10,1,true),fcM);a1.position.y=-.6;a2.position.y=-.35;g.add(a1,a2);g.position.set(n0[0]*1.08,.74,n0[2]*1.08);g.visible=false;rover.add(g);fls.push(g)});
+for(var q4=0;q4<3;q4++){var pd2=PAD[q4],nd2=NODE[q4];tube([lp(nd2[0],pd2[0],.28),lp(nd2[1],pd2[1],.28),lp(nd2[2],pd2[2],.28)],[lp(nd2[0],pd2[0],.62),lp(nd2[1],pd2[1],.62),lp(nd2[2],pd2[2],.62)],.055,dkM);
+ var rg2=new THREE.Mesh(new THREE.TorusGeometry(.24,.016,8,32),alM);rg2.rotation.x=Math.PI/2;rg2.position.set(pd2[0],.065,pd2[2]);rg2.castShadow=true;rover.add(rg2);
+ var ca=Math.cos(AN[q4]+1.0472)*.46,sa=Math.sin(AN[q4]+1.0472)*.46;ball(.17,gdM,ca,.6,sa);tube([ca,.74,sa],[ca,.95,sa],.03,alM);tube([ca,.6,sa],[0,.6,0],.028,alM);var tb=new THREE.Mesh(new THREE.TorusGeometry(.172,.012,6,20),dkM);tb.rotation.x=Math.PI/2;tb.position.set(ca,.6,sa);rover.add(tb)}
+tube([-.12,2.5,.1],[.04,2.74,.16],.03,dkM);ball(.034,mrM,.04,2.74,.16);
+for(var q5=0;q5<6;q5++){var rb=new THREE.Mesh(new THREE.BoxGeometry(.012,.03,.78),alM);rb.position.set(-.45+q5*.18,.02,0);sp0.add(rb)}
+for(var q6=0;q6<4;q6++){var ab=new THREE.Mesh(new THREE.BoxGeometry(.012,.03,.43),alM);ab.position.set(-.3+q6*.2,.02,0);ai.add(ab)}
+rover.scale.setScalar(SC);S.add(rover);
+// ---------- Apollo 12 lunar module and astronauts ----------
+var lm=new THREE.Group();TG=lm;
+var lmG=M(0xc9a03e,.85,.4,null,1,0),lmW=M(0xd8d8d4,.5,.5,null,1,0),lmD=M(0x2a2a2c,.6,.5,null,.8,0);
+var ds=new THREE.Mesh(new THREE.CylinderGeometry(1.95,1.95,1.5,8),lmG);ds.position.y=1.9;ds.castShadow=true;lm.add(ds);
+for(var k3=0;k3<4;k3++){var a3=k3*1.5708+.785,c3=Math.cos(a3),s3=Math.sin(a3);tube([c3*1.9,1.8,s3*1.9],[c3*4.6,.1,s3*4.6],.1,lmW);tube([c3*1.9,1.2,s3*1.9],[c3*3.6,.9,s3*3.6],.06,lmW);cyl(.5,.1,lmW,c3*4.6,.06,s3*4.6)}
+bxm(3.0,2.2,2.6,lmW,0,3.9,0);bxm(.06,.6,.5,lmD,1.5,4.2,.55);bxm(.06,.6,.5,lmD,1.5,4.2,-.55);
+tube([0,5.0,0],[0,5.7,0],.04,lmW);var ld=new THREE.Mesh(new THREE.SphereGeometry(.5,20,10,0,6.2832,0,1.0),lmW);ld.position.y=5.85;ld.rotation.x=Math.PI;lm.add(ld);
+lm.scale.setScalar(SC);lm.position.set(-58,H(-58,-14),-14);lm.visible=false;S.add(lm);
+function astro(){var g=new THREE.Group(),w=M(0xe8e8e6,.1,.8,null,.6,0),vz=M(0x7a5c18,1,.1,null,1.6,0);TG=g;g.L=[];
+ bxm(.5,.65,.32,w,0,1.15,0);bxm(.22,.6,.4,w,-.3,1.2,0);
+ var hd=new THREE.Mesh(new THREE.SphereGeometry(.22,20,14),w);hd.position.set(0,1.65,0);hd.castShadow=true;g.add(hd);var v=new THREE.Mesh(new THREE.SphereGeometry(.17,16,12),vz);v.position.set(.12,1.66,0);v.scale.set(.7,.9,1);g.add(v);
+ [-1,1].forEach(function(s){var lg=new THREE.Group();lg.position.set(0,.85,s*.13);var m1=new THREE.Mesh(new THREE.CylinderGeometry(.1,.09,.8,12),w);m1.position.y=-.4;m1.castShadow=true;lg.add(m1);g.add(lg);g.L.push(lg);
+  var ar=new THREE.Group();ar.position.set(0,1.4,s*.3);var m2=new THREE.Mesh(new THREE.CylinderGeometry(.07,.06,.6,10),w);m2.position.y=-.3;m2.castShadow=true;ar.add(m2);g.add(ar);g.L.push(ar)});
+ g.scale.setScalar(SC);g.visible=false;S.add(g);return g}
+function astroN(ci){var g=new THREE.Group();TG=g;g.L=[];
+function A(geo,m,x,y,z,sc,par){var o=new THREE.Mesh(geo,m);o.position.set(x,y,z);if(sc)o.scale.set(sc[0],sc[1],sc[2]);o.castShadow=true;(par||g).add(o);return o}
+var sT=mk(256,256,function(x,w,hh){var gr=x.createLinearGradient(0,0,0,hh);gr.addColorStop(0,'#f2f1ec');gr.addColorStop(1,'#cfcbc2');x.fillStyle=gr;x.fillRect(0,0,w,hh);x.strokeStyle='rgba(120,115,105,.12)';x.lineWidth=1;for(var i=0;i<w;i+=3){x.beginPath();x.moveTo(i,0);x.lineTo(i,hh);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(w,i);x.stroke()}x.strokeStyle='rgba(90,85,78,.35)';x.lineWidth=2;for(var s=1;s<4;s++){x.beginPath();x.moveTo(s*64,0);x.lineTo(s*64,hh);x.stroke()}for(var k=0;k<40;k++){x.strokeStyle='rgba(80,75,68,.22)';x.beginPath();var wx=Math.random()*w,wy=Math.random()*hh;x.moveTo(wx,wy);x.quadraticCurveTo(wx+14,wy+6,wx+30,wy+Math.random()*8-4);x.stroke()}dust(x,w,hh,500,.35);var dg=x.createLinearGradient(0,hh*.55,0,hh);dg.addColorStop(0,'rgba(120,110,95,0)');dg.addColorStop(1,'rgba(120,110,95,.6)');x.fillStyle=dg;x.fillRect(0,0,w,hh)}),
+cT=mk(128,128,function(x,w,hh){x.fillStyle='#dcdbd5';x.fillRect(0,0,w,hh);x.fillStyle='#4c4e52';x.fillRect(8,8,112,70);for(var i=0;i<12;i++){x.fillStyle=i%3?'#c9c9c9':'#d8b030';x.fillRect(16+(i%6)*17,16+Math.floor(i/6)*16,10,8)}[[36,'#2a60c8'],[88,'#c83a2a']].forEach(function(o){x.fillStyle=o[1];x.beginPath();x.arc(o[0],102,13,0,6.283);x.fill();x.strokeStyle='#888';x.lineWidth=4;x.stroke()})}),
+pT=mk(128,64,function(x,w,hh){x.fillStyle='#fff';x.fillRect(0,0,w,hh);for(var i=0;i<7;i++){x.fillStyle=i%2?'#fff':'#b22234';x.fillRect(0,i*9.2,w,9.2)}x.fillStyle='#3c3b6e';x.fillRect(0,0,56,35)}),
+nT=mk(128,128,function(x,w,hh){x.fillStyle='#fff';x.fillRect(0,0,w,hh);x.fillStyle='#0b3d91';x.beginPath();x.arc(64,64,58,0,6.283);x.fill();x.strokeStyle='#fc3d21';x.lineWidth=7;x.beginPath();x.moveTo(8,86);x.quadraticCurveTo(64,20,122,90);x.stroke();x.fillStyle='#fff';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText('NASA',64,70)}),
+tagT=mk(128,32,function(x,w,hh){x.fillStyle='#f3f1ea';x.fillRect(0,0,w,hh);x.fillStyle='#111';x.font='bold 22px sans-serif';x.textAlign='center';x.fillText(ci?'BEAN':'CONRAD',64,24)});
+var w=M(0xffffff,.1,.85,sT,.6,0),gry=M(0x77746f,.5,.6,null,.7,0),drk=M(0x4a4743,.2,.9,null,.5,0),vz=M(0x9a7a20,1,.08,null,1.8,0),red=M(0xb8302a,.1,.7,null,.6,0),cM=M(0xffffff,.1,.7,cT,.6,0),pM=M(0xffffff,0,.8,pT,.6,0),nM=M(0xffffff,0,.8,nT,.6,0),tM=M(0xffffff,0,.8,tagT,.6,0),
+cy=function(a,b,l,s){return new THREE.CylinderGeometry(a,b,l,s||16)},sph=function(r){return new THREE.SphereGeometry(r,18,12)};
+A(cy(.22,.19,.62,22),w,0,1.15,0,[.8,1,1.3]);A(sph(.21),w,0,.84,0,[.85,.7,1.25]);A(cy(.12,.12,.06,16),gry,0,1.5,0);A(new THREE.TorusGeometry(.215,.03,8,24),gry,0,1.5,0).rotation.x=Math.PI/2;
+A(sph(.25),w,0,1.68,0);A(new THREE.SphereGeometry(.262,24,16,Math.PI-1.1,2.2,.55,1.5),vz,0,1.68,0);
+A(new THREE.BoxGeometry(.28,.6,.5),w,-.27,1.2,0);A(new THREE.BoxGeometry(.22,.14,.4),gry,-.27,1.58,0);A(new THREE.BoxGeometry(.3,.05,.52),gry,-.27,.9,0);A(cy(.006,.006,.5,6),gry,-.3,1.85,.15);
+A(new THREE.BoxGeometry(.06,.24,.3),cM,.2,1.18,0);A(new THREE.PlaneGeometry(.13,.13),nM,.183,1.4,.1).rotation.y=Math.PI/2;A(new THREE.PlaneGeometry(.15,.04),tM,.183,1.4,-.1).rotation.y=Math.PI/2;
+[-1,1].forEach(function(s){tube([.22,1.08,s*.1],[.06,.92,s*.27],.02,gry);tube([.06,.92,s*.27],[-.12,1.0,s*.22],.02,gry);
+ var lg=new THREE.Group();lg.position.set(0,.86,s*.13);g.add(lg);g.L.push(lg);
+ A(cy(.115,.095,.42,14),w,0,-.21,0,0,lg);A(sph(.1),w,0,-.42,0,0,lg);A(cy(.09,.08,.4,14),w,.02,-.62,0,0,lg);A(new THREE.BoxGeometry(.3,.13,.16),drk,.07,-.79,0,0,lg);
+ if(!ci)A(new THREE.TorusGeometry(.1,.014,6,16),red,0,-.14,0,0,lg).rotation.x=Math.PI/2;
+ var ar=new THREE.Group();ar.position.set(0,1.42,s*.31);g.add(ar);g.L.push(ar);
+ A(sph(.1),w,0,0,0,0,ar);A(cy(.075,.065,.34,12),w,0,-.17,0,0,ar);A(sph(.065),w,0,-.34,0,0,ar);A(cy(.062,.055,.3,12),w,.044,-.484,0,0,ar).rotation.z=.3;A(cy(.072,.072,.045,12),gry,.095,-.646,0,0,ar).rotation.z=.3;A(sph(.075),gry,.11,-.694,0,[.9,1.2,.85],ar);A(sph(.028),gry,.145,-.675,-s*.05,0,ar);
+ if(!ci)A(new THREE.TorusGeometry(.07,.012,6,14),red,0,-.1,0,0,ar).rotation.x=Math.PI/2;
+ if(s>0)A(new THREE.PlaneGeometry(.1,.05),pM,0,-.14,.076,0,ar)});
+g.scale.setScalar(SC);g.visible=false;S.add(g);return g}
+var as1=astroN(0),as2=astroN(1);TG=rover;
+// ---------- parts for inspection ----------
+var P=[
+{g:'Structure',n:'Aluminium frame',f:[-.35,1.25,.2],d:6,s:'Launch mass 997.9 kg (2,200 lb)',a:'A triangular frame of thin aluminium tubes that holds everything together.',b:'Legs, engines, electronics, mast and sampler all attach to it. A light frame meant more instruments for each kilogram launched.',t:'Surveyor was built as a scout: strong but light.'},
+{g:'Structure',n:'Mast',f:[0,1.5,0],d:5.5,s:'About 3 m tall overall',a:'A tower rising from the centre of the frame.',b:'It holds the camera, mirror, antennas and solar panel high above the surface for a better view and a clear line to the Sun and Earth.',t:'Everything important sits on top of it.'},
+{g:'Structure',n:'Landing legs',f:[1.25,.65,-.72],d:5,a:'Three legs with shock absorbers at the feet.',b:'At touchdown the legs absorbed the impact. Surveyor 3 bounced twice and still landed safely.',t:'The legs spread out into a wide tripod for stability.'},
+{g:'Structure',n:'Footpads',f:[1.82,.08,-1.05],d:3,a:'Broad pads with crushable blocks above them.',b:'They spread the lander’s weight and crush on impact to soak up energy.',t:'They sank only a little, a clue that the ground was firm.'},
+{g:'Landing',n:'Vernier engines',f:[0,.9,.86],d:3.4,a:'Small engines on the frame used to steer and slow the lander’s final descent.',b:'During Surveyor 3’s landing the engine failed to cut off about 4.3 m up, which caused two bounces.',t:'Even after being pushed up twice, it settled safely.'},
+{g:'Landing',n:'Landing radar',f:[0,.5,0],d:3.2,p:.05,a:'Radar antennas under the frame that measure height and speed on the way down.',b:'Highly reflective rocks confused the radar during Surveyor 3’s descent.',t:'A small sensor error had large consequences.'},
+{g:'Power and radio',n:'Solar panel',f:[.1,2.68,0],d:4,p:.6,a:'A flat panel on top of the mast that turns sunlight into electricity.',b:'It powered the lander and charged its battery through the lunar day.',t:'The lunar night lasts about two Earth weeks, and the lander fell silent soon after it began.'},
+{g:'Power and radio',n:'Planar antenna',f:[-.35,2.4,.2],d:3.2,p:.5,a:'A flat, directional antenna aimed at Earth.',b:'It carried the TV pictures and data back to Earth.',t:'Every one of the thousands of pictures went home through the radio system.'},
+{g:'Power and radio',n:'Omni antennas',f:[-1.2,1.95,-.85],d:4,a:'Two thin antennas that send and receive in every direction.',b:'They do not need to be aimed, which makes them a reliable way to hear Earth.',t:'The simplest antennas are the hardest to lose.'},
+{g:'Power and radio',n:'Electronics compartments',f:[-.54,1.0,.31],d:3.2,a:'Insulated boxes holding the electronics and battery.',b:'Their stripes and surfaces help control how much heat they absorb and give off.',t:'The hot day and freezing night were the biggest challenge for the electronics.'},
+{g:'Science',n:'TV camera',f:[.09,2.0,.04],d:2.4,s:'25 mm and 100 mm lenses',a:'The lander’s eye: two lenses under a mirror.',b:'One 200-line picture took about 20 seconds to send. It could also take sharper 600-line images sent digitally.',t:'It sent back 6,326 pictures. Apollo astronauts later brought the camera system home.'},
+{g:'Science',n:'Steerable mirror',f:[0,2.27,0],d:2.2,p:.5,a:'A mirror above the camera that can turn horizontally and vertically.',b:'It let the camera look around the landing site without moving itself.',t:'The camera stayed still while the mirror did the looking.'},
+{g:'Science',n:'Sampler arm',f:[1.1,.66,.64],d:4.4,s:'Reach up to 1.5 m; dig up to 18 cm deep',a:'A folding arm with a scoop at the end, extended by commands from Earth.',b:'It dug four trenches, made four bearing tests and thirteen impact tests, and moved lunar material in view of the camera.',t:'It was the first Surveyor with a surface-sampling instrument.'},
+{g:'Science',n:'Scoop',f:[1.74,.3,1.0],d:2.4,p:.45,a:'A small metal scoop at the end of the arm.',b:'Its trenches and pushes showed scientists that lunar soil acts like wet sand, strong enough to support an Apollo Lunar Module.',t:'The Apollo 12 astronauts removed it and brought it back to Earth.'}];
+P.forEach(function(o){o.w=[o.f[0]*SC,o.f[1]*SC,o.f[2]*SC];if(o.y===undefined)o.y=(Math.abs(o.f[0])+Math.abs(o.f[2])>.3)?Math.atan2(o.f[0],o.f[2]):.6;if(o.p===undefined)o.p=.3});
+var OV={n:'Surveyor 3 at a glance',a:'A three-legged robotic lander built by NASA and JPL, with a TV camera and a surface sampler.',b:'Launched April 17, 1967 and landed April 20, 1967 in Oceanus Procellarum.',t:'It showed the Moon’s surface could hold an Apollo lander.'};
+// ---------- story keyframes ----------
+var K=[
+{o:[-10,2.8,15],t:[0,2.4,0],sun:3.2,sy:[-34,13,22],ext:.3,ap:.05,dust:0,hide:0},
+{o:[11,2.2,16],t:[0,2.4,0],sun:3.2,sy:[-30,17,24],ext:.3,ap:.05,dust:0,hide:0},
+{o:[-7,1.6,17],t:[0,3,0],sun:3.2,sy:[-34,14,20],ext:.3,ap:.05,dust:0,hide:0},
+{o:[-11,3,16],t:[0,2.4,0],sun:3.2,sy:[-34,14,20],ext:.3,ap:.05,dust:0,hide:0},
+{o:[3,2.5,5.8],t:[0,2.3,0],sun:3.2,sy:[-26,19,26],ext:.3,ap:.05,dust:0,hide:0},
+{o:[6.5,1.7,6.8],t:[1.4,.9,.9],sun:3.2,sy:[-24,22,26],ext:1,ap:.49,dust:0,hide:0},
+{o:[4.3,2.3,3.8],t:[2.3,.15,1.35],sun:3.2,sy:[-24,24,26],ext:1,ap:.49,dust:0,hide:0},
+{o:[-12,3,14],t:[0,2.4,0],sun:.03,sy:[-28,10,22],ext:1,ap:.49,dust:0,hide:0},
+{o:[13,3.8,13],t:[-26,3,-6],sun:3.2,sy:[-26,26,24],ext:1,ap:.49,dust:.7,hide:0},
+{o:[-22,4.5,19],t:[-26,1.6,-1],sun:3.2,sy:[-26,24,24],ext:1,ap:.49,dust:.7,hide:0},
+{o:[-9,3,11],t:[-2,2.2,0],sun:3.2,sy:[-28,16,22],ext:1,ap:.49,dust:.7,hide:1},
+{o:[-13,3.4,10],t:[-3,2.2,0],sun:3.2,sy:[-30,15,22],ext:1,ap:.49,dust:.7,hide:1}];
+function bnc(f){if(f<.2){var q=f/.2;return 14*(1-q*q)}if(f<.5){var a=(f-.2)/.3;return 40*a*(1-a)}if(f<.75){var b=(f-.5)/.25;return 12*b*(1-b)}return 0}
+// ---------- inspect mode ----------
+var INS=true,sel=-1,yaw=.6,yT=.6,cp=.28,pitT=.28,dist=12,dT=12,drag=false,lx=0,ly0=0,tg=new THREE.Vector3(0,2.2,0),tv=new THREE.Vector3(),lk=new THREE.Vector3(),first=true;
+var pl=$('#plist'),hots=[],occ=[],hc=0,rc=new THREE.Raycaster(),hv=new THREE.Vector3();
+function show(o){$('#pg').textContent=o.g||'';$('#pn').textContent=o.n;$('#pa').textContent=o.a;$('#pb').textContent=o.b;$('#pt').textContent=o.t;$('#ps').textContent=o.s||''}
+function pick(i){sel=i;if(i>=0){yT=P[i].y;dT=P[i].d;pitT=P[i].p}else{dT=12;pitT=.28}
+ pl.querySelectorAll('button').forEach(function(b,k){b.className=k-1===i?'on':''});hots.forEach(function(h2,k){h2.className=k===i?'hot on':'hot'});show(i<0?OV:P[i])}
+[{n:'Whole lander'}].concat(P).forEach(function(o,k){if(o.g&&(k<2||P[k-2].g!==o.g)){var gh=document.createElement('div');gh.className='gh';gh.textContent=o.g;pl.appendChild(gh)}var b=document.createElement('button');b.textContent=o.n;b.onclick=function(){pick(k-1)};pl.appendChild(b)});
+P.forEach(function(o,k){var b=document.createElement('button');b.className='hot';b.innerHTML=(k+1)+'<span>'+o.n+'</span>';b.setAttribute('aria-label',o.n);b.onclick=function(){pick(k)};$('#insp').appendChild(b);hots.push(b);occ.push(false)});
+pick(-1);
+function ang(a){while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a}
+var cvs=$('#c');
+cvs.addEventListener('pointerdown',function(e){if(INS){drag=true;lx=e.clientX;ly0=e.clientY;cvs.setPointerCapture(e.pointerId)}});
+cvs.addEventListener('pointermove',function(e){if(drag){yT-=(e.clientX-lx)*.006;yaw=yT;cp=Math.min(1.3,Math.max(.02,cp+(e.clientY-ly0)*.005));pitT=cp;lx=e.clientX;ly0=e.clientY}});
+cvs.addEventListener('pointerup',function(){drag=false});
+cvs.addEventListener('wheel',function(e){if(INS){e.preventDefault();dT=Math.min(18,Math.max(1.5,dT+e.deltaY*.006))}},{passive:false});
+$('#go').onclick=function(){INS=false;document.body.className='story';scrollTo(0,0);sp=0;tp=0};
+$('#back').onclick=function(){INS=true;document.body.className='insp';pick(-1)};
+// ---------- loop ----------
+var sp=0,tp=0,mx=0,my=0;
+function resize(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+addEventListener('mousemove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+function prog(){var m=document.documentElement.scrollHeight-innerHeight;tp=m>0?scrollY/m:0}
+addEventListener('scroll',prog);prog();
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');e.target.querySelectorAll('.num').forEach(count)}})},{threshold:.35});
+document.querySelectorAll('.card').forEach(function(c){io.observe(c)});
+function count(el){if(el.dataset.done)return;el.dataset.done=1;var to=+el.dataset.to,t0=performance.now();(function f(t){var k=Math.min(1,(t-t0)/1800);el.textContent=Math.round(to*(1-Math.pow(1-k,3))).toLocaleString('en');if(k<1)requestAnimationFrame(f)})(t0)}
+var dots=nav.children;
+function frame(t){requestAnimationFrame(frame);
+ sp+=(tp-sp)*.05;var c=INS?1:sp*(N-1),i=Math.min(N-2,Math.floor(c)),f=c-i,e=f*f*(3-2*f),a=K[i],b=K[i+1];
+ for(var d=0;d<N;d++)dots[d].className=d===Math.round(c)?'on':'';
+ var ly=0;if(!INS){if(c>=1.15&&c<2){var q1=sm(1.15,1.85,c);ly=90*q1*q1}else if(c>=2&&c<3){var q2=sm(2,3,c);ly=lp(90,14,1-Math.pow(1-q2,2.2))}else if(c>=3&&c<4)ly=bnc(c-3)}
+ rover.visible=true;rover.position.set(0,ly*SC,0);var fa=!INS&&c>=2.1&&c<3.18;fls.forEach(function(g,q){g.visible=fa;if(fa)g.scale.set(1+.15*Math.sin(t*.04+q),.7+.5*Math.random(),1+.15*Math.cos(t*.05+q))});
+ var ext=INS?1:lp(a.ext,b.ext,e),ap=INS?.49:lp(a.ap,b.ap,e);b1.scale.x=b2.scale.x=1.65*ext;scp.position.x=1.65*ext;armG.rotation.z=-ap;
+ var hid=!INS&&lp(a.hide,b.hide,e)>.6;smp.visible=!hid;tvg.visible=!hid;
+ var dk=INS?0:lp(a.dust,b.dust,e);LMT.forEach(function(p){p[0].color.copy(p[1]).lerp(tan,dk*.75)});
+ var tq=INS?1:sm(5.3,5.9,c);trG.visible=tq>.01;trG.scale.set(.3+.7*tq,tq,.3+.7*tq);
+ lm.visible=!INS&&c>7.5;var ax=c<9?-52:(c>=10?-4.8:lp(-52,-4.8,e)),mv=c>9&&c<10;as1.visible=as2.visible=!INS&&c>=8.9;
+ as1.position.set(ax,H(ax,-1.8),-1.8);as2.position.set(ax-1.6,H(ax-1.6,1.2),1.2);[as1,as2].forEach(function(g,q){g.L.forEach(function(p,r2){p.rotation.z=mv?Math.sin(t*.007+(r2+q)%2*3.14)*.5*((r2%2)?-1:1):0})});
+ var tpos=new THREE.Vector3(),tlook=new THREE.Vector3();
+ if(INS){var fo=sel<0?[0,2.2,0]:P[sel].w;tv.set(fo[0],rover.position.y+fo[1],fo[2]);tg.lerp(tv,.08);dist+=(dT-dist)*.08;cp+=(pitT-cp)*.06;
+  if(!drag){if(sel<0)yT+=.0018;yaw+=ang(yT-yaw)*.06}
+  tpos.set(tg.x+dist*Math.cos(cp)*Math.sin(yaw),Math.max(.4,tg.y+dist*Math.sin(cp)),tg.z+dist*Math.cos(cp)*Math.cos(yaw));tlook.copy(tg)}
+ else{var cx=lp(a.o[0],b.o[0],e)+mx*1.6,cy=lp(a.o[1],b.o[1],e)-my*.8,cz=lp(a.o[2],b.o[2],e);tpos.set(cx,Math.max(H(cx,cz)+.7,cy),cz);tlook.set(lp(a.t[0],b.t[0],e),lp(a.t[1],b.t[1],e)+(c>=2&&c<4?Math.min(ly,26)*SC*.8*sm(2,2.4,c):0),lp(a.t[2],b.t[2],e))}
+ if(first){cam.position.copy(tpos);lk.copy(tlook);first=false}else{var kk=INS?.1:.12;cam.position.lerp(tpos,kk);lk.lerp(tlook,kk)}
+ cam.lookAt(lk);
+ if(INS){hc++;for(var hi=0;hi<P.length;hi++){hv.set(rover.position.x+P[hi].w[0],rover.position.y+P[hi].w[1],P[hi].w[2]);var pv2=hv.clone().project(cam),el=hots[hi];
+  if(pv2.z>1||Math.abs(pv2.x)>1.05||Math.abs(pv2.y)>1.05){el.style.display='none';continue}
+  el.style.display='block';el.style.left=((pv2.x*.5+.5)*innerWidth)+'px';el.style.top=((-pv2.y*.5+.5)*innerHeight)+'px';
+  if(hc%8===hi%8){var dv=hv.clone().sub(cam.position),dl=dv.length();rc.set(cam.position,dv.normalize());rc.far=dl-.14;occ[hi]=rc.intersectObject(rover,true).length>0}
+  el.style.opacity=occ[hi]?.22:1}}
+ var si=lp(a.sun,b.sun,e),sy0=[lp(a.sy[0],b.sy[0],e),lp(a.sy[1],b.sy[1],e),lp(a.sy[2],b.sy[2],e)];
+ sun.intensity=si;sun.position.set(lk.x+sy0[0],sy0[1],lk.z+sy0[2]);sun.target.position.set(lk.x,0,lk.z);hemi.intensity=.04+.1*sm(.05,1.5,si);
+ var ei=Math.min(1,Math.max(.04,si/3.2));EM.forEach(function(p){p[0].envMapIntensity=p[1]*ei});
+ R.render(S,cam)}
+requestAnimationFrame(frame);
+})();
+</script>
+
+
+<script src="story-extras.js"></script>
+<script>
+StoryExtras.init({
+  "craftName": "Surveyor 3",
+  "craftType": "lander",
+  "nssdcaId": "1967-035A",
+  "archiveName": "Surveyor 3 Archive, NASA/JPL",
+  "distanceAU": 0.00257,
+  "juniorSteps": [
+    "I am Surveyor 3. I landed on the Moon in 1967, two years before Apollo. My mission was to prove that the lunar dust was strong enough to support human boots and heavy spacecraft.",
+    "Before my flight, some scientists feared that the Moon was covered in deep dust quicksand that would swallow any landing probe. NASA built me to find out the truth firsthand.",
+    "I launched on April 17, 1967, atop an Atlas-Centaur rocket from Cape Canaveral. Three days later, I was descending directly toward the lunar Ocean of Storms.",
+    "During final descent, bright shiny rocks confused my radar altimeter, and my engines didn't shut down in time. I hit the surface, bounced 10 metres high, touched down again, bounced 3 metres, and finally came to rest. I landed three times in one mission!",
+    "Within an hour of settling into my crater, I activated my television camera and transmitted the first clear, crisp panoramas of Oceanus Procellarum back to Earth.",
+    "My most famous tool was an electric soil-mechanics scoop on an extendable pantograph arm. I reached out 1.5 metres, dug four deep trenches, and pushed down on the lunar soil.",
+    "My telemetry proved the lunar soil had bearing strength comparable to wet coastal sand\u2014about 10 psi. I gave NASA flight directors the green light for Apollo astronauts to land safely.",
+    "On May 4, 1967, the long two-week lunar night fell over Oceanus Procellarum. Temperatures plummeted to -150\u00b0C, draining my batteries. I went quietly to sleep after completing my primary mission.",
+    "More than two years later, on November 19, 1969, Apollo 12 astronauts Pete Conrad and Alan Bean executed a precision pinpoint landing just 180 metres away from me.",
+    "Conrad and Bean walked over to my crater rim, examined my weathered frame, and clipped off my television camera, scoop, and tubing to take back to laboratories on Earth.",
+    "I became the only robotic spacecraft ever visited by astronauts on another world. The parts brought home revealed how years of cosmic rays, solar radiation, and micrometeorites affect space hardware.",
+    "My descent frame remains resting on the Moon forever, standing as an enduring testament to the robots that paved the path for human footsteps on another celestial body."
+  ],
+  "specialistSteps": [
+    "NSSDCA ID: 1967-035A. I am Surveyor 3, third in NASA's unmanned lunar soft-landing series. Mass: 997.9 kg at launch; 294.3 kg dry touchdown mass. Prime contractor: Hughes Aircraft Company under JPL direction.",
+    "Mission Objective: Determine mechanical bearing capacity, thermal characteristics, and radar reflectivity of lunar regolith in Oceanus Procellarum prior to Apollo lunar module descent.",
+    "Trajectory & Propulsion: Launched 07:05:01 UT via Atlas-Centaur (AC-12) from LC-36B. Powered descent employed a 38-45 kN solid propellant retrorocket and three variable-thrust monopropellant hydrazine vernier engines.",
+    "Dynamic Touchdown Anomaly: Lunar surface reflectivity fooled the Doppler radar altimeter beam. Verniers failed to cut off at 4.3 m radar gate, resulting in two rebound bounces (10 m and 3 m) before terminal touchdown at 00:04:17 UT.",
+    "Optical Subsystem: Single vidicon TV camera equipped with 25-100 mm focal length zoom lens, variable focal aperture (f/4 to f/22), and color filter wheel. Transmitted 6,326 frame images over S-band link.",
+    "Surface Sampler Mechanics: Pantograph arm articulated in azimuth (112\u00b0) and elevation (+32\u00b0 to -42\u00b0). Scoop exerted 180 N bearing force and dug four trenches up to 17.5 cm deep into the regolith.",
+    "Geotechnical Telemetry: Bearing capacity evaluated at ~0.55 N/cm\u00b2 (~55 kPa) under static footpad loading, increasing to ~98 kPa at 5 cm depth. Cohesive shear strength confirmed adequate for LM-5 footpad landing gear.",
+    "Terminal Cryogenic Quench: Survived 336 hours of continuous daylight surface operations. S-band telemetry cut off 00:04 UT on May 4, 1967, due to battery voltage drop below 16V during lunar night entry.",
+    "Pinpoint Apollo 12 Rendezvous: On 19 November 1969, Apollo 12 LM-6 Intrepid touched down at 3.01\u00b0 S, 23.42\u00b0 W, exactly 183 m from my position, demonstrating targeted landing guidance.",
+    "In-Situ Retrieval Operations: Conrad and Bean excised 10 kg of components, including the vidicon camera and scoop assembly, using specialized hand tools during EVA-2 (3.8-hour duration).",
+    "Terrestrial Metallurgical Analysis: Returned components exhibited micrometeoroid pitting densities of ~10\u00b3 pits/m\u00b2, optical solar reflector browning from UV radiation, and Streptococcus mitis bacterial spore survival controversy.",
+    "Permanent Lunar Heritage Site: Listed under NASA Historic Preservation Guidelines. My frame remains preserved in the vacuum of Oceanus Procellarum as humanity's first robot-to-human extraterrestrial rendezvous site."
+  ],
+  "quiz": [
+    {
+      "q": "Why did Surveyor 3 bounce twice when it landed?",
+      "options": [
+        "It was intentionally designed to bounce",
+        "Radar altimeter was confused by shiny rocks",
+        "Hydrazine tanks exploded",
+        "The Moon's gravity was too weak"
+      ],
+      "answer": 1,
+      "explain": "Highly reflective rocks confused the radar altimeter, preventing timely vernier cutoff."
+    },
+    {
+      "q": "How many TV images did Surveyor 3 transmit to Earth?",
+      "options": [
+        "326",
+        "1,000",
+        "6,326",
+        "63,260"
+      ],
+      "answer": 2,
+      "explain": "Surveyor 3 transmitted 6,326 frame images over its 14-day surface operational lifespan."
+    },
+    {
+      "q": "What Apollo mission visited Surveyor 3 on the Moon?",
+      "options": [
+        "Apollo 11",
+        "Apollo 12",
+        "Apollo 13",
+        "Apollo 14"
+      ],
+      "answer": 1,
+      "explain": "Apollo 12 astronauts Pete Conrad and Alan Bean landed 180 m away in November 1969."
+    },
+    {
+      "q": "What major component did the astronauts retrieve and return to Earth?",
+      "options": [
+        "Solar battery",
+        "Television camera",
+        "Main engine nozzle",
+        "Hydrazine tank"
+      ],
+      "answer": 1,
+      "explain": "Astronauts retrieved the TV camera, sample scoop, and tubing for laboratory analysis on Earth."
+    }
+  ]
+});
+</script>
+
+</body>
+</html>

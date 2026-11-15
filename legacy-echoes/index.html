@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-sector="moon" data-mode="junior">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ECHOES OF SPACE — Abandoned, Not Forgotten · NASA Space Apps 2026</title>
+  <meta name="description" content="Thirteen silent NASA machines tell their own first-person stories. An immersive Ghost Signal mission control for the NASA Space Apps Challenge 2026.">
+  <meta name="theme-color" content="#05070B">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%2305070B' stroke='%2300F0FF' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%2300F0FF' stroke-width='3' opacity='.6'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%2300F0FF'/%3E%3C/svg%3E">
+
+  <!-- Fonts load from Google Fonts when online; the app degrades gracefully to system fonts offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Arabic:wght@400;500;700&family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="nebula" aria-hidden="true"></div>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="topbar glass">
+    <a class="brand" href="#top" aria-label="Echoes of Space">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="brand-text"><b>ECHOES OF SPACE</b><small data-i18n="brand.sub">Abandoned, Not Forgotten</small></span>
+    </a>
+    <div class="controls">
+      <div class="seg" id="modeSeg" role="group" data-i18n-aria="a11y.mode" aria-label="Age mode">
+        <button type="button" data-mode="junior" aria-pressed="true">
+          <span class="emo">🚀</span><span class="lbl"><b data-i18n="mode.junior">Junior Explorer</b><small data-i18n="mode.junior.age">Ages 6–12</small></span>
+        </button>
+        <button type="button" data-mode="specialist" aria-pressed="false">
+          <span class="emo">🛰️</span><span class="lbl"><b data-i18n="mode.specialist">Mission Specialist</b><small data-i18n="mode.specialist.age">Ages 13+</small></span>
+        </button>
+      </div>
+      <div class="seg compact" id="langSeg" role="group" data-i18n-aria="a11y.lang" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="ku" aria-pressed="false" lang="ckb">KU · کوردی</button>
+      </div>
+      <button type="button" id="soundBtn" class="icon-btn" aria-pressed="true" data-i18n-title="sound.on" title="Sound on">🔊</button>
+      <button type="button" id="uploadBtn" class="btn-ghost"><span aria-hidden="true">⬆</span> <span data-i18n="upload.open">Media &amp; JSON</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="kicker mono"><span class="dot"></span> <span data-i18n="hero.kicker">NASA SPACE APPS CHALLENGE 2026</span></p>
+        <h1 class="glitch" data-text="ECHOES OF SPACE">ECHOES OF SPACE</h1>
+        <p class="hero-tag" data-i18n="brand.sub">Abandoned, Not Forgotten</p>
+        <p class="hero-lede" id="heroLede"></p>
+        <div class="hero-actions">
+          <button type="button" class="btn-primary" id="scanBtn"><span data-i18n="hero.cta">Begin Signal Scan</span> <span aria-hidden="true">◉</span></button>
+          <button type="button" class="btn-ghost" id="randomBtn">🎲 <span data-i18n="hero.random">Tune to a random signal</span></button>
+        </div>
+        <dl class="stats" id="stats"></dl>
+      </div>
+      <aside class="feed glass" aria-live="off">
+        <div class="feed-head mono"><span class="rec"></span> <span data-i18n="feed.title">GHOST SIGNAL FEED</span></div>
+        <div class="feed-body mono" id="feedBody"></div>
+      </aside>
+    </section>
+
+    <!-- ============ SECTORS ============ -->
+    <section class="sectors" id="sectors" aria-labelledby="sectorsTitle">
+      <h2 class="visually-hidden" id="sectorsTitle" data-i18n="sectors.title">Mission sectors</h2>
+      <div class="tabs sector-tabs" id="sectorTabs" role="tablist"></div>
+
+      <div class="map-panel glass" id="mapPanel">
+        <div class="map-head">
+          <div>
+            <p class="eyebrow mono" id="sectorEyebrow"></p>
+            <h3 id="sectorTitle"></h3>
+            <p class="muted" id="sectorDesc"></p>
+          </div>
+          <div class="seg compact" id="viewSeg" role="group" data-i18n-aria="a11y.view" aria-label="Map view">
+            <button type="button" data-view="flat" aria-pressed="true" data-i18n="view.flat">2D Map</button>
+            <button type="button" data-view="globe" aria-pressed="false" data-i18n="view.globe">3D Globe</button>
+          </div>
+        </div>
+
+        <div class="map-grid">
+          <figure class="map-wrap">
+            <figcaption class="mono tiny" id="mapCap"></figcaption>
+            <canvas id="mapCanvas" aria-label="Holographic map"></canvas>
+            <div class="preview" id="preview" aria-live="polite"></div>
+          </figure>
+          <figure class="radar-wrap">
+            <figcaption class="mono tiny"><span class="rec"></span> <span data-i18n="radar.title">GHOST SIGNAL RADAR</span></figcaption>
+            <canvas id="radarCanvas" aria-label="Ghost signal radar"></canvas>
+            <p class="mono tiny muted radar-note" id="radarNote"></p>
+          </figure>
+        </div>
+        <p class="map-hint mono tiny" data-i18n="map.hint">Hover a pin to hear its signal · click to open the dossier</p>
+      </div>
+
+      <div class="card-grid" id="cardGrid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n="footer.text">An educational project for the NASA Space Apps Challenge 2026. Not an official NASA product. Data: NASA NSSDCA &amp; mission archives.</p>
+    <p class="mono tiny muted">NSSDCA · NASA Space Science Data Coordinated Archive · nssdc.gsfc.nasa.gov</p>
+  </footer>
+
+  <!-- ============ DOSSIER MODAL ============ -->
+  <div id="dossier" class="overlay" hidden>
+    <div class="dossier glass" role="dialog" aria-modal="true" aria-labelledby="dosTitle" id="dossierBox"></div>
+  </div>
+
+  <!-- ============ UPLOAD / ATTACH MANAGER ============ -->
+  <div id="upload" class="overlay" hidden>
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="upTitle">
+      <button type="button" class="close" data-close data-i18n-aria="dossier.close" aria-label="Close">✕</button>
+      <h2 id="upTitle" data-i18n="upload.title">Upload / Attach NASA Media &amp; JSON</h2>
+      <p class="muted" data-i18n="upload.sub">Attach archival photos, 3D .glb models, or whole NSSDCA JSON datasets, live. Everything stays in this browser.</p>
+
+      <div class="tabs small" role="tablist" id="upTabs">
+        <button type="button" role="tab" data-tab="json" aria-selected="true" data-i18n="upload.tab.json">Dataset JSON</button>
+        <button type="button" role="tab" data-tab="images" aria-selected="false" data-i18n="upload.tab.images">Photos &amp; diagrams</button>
+        <button type="button" role="tab" data-tab="models" aria-selected="false" data-i18n="upload.tab.models">3D models</button>
+        <button type="button" role="tab" data-tab="library" aria-selected="false" data-i18n="upload.tab.library">Attached</button>
+      </div>
+
+      <section class="tabpanel" data-panel="json">
+        <label class="dropzone" id="dzJson">
+          <input type="file" id="fileJson" accept=".json,application/json" hidden>
+          <span class="dz-ico">🗂️</span><span data-i18n="upload.json.drop">Drop a .json file here or click to browse</span>
+        </label>
+        <label class="field"><span data-i18n="upload.json.paste">…or paste JSON</span>
+          <textarea id="jsonText" class="mono" rows="6" spellcheck="false" placeholder='[{ "id": "my-probe", "sector": "deep", "name": {"en": "…", "ku": "…"} }]'></textarea>
+        </label>
+        <div class="row">
+          <button type="button" class="btn-primary" id="jsonApply" data-i18n="upload.json.apply">Apply JSON</button>
+          <button type="button" class="btn-ghost" id="jsonTemplate" data-i18n="upload.json.template">Download template</button>
+          <button type="button" class="btn-ghost" id="jsonExport" data-i18n="upload.json.export">Export all data</button>
+        </div>
+      </section>
+
+      <section class="tabpanel" data-panel="images" hidden>
+        <label class="field"><span data-i18n="upload.target">Attach to artifact</span><select id="targetImages"></select></label>
+        <label class="dropzone" id="dzImages">
+          <input type="file" id="fileImages" accept="image/*" multiple hidden>
+          <span class="dz-ico">🖼️</span><span data-i18n="upload.images.drop">Drop NASA images here (JPG, PNG, WebP)</span>
+        </label>
+        <p class="tiny muted mono" data-i18n="upload.images.tip">Tip: for permanent images, drop files in assets/images/ named after the artifact id, e.g. apollo11.jpg</p>
+      </section>
+
+      <section class="tabpanel" data-panel="models" hidden>
+        <label class="field"><span data-i18n="upload.target">Attach to artifact</span><select id="targetModels"></select></label>
+        <label class="dropzone" id="dzModels">
+          <input type="file" id="fileModels" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" multiple hidden>
+          <span class="dz-ico">🧊</span><span data-i18n="upload.models.drop">Drop .glb / .gltf 3D models here</span>
+        </label>
+        <p class="tiny muted mono" data-i18n="upload.models.tip">NASA 3D models: nasa3d.arc.nasa.gov · The 3D viewer (model-viewer) loads from the web the first time it is used.</p>
+      </section>
+
+      <section class="tabpanel" data-panel="library" hidden>
+        <div id="library" class="library"></div>
+        <button type="button" class="btn-danger" id="resetAll" data-i18n="upload.reset">Reset all custom data</button>
+      </section>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="js/data-moon.js"></script>
+  <script src="js/data-mars-1.js"></script>
+  <script src="js/data-mars-2.js"></script>
+  <script src="js/data-deep.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/starfield.js"></script>
+  <script src="js/maps.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/upload.js"></script>
+</body>
+</html>
