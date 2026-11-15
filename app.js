@@ -574,7 +574,14 @@
     const d = places[current];
     const rec = d.records[selected] || d.records[0];
     if (rec.has3D && rec.storyPage) {
-      window.location.href = rec.storyPage;
+      const btn = q('open-story-btn');
+      if (btn) {
+        btn.classList.add('launching');
+        btn.innerHTML = '<span class="story-icon">🚀</span> <span>Entering 3D Orbit...</span>';
+      }
+      setTimeout(() => {
+        window.location.href = rec.storyPage;
+      }, 360);
     } else {
       openDossierModal(rec.id);
     }
@@ -585,7 +592,14 @@
     selectRecord(index);
     const rec = places[current].records[index];
     if (rec.has3D && rec.storyPage) {
-      window.location.href = rec.storyPage;
+      const btn = q('open-story-btn');
+      if (btn) {
+        btn.classList.add('launching');
+        btn.innerHTML = '<span class="story-icon">🚀</span> <span>Entering 3D Orbit...</span>';
+      }
+      setTimeout(() => {
+        window.location.href = rec.storyPage;
+      }, 360);
     } else {
       openDossierModal(rec.id);
     }
@@ -634,12 +648,15 @@
     const storyBtn = q('open-story-btn');
     if (storyBtn) {
       storyBtn.style.display = 'inline-flex';
+      storyBtn.classList.remove('launching');
       if (rec.has3D) {
-        storyBtn.innerHTML = '🚀 Open 3D Story';
-        storyBtn.className = 'open-story-btn';
+        storyBtn.innerHTML = '<span class="story-icon">🚀</span> <span>Launch 3D Story</span>';
+        storyBtn.className = 'open-story-btn is-3d-btn';
+        storyBtn.title = 'Launch interactive 3D WebGL tour of ' + rec.title;
       } else {
-        storyBtn.innerHTML = '📄 View Dossier';
-        storyBtn.className = 'open-story-btn dossier-btn-style';
+        storyBtn.innerHTML = '<span class="story-icon">📄</span> <span>Inspect Dossier</span>';
+        storyBtn.className = 'open-story-btn is-dossier-btn';
+        storyBtn.title = 'Inspect NASA telemetry archive for ' + rec.title;
       }
     }
 

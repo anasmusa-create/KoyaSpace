@@ -239,17 +239,21 @@ h1 em { font-style: normal; color: #e7b58c }
 .record-title { font-size: 11px; line-height: 1.35; color: #d4d9dc }
 .record-arrow { color: #687783; font-size: 13px; text-align: right }
 .record-3d-badge {
-  font-size: 9px; font-family: var(--mono); padding: 2px 7px;
-  border-radius: 999px; background: rgba(230,164,109,.15);
-  border: 1px solid rgba(230,164,109,.35); color: var(--accent);
-  letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
-  transition: all .2s ease; cursor: pointer;
+  font-size: 9.5px; font-family: var(--mono); font-weight: 600; padding: 3px 9px;
+  border-radius: 999px; background: rgba(230,164,109,.2);
+  border: 1px solid rgba(230,164,109,.5); color: #f5cfaf;
+  letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 0 8px rgba(230,164,109,.2);
+  transition: all .25s ease; cursor: pointer;
 }
 .record-3d-badge:hover {
-  background: var(--accent); color: #080d14; border-color: var(--accent);
+  background: var(--accent); color: #080d14; border-color: #fff;
+  box-shadow: 0 0 14px rgba(230,164,109,.6);
+  transform: scale(1.08);
 }
 .record.active .record-3d-badge {
-  background: rgba(230,164,109,.3); border-color: var(--accent); color: #fff;
+  background: rgba(230,164,109,.35); border-color: var(--accent); color: #fff;
+  box-shadow: 0 0 12px rgba(230,164,109,.4);
 }
 .record-dossier-badge {
   font-size: 9px; font-family: var(--mono); padding: 2px 7px;
@@ -312,22 +316,118 @@ h1 em { font-style: normal; color: #e7b58c }
 .story { padding: 16px 20px 20px }
 .story-label { font: 9px var(--mono); letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px }
 .story p { color: #c2cbd1; font-size: 12px; line-height: 1.75; margin: 0 }
-.story-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; align-items: center }
+.story-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; align-items: center }
 .source-link {
   display: inline-flex; align-items: center; gap: 7px;
   color: #e8c19b; text-decoration: none;
-  font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase;
+  font: 9.5px var(--mono); letter-spacing: .08em; text-transform: uppercase;
+  transition: color .2s ease;
 }
 .source-link:hover { color: #fff }
+
+/* ── Epic 3D Story & Dossier Launch Button ── */
 .open-story-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 13px; border-radius: 999px;
-  border: 1px solid var(--accent);
-  background: rgba(230,164,109,.14);
-  color: var(--paper); font: 10px var(--mono); letter-spacing: .07em; text-transform: uppercase;
-  transition: background .25s, border-color .25s;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(230,164,109,.7);
+  background: linear-gradient(135deg, rgba(230,164,109,.22) 0%, rgba(194,105,60,.38) 100%);
+  color: #ffffff;
+  font: 600 12px/1 var(--mono);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(0,0,0,.5), 0 0 16px rgba(230,164,109,.28), inset 0 1px 0 rgba(255,255,255,.3);
+  transition: transform .25s cubic-bezier(0.2, 0.8, 0.2, 1), background .25s, border-color .25s, box-shadow .25s, color .25s;
+  animation: storyGlowPulse 3s infinite ease-in-out;
 }
-.open-story-btn:hover { background: rgba(230,164,109,.28); border-color: #f0c090 }
+
+@keyframes storyGlowPulse {
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(0,0,0,.5), 0 0 14px rgba(230,164,109,.25), inset 0 1px 0 rgba(255,255,255,.25);
+    border-color: rgba(230,164,109,.65);
+  }
+  50% {
+    box-shadow: 0 4px 22px rgba(0,0,0,.6), 0 0 26px rgba(230,164,109,.6), inset 0 1px 0 rgba(255,255,255,.5);
+    border-color: rgba(255,210,165,.95);
+  }
+}
+
+/* Shimmer beam light sweep */
+.open-story-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 45%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: rotate(25deg);
+  animation: storyShimmer 3.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+@keyframes storyShimmer {
+  0% { left: -90%; }
+  32%, 100% { left: 190%; }
+}
+
+.open-story-btn .story-icon {
+  font-size: 15px;
+  display: inline-block;
+  transition: transform .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.open-story-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(135deg, rgba(240,175,120,.38) 0%, rgba(215,110,55,.52) 100%);
+  border-color: #ffe0be;
+  box-shadow: 0 6px 26px rgba(0,0,0,.6), 0 0 32px rgba(230,164,109,.75), inset 0 1px 0 #ffffff;
+  color: #ffffff;
+}
+
+.open-story-btn:hover .story-icon {
+  transform: translateY(-2px) rotate(-12deg) scale(1.25);
+}
+
+/* Launching state when clicked */
+.open-story-btn.launching {
+  pointer-events: none;
+  transform: scale(0.96);
+  background: linear-gradient(135deg, #e6a46d 0%, #c2693c 100%);
+  color: #080d14;
+  font-weight: 700;
+  border-color: #ffffff;
+  box-shadow: 0 0 40px rgba(240,180,120,0.95), inset 0 0 16px rgba(255,255,255,0.8);
+}
+
+.open-story-btn.launching .story-icon {
+  animation: rocketLaunch 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes rocketLaunch {
+  0% { transform: translate(0, 0) scale(1); }
+  30% { transform: translate(-3px, 3px) scale(0.9); }
+  100% { transform: translate(26px, -30px) scale(1.5); opacity: 0; }
+}
+
+/* Alternate styling for non-3D telemetry dossiers */
+.open-story-btn.is-dossier-btn {
+  border-color: rgba(157,178,199,.55);
+  background: linear-gradient(135deg, rgba(157,178,199,.18) 0%, rgba(70,90,110,.28) 100%);
+  animation: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.4);
+}
+.open-story-btn.is-dossier-btn:hover {
+  border-color: #cdd9e0;
+  box-shadow: 0 0 22px rgba(157,178,199,.45);
+}
 
 
 
